@@ -1,4 +1,5 @@
 <p align="center"><img alt="go-srs" src="logo.png"/></p>
+
 [![GitHub Release](https://img.shields.io/badge/built_with-Go-00ADD8.svg?style=flat)]() 
 
 **ical-git** is a lightweight calendar application written in Go. 
