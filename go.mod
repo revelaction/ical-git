@@ -4,6 +4,7 @@ go 1.21.0
 
 require (
 	github.com/arran4/golang-ical v0.2.1
+	github.com/fsnotify/fsnotify v1.7.0
 	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.10.0
 	github.com/teambition/rrule-go v1.8.2
