@@ -34,7 +34,7 @@ func main() {
 		}
 	}()
 
-	err = watcher.Add("/home/carasc/src/public/revelaction/ical-git")
+	err = watcher.Add(".t")
 	if err != nil {
 		log.Fatal(err)
 	}
