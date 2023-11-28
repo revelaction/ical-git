@@ -5,6 +5,9 @@
 
 **ical-git** is a lightweight calendar application written in Go. 
 
+> [!NOTE]  
+> Work in progress
+ 
 The calendar data is a collection of iCal files under version control. 
 
 ical-git is a deamon that periodically pulls the iCal files and creates notifications based on the VALARM components within the iCal files. 
