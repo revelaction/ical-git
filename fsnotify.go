@@ -34,7 +34,7 @@ func main() {
 		}
 	}()
 
-	err = watcher.Add(".t")
+	err = watcher.Add(".")
 	if err != nil {
 		log.Fatal(err)
 	}
