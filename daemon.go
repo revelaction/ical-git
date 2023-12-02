@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
-	"fmt"
+	//"fmt"
 	"os/signal"
 	"syscall"
 	"time"
@@ -18,53 +18,60 @@ func start()  {
 }
 
 func main() {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
+
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGHUP)
 
 	defer func() {
 		signal.Stop(signalChan)
-		cancel()
+		//cancel() TODO
 	}()
 
 	go func() {
+
+        ctx, cancel := context.WithCancel(context.Background())
+        go run(ctx)
+
 		for {
-			select {
-			case s := <-signalChan:
-				switch s {
-				case syscall.SIGHUP:
+            select {
+            case s := <-signalChan:
+                switch s {
+                case syscall.SIGHUP:
                     log.Printf("SIGHUP called")
-                    //start()
-					os.Exit(1)
-				case os.Interrupt:
+                    log.Printf("canceling previous ctx")
+                    cancel()
+                    log.Printf("Initializing: read new conf, cancel AfterFuncs...")
+                    //create new context
+                    log.Printf("creating new task context")
+                    ctx, cancel = context.WithCancel(context.Background())
+                    go run(ctx)
+
+                case os.Interrupt:
                     log.Printf("Interrupt called")
-					cancel()
-					os.Exit(1)
-                    log.Printf("Interrupt called")
-				}
-			case <-ctx.Done():
-				log.Printf("Done.")
-				os.Exit(1)
-			}
-		}
+                    cancel()
+                    os.Exit(1)
+                }
+                //case <-ctx.Done():
+                //	log.Printf("Done.")
+                //	os.Exit(1)
+                //}
+            }
+        }
 	}()
 
-    if err := run(ctx); err != nil {
-        fmt.Fprintf(os.Stderr, "%s\n", err)
-        os.Exit(1)
-    }
+    select{}
 }
 
-func run(ctx context.Context) error {
+func run(ctx context.Context)  {
     ticker := time.NewTicker(3 * time.Second)
     defer ticker.Stop()
 
 	for {
 		select {
 		case <-ctx.Done():
-			return nil
+            log.Printf("run: received call for Done. returning")
+			return 
 		case <-ticker.C:
             log.Printf("starting tick ----------------")
 
