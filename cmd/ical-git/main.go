@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 	"github.com/revelaction/ical-git/fetch/filesystem"
+	"github.com/revelaction/ical-git/ical"
 )
 
 const defaultTick = 3 * time.Second
@@ -81,7 +82,13 @@ func run(ctx context.Context)  {
             // https://gist.github.com/sethamclean/9475737
            f := filesystem.New("testdata")
            ch := f.GetCh()
+           p := ical.NewParser()
            for content := range ch {
+               err := p.Parse(content)
+               if err != nil {
+                   continue
+               }
+
                fmt.Println(string(content))
            }
            // //ch has channels of contents <-chan []byte
