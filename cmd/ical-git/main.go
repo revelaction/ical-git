@@ -81,13 +81,14 @@ func run(ctx context.Context)  {
             // get the ical fields (from git or local fylesystem), parse them, find next, build struct, create the AfterFunc, save the cancel method. 
             // get thepath of the contents
             // https://gist.github.com/sethamclean/9475737
-           f := filesystem.New("testdata")
+           f := filesystem.New("../ical-testdata")
+           // TODO
            ch := f.GetCh()
            p := ical.NewParser()
            for content := range ch {
                err := p.Parse(content)
                if err != nil {
-                   continue
+                   fmt.Printf("error: %v+", err)
                }
 
                fmt.Println(string(content))
