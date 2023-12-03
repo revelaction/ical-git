@@ -10,6 +10,7 @@ import (
 	"time"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
+	"github.com/gen2brain/beeep"
 )
 
 const defaultTick = 3 * time.Second
@@ -90,6 +91,11 @@ func run(ctx context.Context)  {
                }
 
                fmt.Println(string(content))
+           }
+
+
+           for _, n := range p.Notifications(){
+                beeep.Notify(n.Summary, n.EventTime.Format(time.RFC822), "./logo.png")
            }
            // //ch has channels of contents <-chan []byte
            // parser := ical.NewParser()
