@@ -4,11 +4,11 @@ import (
 	"context"
 	"log"
 	"os"
-	//"fmt"
+	"fmt"
 	"os/signal"
 	"syscall"
 	"time"
-
+	"github.com/revelaction/ical-git/fetch/filesystem"
 )
 
 const defaultTick = 5 * time.Second
@@ -75,11 +75,15 @@ func run(ctx context.Context)  {
 		case <-ticker.C:
             log.Printf("starting tick ----------------")
 
+
             // get the ical fields (from git or local fylesystem), parse them, find next, build struct, create the AfterFunc, save the cancel method. 
             // get thepath of the contents
             // https://gist.github.com/sethamclean/9475737
-            //var r retrieverer = retriever.New('filesystem')
-           // ch := r.GetCh()
+           f := filesystem.New(".")
+           ch := f.GetCh()
+           for content := range ch {
+               fmt.Println(string(content))
+           }
            // //ch has channels of contents <-chan []byte
            // parser := ical.NewParser()
            // notifications := []Notification

@@ -3,6 +3,7 @@ package filesystem
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"github.com/revelaction/ical-git/fetch"
 )
 
@@ -13,7 +14,7 @@ type FileSystem struct {
 }
 
 // New creates a new instance of FileSystem
-func New(rootDir string) *FileSystem {
+func New(rootDir string) fetch.Fetcher {
 	return &FileSystem{
 		rootDir: rootDir,
 		ch:      make(chan []byte),
@@ -24,9 +25,22 @@ func New(rootDir string) *FileSystem {
 func (fs *FileSystem) GetCh() <-chan []byte {
 	go func() {
         // TODO 
-		filepath.Walk(fs.rootDir, func(path string, _ os.FileInfo, _ error) (err error) {
-			fs.ch <- path
-			return
+		filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, _ error) (err error) {
+
+            if info.IsDir() {
+                return nil
+            }
+
+            if strings.HasSuffix(strings.ToLower(info.Name()), ".ical") || strings.HasSuffix(strings.ToLower(info.Name()), ".ics") {
+                content, err := os.ReadFile(path)
+                if err != nil {
+                    return nil
+                }
+
+			    fs.ch <- content 
+            }
+
+			return nil
 		})
 
 		defer close(fs.ch)
