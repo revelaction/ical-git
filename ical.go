@@ -49,15 +49,12 @@ END:VCALENDAR
         startical, _ := events[0].GetStartAt()
         fmt.Println("ical DTSTART: ", startical)
 
-
-
         //get the summary like this
 		rule := events[0].GetProperty(ics.ComponentPropertyRrule).Value
 		start := events[0].GetProperty(ics.ComponentPropertyDtStart).Value
 
         icalSerialized := events[0].Serialize()
         fmt.Printf("lipo %v+", icalSerialized)
-
 
         icalStr := "DTSTART:" + start + "\nRRULE:" + rule
         fmt.Println("ical str: ", icalStr)

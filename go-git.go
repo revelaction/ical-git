@@ -89,7 +89,6 @@ func main() {
 		}
 		defer f.Close()
 
-		// Read the first line of the file
 		fileContent, err := io.ReadAll(f)
 		if err != nil {
 			log.Fatalf("Error while reading file: %s", err)

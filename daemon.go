@@ -11,7 +11,7 @@ import (
 
 )
 
-const defaultTick = 60 * time.Second
+const defaultTick = 5 * time.Second
 
 
 func start()  {
@@ -64,7 +64,7 @@ func main() {
 }
 
 func run(ctx context.Context)  {
-    ticker := time.NewTicker(3 * time.Second)
+    ticker := time.NewTicker(defaultTick)
     defer ticker.Stop()
 
 	for {
@@ -75,9 +75,34 @@ func run(ctx context.Context)  {
 		case <-ticker.C:
             log.Printf("starting tick ----------------")
 
-            log.Printf("starting task")
-            time.Sleep(2 * time.Second)
+            // get the ical fields (from git or local fylesystem), parse them, find next, build struct, create the AfterFunc, save the cancel method. 
+            // get thepath of the contents
+            // https://gist.github.com/sethamclean/9475737
+            //var r retrieverer = retriever.New('filesystem')
+           // ch := r.GetCh()
+           // //ch has channels of contents <-chan []byte
+           // parser := ical.NewParser()
+           // notifications := []Notification
+           // for _, calendar := range ch() {
+           //     nts := parser.Parse(calendarEvent) // [] do we allow many events in the calendar?. thro errors, not supported feautres for each file
+           //     // create afterfunc
+           //     //pass the time.time to the AfterFunc -> get Timer
+           //     //put the timer in the notification
+           //     for _, nt := range nts {
+           //         nt.Timer:= notficationTimer() //many event in a calendar??? NO for MVP
+           //         notifications := append(notifications, nt)
+           //     }
+           // }
+           // 
+
+
+           // notifications := retrieverer.Get() // []notifications
+            // rad each ical fields
+            // retriever interface getPaths
+
+
             log.Printf("end task")
 		}
 	}
 }
+
