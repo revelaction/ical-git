@@ -42,7 +42,6 @@ func (p *Parser) Notifications() []notify.Notification {
 
 func buildNotification(event *ics.VEvent) notify.Notification {
 
-
     n := notify.Notification{}
     // TODO
 	//n.EventTime, _ := event.GetStartAt()
@@ -68,7 +67,7 @@ func NewParser() *Parser {
 
 func parseRRule(event *ics.VEvent) string {
 
-    fmt.Printf("event: %v\n", event.Serialize())
+    //fmt.Printf("event: %v\n", event.Serialize())
     scanner := bufio.NewScanner(strings.NewReader(event.Serialize()))
 	var lines []string
 
@@ -94,7 +93,11 @@ func parseRRule(event *ics.VEvent) string {
 }
 
 func nextEventTime(rruleLines string) time.Time {
-    s, _ := rrule.StrToRRuleSet(rruleLines)
+    s, err := rrule.StrToRRuleSet(rruleLines)
+    if err != nil {
+        fmt.Printf("rrlue could not find next: %s\n", err)
+        return time.Time{} 
+    }
     next := s.After(time.Now(), false)
 
     // if no RRULE, After provides Zero time get 
