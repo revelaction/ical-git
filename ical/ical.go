@@ -8,13 +8,16 @@ import (
     "bufio"
 	"github.com/arran4/golang-ical"
 	"github.com/revelaction/ical-git/notify"
+	"github.com/revelaction/ical-git/config"
 	"github.com/teambition/rrule-go"
 
 )
 
 type Parser struct {
 	notifications []notify.Notification
+    conf config.Config
 }
+
 
 func (p *Parser) Parse(data []byte) error {
 	reader := bytes.NewReader(data)
@@ -26,11 +29,30 @@ func (p *Parser) Parse(data []byte) error {
 	for _, event := range cal.Events() {
 
         rruleLines := parseRRule(event)
-        fmt.Println("rrule lines", rruleLines)
+        //fmt.Println("rrule lines", rruleLines)
+        eventTime, err := nextEventTime(rruleLines)
+        if err != nil {
+            fmt.Println("error:", err)
+            continue
+        }
 
-        fmt.Println("The first recurrence after now is: ", nextEventTime(rruleLines))
+        for _, alarm := range config.DefaultAlarms {
+            //fmt.Println("alarm", alarm)
+            alarmTime, _ := calculateAlarmTime(eventTime, alarm.Duration)
 
-		//p.notifications = append(p.notifications, buildNotification(event))
+            tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
+
+            if isInTickPeriod(alarmTime, tickDuration) {
+                n := buildNotification(event)
+                n.Time = alarmTime
+		        p.notifications = append(p.notifications, buildNotification(event))
+            }
+
+            //calculate alarm time 
+            // if alarm in tick, (apply offset -3), build Notification
+        }
+
+        //fmt.Println("The first recurrence after now is: ", nextEventTime(rruleLines))
 	}
 
 	return nil
@@ -38,6 +60,32 @@ func (p *Parser) Parse(data []byte) error {
 
 func (p *Parser) Notifications() []notify.Notification {
 	return p.notifications
+}
+
+
+func calculateAlarmTime(eventTime time.Time, durationString string) (time.Time, error) {
+    duration, err := time.ParseDuration(durationString)
+    if err != nil {
+        return time.Time{}, fmt.Errorf("error parsing duration: %w", err)
+    }
+
+    alarmTime := eventTime.Add(-duration)
+    return alarmTime, nil
+}
+
+
+func isInTickPeriod(t time.Time, duration time.Duration) bool {
+	now := time.Now()
+
+	if t.Before(now) {
+		return false
+	}
+
+	if t.After(now.Add(duration)) {
+		return false
+	}
+
+	return true
 }
 
 func buildNotification(event *ics.VEvent) notify.Notification {
@@ -62,6 +110,11 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 func NewParser() *Parser {
 	return &Parser{
 		notifications: []notify.Notification{},
+        // TODO toml
+        conf: config.Config{
+            TZ: "Europe/Paris",
+            DaemonTick: "3s",
+        },
 	}
 }
 
@@ -92,12 +145,13 @@ func parseRRule(event *ics.VEvent) string {
 	return strings.Join(lines, "\n")
 }
 
-func nextEventTime(rruleLines string) time.Time {
+func nextEventTime(rruleLines string) (time.Time, error) {
     s, err := rrule.StrToRRuleSet(rruleLines)
     if err != nil {
-        fmt.Printf("rrlue could not find next: %s\n", err)
-        return time.Time{} 
+        // TODO maybe try to aplly config tz.
+        return time.Time{}, err
     }
+
     next := s.After(time.Now(), false)
 
     // if no RRULE, After provides Zero time get 
@@ -105,9 +159,10 @@ func nextEventTime(rruleLines string) time.Time {
     if next.IsZero(){
         // TODO location
         if s.GetDTStart().After(time.Now()){
-            return s.GetDTStart()
+            return s.GetDTStart(), nil
         }
     }
 
-    return next
+
+    return next, nil
 }

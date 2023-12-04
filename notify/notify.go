@@ -29,7 +29,7 @@ type Notification struct {
 	Summary     string
 	Description string
 	Type        Type
-	TriggerTime time.Time
+	Time time.Time
 }
 
 var configs = Confs{
@@ -37,3 +37,8 @@ var configs = Confs{
 	{"telegram", 24 * time.Hour},     // 1 day
 	{"desktop", 15 * time.Minute},    // 15 minutes
 }
+
+// notifier receives the potencial notification
+// generate possible notification accoreding to configs
+// if notfication.Time is in TickPeriod schedule with AfterFunc
+
