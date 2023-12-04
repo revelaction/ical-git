@@ -11,6 +11,7 @@ import (
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/desktop"
+	//"github.com/revelaction/ical-git/notify/telegram"
 )
 
 const defaultTick = 3 * time.Second
