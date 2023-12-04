@@ -43,9 +43,11 @@ func buildNotification(event *ics.VEvent) notify.Notification {
     // TODO check
 	summary := event.GetProperty(ics.ComponentPropertySummary).Value
 
+	description := event.GetProperty(ics.ComponentPropertyDescription).Value
     return notify.Notification{
         EventTime: eventTime,
         Summary: summary,
+        Description: description,
     }
 }
 

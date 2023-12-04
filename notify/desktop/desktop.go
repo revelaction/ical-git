@@ -1,13 +1,24 @@
 package desktop
 
 import (
-	"fmt"
-	"github.com/your/package/notify"
+	"github.com/revelaction/ical-git/notify"
+	"github.com/gen2brain/beeep"
+    "time"
 )
 
-type Desktop struct{}
+// Desktop implements the notify.Notifier interface
+type Desktop struct {
+	Icon string
+}
 
-func (d *Desktop) Notify(notification ical.Notification) error {
-	// Implement your desktop notification logic here
+func New(icon string) *Desktop {
+	return &Desktop{
+		Icon: icon,
+	}
+}
+
+func (d *Desktop) Notify(n notify.Notification) error {
+
+    beeep.Notify(n.Summary + n.EventTime.Format(time.RFC822), n.Description, d.Icon)
 	return nil
 }
