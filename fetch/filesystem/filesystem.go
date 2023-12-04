@@ -1,10 +1,10 @@
 package filesystem
 
 import (
+	"github.com/revelaction/ical-git/fetch"
 	"os"
 	"path/filepath"
 	"strings"
-	"github.com/revelaction/ical-git/fetch"
 )
 
 // FileSystem implements the fetch.Fetcher interface
@@ -24,21 +24,21 @@ func New(rootDir string) fetch.Fetcher {
 // GetCh implements the fetch.Fetcher interface method
 func (fs *FileSystem) GetCh() <-chan []byte {
 	go func() {
-        // TODO 
+		// TODO
 		filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, _ error) (err error) {
 
-            if info.IsDir() {
-                return nil
-            }
+			if info.IsDir() {
+				return nil
+			}
 
-            if strings.HasSuffix(strings.ToLower(info.Name()), ".ical") || strings.HasSuffix(strings.ToLower(info.Name()), ".ics") {
-                content, err := os.ReadFile(path)
-                if err != nil {
-                    return nil
-                }
+			if strings.HasSuffix(strings.ToLower(info.Name()), ".ical") || strings.HasSuffix(strings.ToLower(info.Name()), ".ics") {
+				content, err := os.ReadFile(path)
+				if err != nil {
+					return nil
+				}
 
-			    fs.ch <- content 
-            }
+				fs.ch <- content
+			}
 
 			return nil
 		})

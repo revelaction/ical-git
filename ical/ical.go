@@ -7,8 +7,8 @@ import (
 	"github.com/revelaction/ical-git/notify"
 )
 
-type Parser struct{
-    notifications []notify.Notification
+type Parser struct {
+	notifications []notify.Notification
 }
 
 func (p *Parser) Parse(data []byte) error {
@@ -18,17 +18,17 @@ func (p *Parser) Parse(data []byte) error {
 		return err
 	}
 
-    for _, event := range cal.Events()  {
+	for _, event := range cal.Events() {
 
-        if isEventRecurrent(event) {
-            // calculate next
-            //fmt.Printf("is recurrent %v#", event)
-        }
+		if isEventRecurrent(event) {
+			// calculate next
+			//fmt.Printf("is recurrent %v#", event)
+		}
 
-        //fmt.Printf("is NOT recurrent %v#", event)
-        p.notifications = append(p.notifications, buildNotification(event))
-        // simple
-    }
+		//fmt.Printf("is NOT recurrent %v#", event)
+		p.notifications = append(p.notifications, buildNotification(event))
+		// simple
+	}
 
 	return nil
 }
@@ -39,30 +39,30 @@ func (p *Parser) Notifications() []notify.Notification {
 
 func buildNotification(event *ics.VEvent) notify.Notification {
 
-    eventTime, _ := event.GetStartAt()
-    // TODO check
+	eventTime, _ := event.GetStartAt()
+	// TODO check
 	summary := event.GetProperty(ics.ComponentPropertySummary).Value
 
 	description := event.GetProperty(ics.ComponentPropertyDescription).Value
-    return notify.Notification{
-        EventTime: eventTime,
-        Summary: summary,
-        Description: description,
-    }
+	return notify.Notification{
+		EventTime:   eventTime,
+		Summary:     summary,
+		Description: description,
+	}
 }
 
 func isEventRecurrent(event *ics.VEvent) bool {
 
 	rule := event.GetProperty(ics.ComponentPropertyRrule)
-    if rule == nil {
-        return false
-    }
+	if rule == nil {
+		return false
+	}
 
-    return true
+	return true
 }
 
 func NewParser() *Parser {
 	return &Parser{
-        notifications: []notify.Notification{},
-    }
+		notifications: []notify.Notification{},
+	}
 }

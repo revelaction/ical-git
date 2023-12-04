@@ -1,9 +1,9 @@
 package desktop
 
 import (
-	"github.com/revelaction/ical-git/notify"
 	"github.com/gen2brain/beeep"
-    "time"
+	"github.com/revelaction/ical-git/notify"
+	"time"
 )
 
 // Desktop implements the notify.Notifier interface
@@ -19,6 +19,6 @@ func New(icon string) *Desktop {
 
 func (d *Desktop) Notify(n notify.Notification) error {
 
-    beeep.Notify(n.Summary + n.EventTime.Format(time.RFC822), n.Description, d.Icon)
+	beeep.Notify(n.Summary+n.EventTime.Format(time.RFC822), n.Description, "/usr/share/icons/hicolor/48x48/apps/filezilla.png")
 	return nil
 }

@@ -1,7 +1,7 @@
 package telegram
 
 import (
-	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5" 
+	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/revelaction/ical-git/notify"
 	"time"
 )
@@ -38,7 +38,7 @@ func New() *Telegram {
 }
 
 func (t *Telegram) Notify(n notify.Notification) error {
-    message := n.Summary + n.EventTime.Format(time.RFC822)
+	message := n.Summary + n.EventTime.Format(time.RFC822)
 	msg := tg.NewMessage(chatId, message)
 	msg.ParseMode = "markdown"
 	_, err := t.bot.Send(msg)

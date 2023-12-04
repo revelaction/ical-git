@@ -15,9 +15,9 @@ func main() {
 
 	// Schedule the goroutine to run at the target time
 
-    time.AfterFunc(durationUntilTarget, func() {
-        fmt.Println("Running goroutine at target time")
-    })
+	time.AfterFunc(durationUntilTarget, func() {
+		fmt.Println("Running goroutine at target time")
+	})
 
 	// Cancel the timer
 	//if timer.Stop() {
@@ -25,5 +25,5 @@ func main() {
 	//}
 
 	// Keep the main function running
-    select{}
+	select {}
 }
