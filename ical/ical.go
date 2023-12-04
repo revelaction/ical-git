@@ -2,9 +2,14 @@ package ical
 
 import (
 	"bytes"
-	//"fmt"
+	"fmt"
+	"time"
+	"strings"
+    "bufio"
 	"github.com/arran4/golang-ical"
 	"github.com/revelaction/ical-git/notify"
+	"github.com/teambition/rrule-go"
+
 )
 
 type Parser struct {
@@ -20,14 +25,12 @@ func (p *Parser) Parse(data []byte) error {
 
 	for _, event := range cal.Events() {
 
-		if isEventRecurrent(event) {
-			// calculate next
-			//fmt.Printf("is recurrent %v#", event)
-		}
+        rruleLines := parseRRule(event)
+        fmt.Println("rrule lines", rruleLines)
 
-		//fmt.Printf("is NOT recurrent %v#", event)
-		p.notifications = append(p.notifications, buildNotification(event))
-		// simple
+        fmt.Println("The first recurrence after now is: ", nextEventTime(rruleLines))
+
+		//p.notifications = append(p.notifications, buildNotification(event))
 	}
 
 	return nil
@@ -39,30 +42,69 @@ func (p *Parser) Notifications() []notify.Notification {
 
 func buildNotification(event *ics.VEvent) notify.Notification {
 
-	eventTime, _ := event.GetStartAt()
-	// TODO check
-	summary := event.GetProperty(ics.ComponentPropertySummary).Value
 
-	description := event.GetProperty(ics.ComponentPropertyDescription).Value
-	return notify.Notification{
-		EventTime:   eventTime,
-		Summary:     summary,
-		Description: description,
-	}
-}
+    n := notify.Notification{}
+    // TODO
+	//n.EventTime, _ := event.GetStartAt()
 
-func isEventRecurrent(event *ics.VEvent) bool {
+    summaryProp := event.GetProperty(ics.ComponentPropertySummary)
+    if nil != summaryProp {
+        n.Summary = summaryProp.Value
+    }
 
-	rule := event.GetProperty(ics.ComponentPropertyRrule)
-	if rule == nil {
-		return false
-	}
+    descriptionProp := event.GetProperty(ics.ComponentPropertyDescription)
+    if nil != summaryProp {
+        n.Description = descriptionProp.Value
+    }
 
-	return true
+	return n 
 }
 
 func NewParser() *Parser {
 	return &Parser{
 		notifications: []notify.Notification{},
 	}
+}
+
+func parseRRule(event *ics.VEvent) string {
+
+    fmt.Printf("event: %v\n", event.Serialize())
+    scanner := bufio.NewScanner(strings.NewReader(event.Serialize()))
+	var lines []string
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if strings.HasPrefix(line, "DTSTART") {
+			lines = append([]string{line}, lines...)
+			continue
+		}
+
+		if strings.HasPrefix(line, "RRULE") {
+			lines = append(lines, line)
+			return strings.Join(lines, "\n")
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+        // TODO
+	}
+
+	return strings.Join(lines, "\n")
+}
+
+func nextEventTime(rruleLines string) time.Time {
+    s, _ := rrule.StrToRRuleSet(rruleLines)
+    next := s.After(time.Now(), false)
+
+    // if no RRULE, After provides Zero time get 
+    // Try DSTART > Now
+    if next.IsZero(){
+        // TODO location
+        if s.GetDTStart().After(time.Now()){
+            return s.GetDTStart()
+        }
+    }
+
+    return next
 }
