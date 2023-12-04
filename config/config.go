@@ -27,6 +27,8 @@ type Config struct {
 
 type Alarm struct {
 	Type      string `toml:"type"`
+
+    // ISO8601
 	Duration string `toml:"alarm_duration_before"` 
 }
 
@@ -46,7 +48,7 @@ type Alarms []Alarm
 
 // if not config given
 var DefaultAlarms = Alarms{
-	{"telegram", "7d"},     // 1 week
-	{"telegram", "1d"},     // 1 day
-	{"desktop", "15m"},    // 15 minutes
+	{"telegram", "P7D"},     // 1 week
+	{"telegram", "P1D"},     // 1 day
+	{"desktop", "PT15M"},    // 15 minutes
 }

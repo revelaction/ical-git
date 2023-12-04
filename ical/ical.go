@@ -7,9 +7,10 @@ import (
 	"strings"
     "bufio"
 	"github.com/arran4/golang-ical"
+	"github.com/teambition/rrule-go"
+    "github.com/sosodev/duration"
 	"github.com/revelaction/ical-git/notify"
 	"github.com/revelaction/ical-git/config"
-	"github.com/teambition/rrule-go"
 
 )
 
@@ -29,7 +30,7 @@ func (p *Parser) Parse(data []byte) error {
 	for _, event := range cal.Events() {
 
         rruleLines := parseRRule(event)
-        //fmt.Println("rrule lines", rruleLines)
+        fmt.Printf("-------------------------rrule: %v\n", rruleLines)
         eventTime, err := nextEventTime(rruleLines)
         if err != nil {
             fmt.Println("error:", err)
@@ -37,15 +38,21 @@ func (p *Parser) Parse(data []byte) error {
         }
 
         for _, alarm := range config.DefaultAlarms {
-            //fmt.Println("alarm", alarm)
             alarmTime, _ := calculateAlarmTime(eventTime, alarm.Duration)
+            if err != nil {
+                fmt.Println("error:", err)
+                continue
+            }
+
+            //n := buildNotification(event) //debug
+            fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.Duration, alarmTime)
 
             tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
 
             if isInTickPeriod(alarmTime, tickDuration) {
                 n := buildNotification(event)
                 n.Time = alarmTime
-		        p.notifications = append(p.notifications, buildNotification(event))
+                n.EventTime = eventTime
             }
 
             //calculate alarm time 
@@ -63,13 +70,14 @@ func (p *Parser) Notifications() []notify.Notification {
 }
 
 
-func calculateAlarmTime(eventTime time.Time, durationString string) (time.Time, error) {
-    duration, err := time.ParseDuration(durationString)
+func calculateAlarmTime(eventTime time.Time, iso8601Duration string) (time.Time, error) {
+
+    d, err := duration.Parse(iso8601Duration)
     if err != nil {
         return time.Time{}, fmt.Errorf("error parsing duration: %w", err)
     }
 
-    alarmTime := eventTime.Add(-duration)
+    alarmTime := eventTime.Add(-d.ToTimeDuration())
     return alarmTime, nil
 }
 
