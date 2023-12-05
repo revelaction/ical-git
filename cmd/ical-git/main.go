@@ -6,6 +6,7 @@ import (
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/desktop"
+	"github.com/revelaction/ical-git/config"
 	"log"
 	"os"
 	"os/signal"
@@ -13,8 +14,6 @@ import (
 	"time"
 	//"github.com/revelaction/ical-git/notify/telegram"
 )
-
-const defaultTick = 3 * time.Second
 
 func start() {
 }
@@ -32,7 +31,7 @@ func main() {
 	go func() {
 
 		ctx, cancel := context.WithCancel(context.Background())
-		go run(ctx)
+		go tick(ctx)
 
 		for {
 			select {
@@ -46,7 +45,7 @@ func main() {
 					//create new context
 					log.Printf("creating new task context")
 					ctx, cancel = context.WithCancel(context.Background())
-					go run(ctx)
+					go tick(ctx)
 
 				case os.Interrupt:
 					log.Printf("Interrupt called")
@@ -64,58 +63,56 @@ func main() {
 	select {}
 }
 
-func run(ctx context.Context) {
-	ticker := time.NewTicker(defaultTick)
+func tick(ctx context.Context) {
+    // TODO toml
+    conf := config.Config{
+        TZ: "Europe/Paris",
+        DaemonTick: "15m",
+    }
+
+    tick, err := time.ParseDuration(conf.DaemonTick)
+    if err != nil {
+		os.Exit(1)
+    }
+
+	ticker := time.NewTicker(tick)
 	defer ticker.Stop()
 
 	for {
+        run(conf)
+
 		select {
 		case <-ctx.Done():
 			log.Printf("run: received call for Done. returning")
 			return
 		case <-ticker.C:
-			log.Printf("starting tick ----------------")
-
-			// get the ical fields (from git or local fylesystem), parse them, find next, build struct, create the AfterFunc, save the cancel method.
-			// get thepath of the contents
-			// https://gist.github.com/sethamclean/9475737
-			f := filesystem.New("testdata")
-			// TODO
-			ch := f.GetCh()
-			p := ical.NewParser()
-			for content := range ch {
-				err := p.Parse(content)
-				if err != nil {
-					fmt.Printf("error: %v+", err)
-				}
-
-			}
-
-			notifier := desktop.New("logo.png")
-			for _, n := range p.Notifications() {
-				_ = notifier.Notify(n)
-			}
-
-			// //ch has channels of contents <-chan []byte
-			// parser := ical.NewParser()
-			// notifications := []Notification
-			// for _, calendar := range ch() {
-			//     nts := parser.Parse(calendarEvent) // [] do we allow many events in the calendar?. thro errors, not supported feautres for each file
-			//     // create afterfunc
-			//     //pass the time.time to the AfterFunc -> get Timer
-			//     //put the timer in the notification
-			//     for _, nt := range nts {
-			//         nt.Timer:= notficationTimer() //many event in a calendar??? NO for MVP
-			//         notifications := append(notifications, nt)
-			//     }
-			// }
-			//
-
-			// notifications := retrieverer.Get() // []notifications
-			// rad each ical fields
-			// retriever interface getPaths
-
-			log.Printf("end task")
+            log.Printf("starting tick ----------------")
+            run(conf)
+            log.Printf("end tick ----------------")
 		}
 	}
+}
+
+func run(conf config.Config) {
+
+    log.Printf("start run()")
+    f := filesystem.New("../ical-testdata")
+    ch := f.GetCh()
+
+    p := ical.NewParser(conf)
+    for content := range ch {
+        err := p.Parse(content)
+        if err != nil {
+            fmt.Printf("error: %v+", err)
+        }
+
+    }
+
+    notifier := desktop.New("logo.png")
+    for _, n := range p.Notifications() {
+        _ = notifier.Notify(n)
+    }
+
+    log.Printf("end run()")
+
 }
