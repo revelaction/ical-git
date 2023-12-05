@@ -25,6 +25,26 @@ END:VEVENT
 END:VCALENDAR
 `)
 
+    icsData = []byte(`
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Product//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Berlin:20231206T120000
+DTEND;TZID=Europe/Berlin:20231206T130000
+DTSTAMP:20231201T090000Z
+UID:unique-id-12345@example.com
+SUMMARY:5 events
+RDATE;TZID=Europe/Berlin:20231211T120000,20231212T120000,20231214T120000,20231218T120000
+END:VEVENT
+END:VCALENDAR
+`)
+
+
+
+
 	// RRULE:FREQ=MONTHLY;BYMONTHDAY=25
 
 	// Parse the ICS file
@@ -54,8 +74,11 @@ END:VCALENDAR
 		//rule := events[0].GetProperty(ics.ComponentPropertyRrule).Value
 		//start := events[0].GetProperty(ics.ComponentPropertyDtStart).Value
 
-		//icalSerialized := events[0].Serialize()
+		icalSerialized := events[0].Serialize()
+        fmt.Printf("lipo:\n%v\n", icalSerialized)
+
         linesStr := parseRRule(events[0])
+
 
         fmt.Printf("lipo:\n%v\n", linesStr)
 
@@ -66,7 +89,7 @@ END:VCALENDAR
 		s, _ := rrule.StrToRRuleSet(linesStr)
 		//fmt.Printf("lipo %v#", events[0].GetProperty(ics.ComponentPropertyDtStart))
 		//fmt.Println("Date of the set:", s.String())
-		fmt.Printf("Set DTStart: %v#\n", s.GetDTStart())
+		//fmt.Printf("Set DTStart: %v#\n", s.GetDTStart())
 		next := s.Iterator()
 
 		for i := 0; i < 20; i++ {
@@ -79,19 +102,20 @@ END:VCALENDAR
 
         // TODO utc
         fmt.Println("The first recurrence after now is: ", s.After(time.Now(), false))
-
-
 	}
 
 }
 
 
 func parseRRule(event *ics.VEvent) string {
-    scanner := bufio.NewScanner(strings.NewReader(event.Serialize()))
+    eventCleaned := strings.Replace(event.Serialize(), "\r\n ", "", -1)
+
+    scanner := bufio.NewScanner(strings.NewReader(eventCleaned))
 	var lines []string
 
 	for scanner.Scan() {
 		line := scanner.Text()
+        fmt.Printf("-------------------%s--------------", line)
 
 		if strings.HasPrefix(line, "DTSTART") {
 			lines = append([]string{line}, lines...)
@@ -99,6 +123,12 @@ func parseRRule(event *ics.VEvent) string {
 		}
 
 		if strings.HasPrefix(line, "RRULE") {
+			lines = append(lines, line)
+			return strings.Join(lines, "\n")
+		}
+
+		if strings.HasPrefix(line, "RDATE") {
+            
 			lines = append(lines, line)
 			return strings.Join(lines, "\n")
 		}
@@ -110,3 +140,4 @@ func parseRRule(event *ics.VEvent) string {
 
 	return strings.Join(lines, "\n")
 }
+

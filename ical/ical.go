@@ -11,6 +11,7 @@ import (
     "github.com/sosodev/duration"
 	"github.com/revelaction/ical-git/notify"
 	"github.com/revelaction/ical-git/config"
+    "regexp"
 
 )
 
@@ -34,18 +35,20 @@ func (p *Parser) Parse(data []byte) error {
         fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
         eventTime, err := et.next()
         if err != nil {
-            fmt.Println("error:", err)
-            continue
+            // guess event time
+            if eventTime.IsZero() {
+                fmt.Println("error:", err)
+                continue
+            }
         }
 
         for _, alarm := range config.DefaultAlarms {
-            alarmTime, _ := calculateAlarmTime(eventTime, alarm.Duration)
+            alarmTime, err := calculateAlarmTime(eventTime, alarm.Duration)
             if err != nil {
                 fmt.Println("error:", err)
                 continue
             }
 
-            //n := buildNotification(event) //debug
             fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.Duration, alarmTime)
 
             tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
@@ -110,7 +113,7 @@ func buildNotification(event *ics.VEvent) notify.Notification {
     }
 
     descriptionProp := event.GetProperty(ics.ComponentPropertyDescription)
-    if nil != summaryProp {
+    if nil != descriptionProp {
         n.Description = descriptionProp.Value
     }
 
@@ -126,32 +129,46 @@ func NewParser(c config.Config) *Parser {
 
 type EventTime struct {
 	vEvent        *ics.VEvent
-	dStart        string
+	dtStart        string
 	rRule         []string
+	rDate         []string
 	timeZone      *time.Location
 	hasFloating   bool
 }
 
 func newEventTime(vEvent *ics.VEvent) *EventTime {
+    //validate in config // TODO
+    loc, _ := time.LoadLocation("Europe/Berlin")
 	return &EventTime{
 		vEvent:      vEvent,
         rRule: []string{},
+        timeZone : loc, 
 	}
 }
 
 func (et *EventTime) parse() {
-    scanner := bufio.NewScanner(strings.NewReader(et.vEvent.Serialize()))
+
+    // content line (icalendar spec) should not be longer thant 75 chars. 
+    // golang-ical properly break lines when serialize()
+    // we remove the space to make sure simple scanner works properly
+	eventCleaned := strings.Replace(et.vEvent.Serialize(), "\n ", "", -1)
+    scanner := bufio.NewScanner(strings.NewReader(eventCleaned))
 
 	for scanner.Scan() {
 		line := scanner.Text()
 
 		if strings.HasPrefix(line, "DTSTART") {
-            et.dStart = line
+            et.dtStart = line
 			continue
 		}
 
 		if strings.HasPrefix(line, "RRULE") {
 			et.rRule = append(et.rRule, line)
+            continue
+		}
+
+		if strings.HasPrefix(line, "RDATE") {
+			et.rDate = append(et.rDate, line)
             continue
 		}
 	}
@@ -169,8 +186,16 @@ func (et *EventTime) hasRRule() bool {
 	return false
 }
 
-func (et *EventTime) hasDStart() bool {
-    if et.dStart == "" {
+func (et *EventTime) hasRDate() bool {
+    if len(et.rDate) > 0 {
+        return true
+    }
+
+	return false
+}
+
+func (et *EventTime) hasDtStart() bool {
+    if et.dtStart == "" {
         return false
     }
 
@@ -178,30 +203,76 @@ func (et *EventTime) hasDStart() bool {
 }
 
 // TODO
-func (et *EventTime) hasFloatingDStart() bool {
-	return false 
+func (et *EventTime) isFloating() bool {
+    if matched, _ := regexp.MatchString(`\d{8}T\d{6}$`, et.dtStart); matched {
+        return true
+    }
+
+    return false 
+}
+
+// hasTzId parses DTSTART;TZID=Some/Timezone:20231129T100000
+func (et *EventTime) hasTzId() bool {
+
+	components := strings.Split(et.dtStart, ":")
+
+	if len(components) != 2 {
+		return false
+	}
+
+    parameters := strings.Split(components[0], ";")
+
+    for _, p:= range parameters {
+        if strings.HasPrefix(p, "TZID=") {
+            return true
+        }
+    }
+
+    return false
+}
+
+func (et *EventTime) parseDtStartInLocation() (time.Time, error) {
+    // The layout for an iCalendar floating date-time value
+    const layout = "20060102T150405"
+    components := strings.Split(et.dtStart, ":")
+    dateTime := components[1]
+
+    t, err := time.ParseInLocation(layout, dateTime, et.timeZone)
+    if err != nil {
+        return time.Time{}, err
+    }
+
+    return t, nil
 }
 
 func (et *EventTime) joinLines() string {
 
-    s := []string{et.dStart}
+    s := []string{et.dtStart}
     s = append(s, et.rRule...)
+    s = append(s, et.rDate...)
 	return strings.Join(s, "\n")
 }
 
-// TODO
-// if no RRULE get s.GetDTStart(), if parse error in DSTART, try goland-ical VALUE, check if TZ propeerty, check no UTC in value, apply config timezone if exist or machine localtion
-// if no RRULE get s.GetDTStart(), if zero, return -> event is in the past
-// if hasRRule, and parse error, return error, 
-// if hasRRule, and zero value, return zero value, all events of set are in the past.
 func (et *EventTime) next() (time.Time, error) {
 
     s, err := rrule.StrToRRuleSet(et.joinLines())
     if err != nil {
-        return time.Time{}, fmt.Errorf("rrule parse error %s", err)
+        // we try to fix:
+        // DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
+        if !et.hasRRule() && et.hasDtStart() {
+            if et.isFloating() && et.hasTzId() {
+                guessTime, errParse := et.parseDtStartInLocation()
+                fmt.Println(guessTime)
+                if errParse != nil {
+                    return time.Time{},fmt.Errorf("error %w: error %w ", err, errParse)
+                }
+
+                return guessTime, fmt.Errorf("error %w: guess event time ok", err)
+            }
+        }
     }
 
-    if !et.hasRRule() {
+    if !et.hasRRule() && !et.hasRDate() {
         dtStart := s.GetDTStart()
 
         if dtStart.After(time.Now()){
