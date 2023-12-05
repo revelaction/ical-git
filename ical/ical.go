@@ -24,14 +24,15 @@ func (p *Parser) Parse(data []byte) error {
 	reader := bytes.NewReader(data)
 	cal, err := ics.ParseCalendar(reader)
 	if err != nil {
-		return err
+		return fmt.Errorf("calendar parse error: %w", err)
 	}
 
 	for _, event := range cal.Events() {
 
-        rruleLines := parseRRule(event)
-        fmt.Printf("-------------------------rrule: %v\n", rruleLines)
-        eventTime, err := nextEventTime(rruleLines)
+        et := newEventTime(event)
+        et.parse()
+        fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
+        eventTime, err := et.next()
         if err != nil {
             fmt.Println("error:", err)
             continue
@@ -50,16 +51,17 @@ func (p *Parser) Parse(data []byte) error {
             tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
 
             if isInTickPeriod(alarmTime, tickDuration) {
+                fmt.Println("in tick")
                 n := buildNotification(event)
                 n.Time = alarmTime
                 n.EventTime = eventTime
+                n.Type = alarm.Type
+                p.notifications = append(p.notifications, n)
             }
 
-            //calculate alarm time 
             // if alarm in tick, (apply offset -3), build Notification
         }
 
-        //fmt.Println("The first recurrence after now is: ", nextEventTime(rruleLines))
 	}
 
 	return nil
@@ -115,16 +117,105 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 	return n 
 }
 
-func NewParser() *Parser {
+func NewParser(c config.Config) *Parser {
 	return &Parser{
 		notifications: []notify.Notification{},
-        // TODO toml
-        conf: config.Config{
-            TZ: "Europe/Paris",
-            DaemonTick: "3s",
-        },
+        conf: c,
 	}
 }
+
+type EventTime struct {
+	vEvent        *ics.VEvent
+	dStart        string
+	rRule         []string
+	timeZone      *time.Location
+	hasFloating   bool
+}
+
+func newEventTime(vEvent *ics.VEvent) *EventTime {
+	return &EventTime{
+		vEvent:      vEvent,
+        rRule: []string{},
+	}
+}
+
+func (et *EventTime) parse() {
+    scanner := bufio.NewScanner(strings.NewReader(et.vEvent.Serialize()))
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if strings.HasPrefix(line, "DTSTART") {
+            et.dStart = line
+			continue
+		}
+
+		if strings.HasPrefix(line, "RRULE") {
+			et.rRule = append(et.rRule, line)
+            continue
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+        // TODO
+	}
+}
+
+func (et *EventTime) hasRRule() bool {
+    if len(et.rRule) > 0 {
+        return true
+    }
+
+	return false
+}
+
+func (et *EventTime) hasDStart() bool {
+    if et.dStart == "" {
+        return false
+    }
+
+	return true
+}
+
+// TODO
+func (et *EventTime) hasFloatingDStart() bool {
+	return false 
+}
+
+func (et *EventTime) joinLines() string {
+
+    s := []string{et.dStart}
+    s = append(s, et.rRule...)
+	return strings.Join(s, "\n")
+}
+
+// TODO
+// if no RRULE get s.GetDTStart(), if parse error in DSTART, try goland-ical VALUE, check if TZ propeerty, check no UTC in value, apply config timezone if exist or machine localtion
+// if no RRULE get s.GetDTStart(), if zero, return -> event is in the past
+// if hasRRule, and parse error, return error, 
+// if hasRRule, and zero value, return zero value, all events of set are in the past.
+func (et *EventTime) next() (time.Time, error) {
+
+    s, err := rrule.StrToRRuleSet(et.joinLines())
+    if err != nil {
+        return time.Time{}, fmt.Errorf("rrule parse error %s", err)
+    }
+
+    if !et.hasRRule() {
+        dtStart := s.GetDTStart()
+
+        if dtStart.After(time.Now()){
+            return dtStart, nil
+        }
+
+        // expired
+        return time.Time{}, nil
+    }
+
+
+    return s.After(time.Now(), false), nil
+}
+
 
 func parseRRule(event *ics.VEvent) string {
 
@@ -153,10 +244,20 @@ func parseRRule(event *ics.VEvent) string {
 	return strings.Join(lines, "\n")
 }
 
+// if ruleLines has no RRULE ans DSTART, s.After provides Zero time 
+// if ruleLines has RRULE, After provides Zero time when all recurrent events
+// are older than DSTART
+// 
+// custom timezones referencing a VTIMEZONE in the VCALENDAR are not suported
+// TODO strct EventTime with hasRRule for better logic
+// if no RRULE get s.GetDTStart(), if parse error in DSTART, try goland-ical VALUE, check if TZ propeerty, check no UTC in value, apply config timezone if exist or machine localtion
+// if no RRULE get s.GetDTStart(), if zero, return -> event is in the past
+// if hasRRule, and parse error, return error, 
+// if hasRRule, and zero value, return zero value, all events of set are in the past.
+// next()
 func nextEventTime(rruleLines string) (time.Time, error) {
     s, err := rrule.StrToRRuleSet(rruleLines)
     if err != nil {
-        // TODO maybe try to aplly config tz.
         return time.Time{}, err
     }
 
