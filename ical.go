@@ -1,12 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/arran4/golang-ical"
 	"github.com/teambition/rrule-go"
 	"strings"
-    "bufio"
-    "time"
+	"time"
 )
 
 func main() {
@@ -25,7 +25,7 @@ END:VEVENT
 END:VCALENDAR
 `)
 
-    icsData = []byte(`
+	icsData = []byte(`
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Your Product//EN
@@ -41,9 +41,6 @@ RDATE;TZID=Europe/Berlin:20231211T120000,20231212T120000,20231214T120000,2023121
 END:VEVENT
 END:VCALENDAR
 `)
-
-
-
 
 	// RRULE:FREQ=MONTHLY;BYMONTHDAY=25
 
@@ -75,12 +72,11 @@ END:VCALENDAR
 		//start := events[0].GetProperty(ics.ComponentPropertyDtStart).Value
 
 		icalSerialized := events[0].Serialize()
-        fmt.Printf("lipo:\n%v\n", icalSerialized)
+		fmt.Printf("lipo:\n%v\n", icalSerialized)
 
-        linesStr := parseRRule(events[0])
+		linesStr := parseRRule(events[0])
 
-
-        fmt.Printf("lipo:\n%v\n", linesStr)
+		fmt.Printf("lipo:\n%v\n", linesStr)
 
 		//icalStr := "DTSTART:" + start + "\nRRULE:" + rule
 		//fmt.Println("ical str: ", icalStr)
@@ -100,22 +96,21 @@ END:VCALENDAR
 		//    fmt.Println(t)
 		//}
 
-        // TODO utc
-        fmt.Println("The first recurrence after now is: ", s.After(time.Now(), false))
+		// TODO utc
+		fmt.Println("The first recurrence after now is: ", s.After(time.Now(), false))
 	}
 
 }
 
-
 func parseRRule(event *ics.VEvent) string {
-    eventCleaned := strings.Replace(event.Serialize(), "\r\n ", "", -1)
+	eventCleaned := strings.Replace(event.Serialize(), "\r\n ", "", -1)
 
-    scanner := bufio.NewScanner(strings.NewReader(eventCleaned))
+	scanner := bufio.NewScanner(strings.NewReader(eventCleaned))
 	var lines []string
 
 	for scanner.Scan() {
 		line := scanner.Text()
-        fmt.Printf("-------------------%s--------------", line)
+		fmt.Printf("-------------------%s--------------", line)
 
 		if strings.HasPrefix(line, "DTSTART") {
 			lines = append([]string{line}, lines...)
@@ -128,16 +123,15 @@ func parseRRule(event *ics.VEvent) string {
 		}
 
 		if strings.HasPrefix(line, "RDATE") {
-            
+
 			lines = append(lines, line)
 			return strings.Join(lines, "\n")
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		// TODO 
+		// TODO
 	}
 
 	return strings.Join(lines, "\n")
 }
-

@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/desktop"
-	"github.com/revelaction/ical-git/config"
 	"log"
 	"os"
 	"os/signal"
@@ -64,58 +64,58 @@ func main() {
 }
 
 func tick(ctx context.Context) {
-    // TODO toml
-    conf := config.Config{
-        TZ: "Europe/Paris",
-        DaemonTick: "15m",
-    }
+	// TODO toml
+	conf := config.Config{
+		TZ:         "Europe/Paris",
+		DaemonTick: "15m",
+	}
 
-    tick, err := time.ParseDuration(conf.DaemonTick)
-    if err != nil {
+	tick, err := time.ParseDuration(conf.DaemonTick)
+	if err != nil {
 		os.Exit(1)
-    }
+	}
 
 	ticker := time.NewTicker(tick)
 	defer ticker.Stop()
 
 	for {
-        run(conf)
+		run(conf)
 
 		select {
 		case <-ctx.Done():
 			log.Printf("run: received call for Done. returning")
 			return
 		case <-ticker.C:
-            log.Printf("starting tick ----------------")
-            run(conf)
-            log.Printf("end tick ----------------")
+			log.Printf("starting tick ----------------")
+			run(conf)
+			log.Printf("end tick ----------------")
 		}
 	}
 }
 
 func run(conf config.Config) {
 
-    log.Printf("start run()")
-    f := filesystem.New("../ical-testdata")
-    ch := f.GetCh()
+	log.Printf("start run()")
+	f := filesystem.New("../ical-testdata")
+	ch := f.GetCh()
 
-    p := ical.NewParser(conf)
-    for content := range ch {
-        err := p.Parse(content)
-        if err != nil {
-            fmt.Printf("error: %v+", err)
-        }
+	p := ical.NewParser(conf)
+	for content := range ch {
+		err := p.Parse(content)
+		if err != nil {
+			fmt.Printf("error: %v+", err)
+		}
 
-    }
+	}
 
-    notifier := desktop.New("logo.png")
-    for _, n := range p.Notifications() {
-        // get type of notifuication build notifier.
-        // AFterFunc, schedule  
+	notifier := desktop.New("logo.png")
+	for _, n := range p.Notifications() {
+		// get type of notifuication build notifier.
+		// AFterFunc, schedule
 
-        _ = notifier.Notify(n)
-    }
+		_ = notifier.Notify(n)
+	}
 
-    log.Printf("end run()")
+	log.Printf("end run()")
 
 }
