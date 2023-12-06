@@ -3,23 +3,24 @@ package desktop
 import (
 	"github.com/gen2brain/beeep"
 	"github.com/revelaction/ical-git/notify"
+	"github.com/revelaction/ical-git/config"
 	"time"
 )
 
 // Desktop implements the notify.Notifier interface
 type Desktop struct {
-	Icon string
+    config config.Config
 }
 
-func New(icon string) *Desktop {
+func New(conf config.Config) *Desktop {
 	return &Desktop{
-		Icon: icon,
+		config: conf,
 	}
 }
 
 // icon https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#directory_layout
 func (d *Desktop) Notify(n notify.Notification) error {
 
-	beeep.Notify(n.Summary+n.EventTime.Format(time.RFC822), n.Description, "/usr/share/icons/hicolor/48x48/apps/filezilla.png")
+	beeep.Notify(n.Summary+n.EventTime.Format(time.RFC822), n.Description, d.config.Icon)
 	return nil
 }

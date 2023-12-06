@@ -15,6 +15,13 @@ type Parser struct {
 	conf          config.Config
 }
 
+func NewParser(c config.Config) *Parser {
+	return &Parser{
+		notifications: []notify.Notification{},
+		conf:          c,
+	}
+}
+
 func (p *Parser) Parse(data []byte) error {
 	reader := bytes.NewReader(data)
 	cal, err := ics.ParseCalendar(reader)
@@ -35,7 +42,7 @@ func (p *Parser) Parse(data []byte) error {
 			}
 		}
 
-		for _, alarm := range config.DefaultAlarms {
+		for _, alarm := range p.conf.Alarms {
 			alarmTime, err := calculateAlarmTime(eventTime, alarm.When)
 			if err != nil {
 				fmt.Println("error:", err)
@@ -48,7 +55,6 @@ func (p *Parser) Parse(data []byte) error {
 			tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
 
 			if isInTickPeriod(alarmTime, tickDuration) {
-				fmt.Println("in tick")
 				n := buildNotification(event)
 				n.Time = alarmTime
 				n.EventTime = eventTime
@@ -58,7 +64,6 @@ func (p *Parser) Parse(data []byte) error {
 
 			// if alarm in tick, (apply offset -3), build Notification
 		}
-
 	}
 
 	return nil
@@ -75,7 +80,7 @@ func calculateAlarmTime(eventTime time.Time, iso8601Duration string) (time.Time,
 		return time.Time{}, fmt.Errorf("error parsing duration: %w", err)
 	}
 
-	alarmTime := eventTime.Add(-d.ToTimeDuration())
+	alarmTime := eventTime.Add(d.ToTimeDuration())
 	return alarmTime, nil
 }
 
@@ -96,8 +101,6 @@ func isInTickPeriod(t time.Time, duration time.Duration) bool {
 func buildNotification(event *ics.VEvent) notify.Notification {
 
 	n := notify.Notification{}
-	// TODO
-	//n.EventTime, _ := event.GetStartAt()
 
 	summaryProp := event.GetProperty(ics.ComponentPropertySummary)
 	if nil != summaryProp {
@@ -110,12 +113,5 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 	}
 
 	return n
-}
-
-func NewParser(c config.Config) *Parser {
-	return &Parser{
-		notifications: []notify.Notification{},
-		conf:          c,
-	}
 }
 
