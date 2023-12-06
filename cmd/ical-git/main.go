@@ -7,6 +7,7 @@ import (
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/desktop"
+	"github.com/BurntSushi/toml"
 	"log"
 	"os"
 	"os/signal"
@@ -15,7 +16,21 @@ import (
 	//"github.com/revelaction/ical-git/notify/telegram"
 )
 
-func start() {
+// configFile is the config file path (absolute path)
+const configFile = "icalgit.toml"
+
+func loadConfig() config.Config {
+	// Config file
+	var conf config.Config
+	if _, err := toml.DecodeFile(configFile, &conf); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := conf.Validate(); err != nil {
+		log.Fatal(err)
+	}
+
+    return conf
 }
 
 func main() {
@@ -30,8 +45,10 @@ func main() {
 
 	go func() {
 
+        conf := loadConfig()
+
 		ctx, cancel := context.WithCancel(context.Background())
-		go tick(ctx)
+		go tick(ctx, conf)
 
 		for {
 			select {
@@ -45,7 +62,7 @@ func main() {
 					//create new context
 					log.Printf("creating new task context")
 					ctx, cancel = context.WithCancel(context.Background())
-					go tick(ctx)
+					go tick(ctx, conf)
 
 				case os.Interrupt:
 					log.Printf("Interrupt called")
@@ -63,12 +80,7 @@ func main() {
 	select {}
 }
 
-func tick(ctx context.Context) {
-	// TODO toml
-	conf := config.Config{
-		TZ:         "Europe/Paris",
-		DaemonTick: "15m",
-	}
+func tick(ctx context.Context, conf config.Config) {
 
 	tick, err := time.ParseDuration(conf.DaemonTick)
 	if err != nil {

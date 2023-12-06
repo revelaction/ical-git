@@ -1,0 +1,11 @@
+timezone = "Europe/Berlin"
+tick = "5m"
+icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
+
+alarms = [
+	{type = "telegram", when = "-P7D"},  
+	{type = "desktop", when = "-P1D"},  
+	{type = "desktop", when = "-PT15M"},  
+	{type = "desktop", when = "-PT1H"},  
+	{type = "desktop", when = "-PT13H30M"}, 
+]

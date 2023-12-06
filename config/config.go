@@ -19,13 +19,13 @@ type Config struct {
 	// git repo, credentials
 	// or filesystem Path
 
-	Alarms map[string]Alarm
+	Alarms []Alarm
 }
 
 type Alarm struct {
 	Type string `toml:"type"`
 	// ISO8601
-	Duration string `toml:"alarm_duration_before"`
+	When string `toml:"when"`
 }
 
 var errConfNotDuration = errors.New("the value given can not be parsed to a Duration")

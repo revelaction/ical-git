@@ -36,14 +36,14 @@ func (p *Parser) Parse(data []byte) error {
 		}
 
 		for _, alarm := range config.DefaultAlarms {
-			alarmTime, err := calculateAlarmTime(eventTime, alarm.Duration)
+			alarmTime, err := calculateAlarmTime(eventTime, alarm.When)
 			if err != nil {
 				fmt.Println("error:", err)
 				continue
 			}
 
 			// TODO format()
-			fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.Duration, alarmTime)
+			fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.When, alarmTime)
 
 			tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
 

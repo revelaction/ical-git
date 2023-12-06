@@ -10,11 +10,13 @@ import (
 	"time"
 )
 
+// TODO to event
 type EventTime struct {
 	vEvent      *ics.VEvent
 	dtStart     string
 	rRule       []string
 	rDate       []string
+    // TODO deprecate this is config
 	timeZone    *time.Location
 	hasFloating bool
 	guessed     bool

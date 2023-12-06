@@ -3,6 +3,7 @@ module github.com/revelaction/ical-git
 go 1.21.0
 
 require (
+	github.com/BurntSushi/toml v1.3.2
 	github.com/arran4/golang-ical v0.2.1
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gen2brain/beeep v0.0.0-20230907135156-1a38885a97fc
