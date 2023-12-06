@@ -110,6 +110,9 @@ func run(conf config.Config) {
 
     notifier := desktop.New("logo.png")
     for _, n := range p.Notifications() {
+        // get type of notifuication build notifier.
+        // AFterFunc, schedule  
+
         _ = notifier.Notify(n)
     }
 

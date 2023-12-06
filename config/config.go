@@ -49,6 +49,7 @@ var DefaultAlarms = Alarms{
 	{Telegram, "P7D"},     // 1 week
 	{Telegram, "P1D"},     // 1 day
 	{Desktop, "PT15M"},    // 15 minutes
+	{Desktop, "PT45M"},    
 	{Desktop, "PT13H30M"},    
 	{Desktop, "PT16H30M"},    
 	{Desktop, "PT2H30M"},    

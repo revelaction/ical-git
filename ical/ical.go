@@ -33,9 +33,8 @@ func (p *Parser) Parse(data []byte) error {
         et := newEventTime(event)
         et.parse()
         fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
-        eventTime, err := et.next()
+        eventTime, err := et.nextTime()
         if err != nil {
-            // guess event time
             if eventTime.IsZero() {
                 fmt.Println("error:", err)
                 continue
@@ -49,6 +48,7 @@ func (p *Parser) Parse(data []byte) error {
                 continue
             }
 
+            // TODO format()
             fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.Duration, alarmTime)
 
             tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
@@ -134,6 +134,7 @@ type EventTime struct {
 	rDate         []string
 	timeZone      *time.Location
 	hasFloating   bool
+    guessed     bool
 }
 
 func newEventTime(vEvent *ics.VEvent) *EventTime {
@@ -142,6 +143,7 @@ func newEventTime(vEvent *ics.VEvent) *EventTime {
 	return &EventTime{
 		vEvent:      vEvent,
         rRule: []string{},
+        rDate: []string{},
         timeZone : loc, 
 	}
 }
@@ -202,7 +204,11 @@ func (et *EventTime) hasDtStart() bool {
 	return true
 }
 
-// TODO
+func (et *EventTime) isGuessed() bool {
+    return et.guessed
+}
+
+// TODO err
 func (et *EventTime) isFloating() bool {
     if matched, _ := regexp.MatchString(`\d{8}T\d{6}$`, et.dtStart); matched {
         return true
@@ -245,6 +251,10 @@ func (et *EventTime) parseDtStartInLocation() (time.Time, error) {
     return t, nil
 }
 
+//func (et *EventTime) format() string {
+//    return fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.Duration, alarmTime)
+//}
+
 func (et *EventTime) joinLines() string {
 
     s := []string{et.dtStart}
@@ -253,29 +263,46 @@ func (et *EventTime) joinLines() string {
 	return strings.Join(s, "\n")
 }
 
-func (et *EventTime) next() (time.Time, error) {
+// golang-ical, rrule  do not support custom timezones
+// try to find one  
+// DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
+func (et *EventTime) guessEventTimeForError(err error) (time.Time, error) {
+    if !et.hasRRule() && et.hasDtStart() {
+        if et.isFloating() && et.hasTzId() {
+            guessTime, errParse := et.parseDtStartInLocation()
+            if errParse != nil {
+                return time.Time{},fmt.Errorf("error %w: error %w ", err, errParse)
+            }
+
+            return guessTime, fmt.Errorf("error %w: guess event time ok", err)
+        }
+    }
+
+    return time.Time{},fmt.Errorf("Could not guess event time: %w", err)
+}
+
+func (et *EventTime) nextTime() (time.Time, error) {
+
+    now := time.Now()
 
     s, err := rrule.StrToRRuleSet(et.joinLines())
     if err != nil {
-        // we try to fix:
-        // DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
-        if !et.hasRRule() && et.hasDtStart() {
-            if et.isFloating() && et.hasTzId() {
-                guessTime, errParse := et.parseDtStartInLocation()
-                fmt.Println(guessTime)
-                if errParse != nil {
-                    return time.Time{},fmt.Errorf("error %w: error %w ", err, errParse)
-                }
-
-                return guessTime, fmt.Errorf("error %w: guess event time ok", err)
-            }
-        }
+        t, err := et.guessEventTimeForError(err)
+        fmt.Println("-----------", t)
+        if !t.IsZero(){
+            et.guessed = true
+            // check if after now
+            if t.After(now){
+                return t, err
+            } 
+        } 
+        return time.Time{}, nil
     }
 
     if !et.hasRRule() && !et.hasRDate() {
         dtStart := s.GetDTStart()
 
-        if dtStart.After(time.Now()){
+        if dtStart.After(now){
             return dtStart, nil
         }
 
@@ -283,6 +310,5 @@ func (et *EventTime) next() (time.Time, error) {
         return time.Time{}, nil
     }
 
-
-    return s.After(time.Now(), false), nil
+    return s.After(now, false), nil
 }
