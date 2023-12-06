@@ -1,6 +1,5 @@
 timezone = "Europe/Berlin"
-tick = "5m"
-icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
+tick = "24h"
 
 alarms = [
 	{type = "telegram", when = "-P7D"},  
@@ -8,4 +7,18 @@ alarms = [
 	{type = "desktop", when = "-PT15M"},  
 	{type = "desktop", when = "-PT1H"},  
 	{type = "desktop", when = "-PT13H30M"}, 
+	{type = "desktop", when = "-P5D"}, 
+	{type = "desktop", when = "-P6D"}, 
+	{type = "telegram", when = "-P4D"}, 
+	{type = "desktop", when = "-P4D"}, 
 ]
+
+#notifiers = ["telegram", "desktop"]
+notifiers = ["desktop"]
+
+[telegram]
+token = "yuu3b3k"
+chat_id = 588488
+
+[desktop]
+icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"

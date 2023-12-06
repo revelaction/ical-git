@@ -21,6 +21,6 @@ func New(conf config.Config) *Desktop {
 // icon https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#directory_layout
 func (d *Desktop) Notify(n notify.Notification) error {
 
-	beeep.Notify(n.Summary+n.EventTime.Format(time.RFC822), n.Description, d.config.Icon)
+	beeep.Notify(n.Summary+n.EventTime.Format(time.RFC822), n.Description, d.config.Desktop.Icon)
 	return nil
 }

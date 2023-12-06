@@ -3,12 +3,9 @@ package telegram
 import (
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/revelaction/ical-git/notify"
+	"github.com/revelaction/ical-git/config"
 	"time"
-)
-
-const (
-	telegran_token = "sadfsag"
-	chatId         = int64(373747346)
+	"fmt"
 )
 
 type Notifier interface {
@@ -23,10 +20,12 @@ type message struct {
 // Telegram
 type Telegram struct {
 	bot *tg.BotAPI
+    conf config.Config
 }
 
-func New() *Telegram {
-	bot, err := tg.NewBotAPI(telegran_token)
+func New(conf config.Config) *Telegram {
+    fmt.Println("token", conf.Telegram.Token)
+	bot, err := tg.NewBotAPI(conf.Telegram.Token)
 	if err != nil {
 		// TODO
 		return nil
@@ -34,12 +33,14 @@ func New() *Telegram {
 
 	return &Telegram{
 		bot: bot,
+        conf: conf,
 	}
 }
 
 func (t *Telegram) Notify(n notify.Notification) error {
-	message := n.Summary + n.EventTime.Format(time.RFC822)
-	msg := tg.NewMessage(chatId, message)
+	message := n.Summary + " " + n.EventTime.Format(time.RFC822)
+    fmt.Println("in telegram", message, t.conf.Telegram.ChatId)
+	msg := tg.NewMessage(t.conf.Telegram.ChatId, message)
 	msg.ParseMode = "markdown"
 	_, err := t.bot.Send(msg)
 	if err != nil {
