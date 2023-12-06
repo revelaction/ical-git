@@ -146,11 +146,7 @@ func newEventTime(vEvent *ics.VEvent) *EventTime {
 
 func (et *EventTime) parse() {
 
-	// content line (icalendar spec) should not be longer thant 75 chars.
-	// golang-ical properly break lines when serialize()
-	// we remove the space to make sure simple scanner works properly
-	eventCleaned := strings.Replace(et.vEvent.Serialize(), "\n ", "", -1)
-	scanner := bufio.NewScanner(strings.NewReader(eventCleaned))
+	scanner := bufio.NewScanner(strings.NewReader(et.serialize()))
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -202,6 +198,13 @@ func (et *EventTime) hasDtStart() bool {
 
 func (et *EventTime) isGuessed() bool {
 	return et.guessed
+}
+
+// content line (icalendar spec) should not be longer thant 75 chars.
+// golang-ical properly break lines when serialize()
+// we remove the space to make sure simple scanner works properly
+func (et *EventTime) serialize() string {
+	return strings.Replace(et.vEvent.Serialize(), "\r\n ", "", -1)
 }
 
 // TODO err
