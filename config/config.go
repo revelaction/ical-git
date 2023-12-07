@@ -10,7 +10,7 @@ type Config struct {
 	DaemonTick time.Duration `toml:"tick"`
 	Icon       string        `toml:"icon"`
 
-	alarms []Alarm
+	Alarms []Alarm
 
 	Notifiers []string
 	Telegram  Telegram
@@ -36,7 +36,7 @@ var errConfNotDuration = errors.New("the value given can not be parsed to a Dura
 
 func (c *Config) AlarmsAllowed() []Alarm {
 	als := []Alarm{}
-	for _, al := range c.alarms {
+	for _, al := range c.Alarms {
 		for _, n := range c.Notifiers {
 			if n == al.Type {
 				als = append(als, al)
