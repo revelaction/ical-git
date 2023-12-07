@@ -18,4 +18,3 @@ type Notification struct {
 	Type        string
 	Time        time.Time
 }
-

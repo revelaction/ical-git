@@ -12,11 +12,11 @@ import (
 
 // TODO to event
 type EventTime struct {
-	vEvent      *ics.VEvent
-	dtStart     string
-	rRule       []string
-	rDate       []string
-    // TODO deprecate this is config
+	vEvent  *ics.VEvent
+	dtStart string
+	rRule   []string
+	rDate   []string
+	// TODO deprecate this is config
 	timeZone    *time.Location
 	hasFloating bool
 	guessed     bool
@@ -172,7 +172,7 @@ func (et *EventTime) guessEventTimeForError(err error) (time.Time, error) {
 // nextTime returns the next ocurrence of a event
 // It can return a zero time indicating that the event is in the past or that
 // an error ocurred.
-// it tries to guess the time of a event with custom VTIMEZONE. (TODO remove the guessed and return bool gor the guess) 
+// it tries to guess the time of a event with custom VTIMEZONE. (TODO remove the guessed and return bool gor the guess)
 // TODO nextTime(now) and bring the start time
 func (et *EventTime) nextTime() (time.Time, error) {
 

@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/BurntSushi/toml"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/schedule"
-	"github.com/BurntSushi/toml"
 	"log"
 	"os"
 	"os/signal"
@@ -25,7 +25,7 @@ func loadConfig() config.Config {
 		log.Fatal(err)
 	}
 
-    return conf
+	return conf
 }
 
 func main() {
@@ -40,8 +40,8 @@ func main() {
 
 	go func() {
 
-        // ctx, cancel := load(conf) TODO
-        conf := loadConfig()
+		// ctx, cancel := load(conf) TODO
+		conf := loadConfig()
 		ctx, cancel := context.WithCancel(context.Background())
 		go tick(ctx, conf)
 
@@ -77,7 +77,7 @@ func main() {
 
 func tick(ctx context.Context, conf config.Config) {
 
-    now := time.Now()
+	now := time.Now()
 	ticker := time.NewTicker(conf.DaemonTick)
 	defer ticker.Stop()
 
@@ -111,8 +111,7 @@ func run(conf config.Config, start time.Time) {
 
 	}
 
-    ntf := schedule.NewScheduler(conf, start)
-    ntf.Schedule(p.Notifications()) 
+	ntf := schedule.NewScheduler(conf, start)
+	ntf.Schedule(p.Notifications())
 	log.Printf("end run()")
 }
-

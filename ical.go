@@ -2,20 +2,20 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"github.com/arran4/golang-ical"
 	"github.com/teambition/rrule-go"
 	"strings"
 	"time"
-    "bytes"
-    //"os"
+	//"os"
 )
 
 func main() {
 	// Define the ICS file contents
 	//icsDataFoldedSpace := []byte("RDATE;TZID=Europe/Berlin:20231211T120000,20231212T120000,20231214T120000,\r\n 20231218T120000,20231211T120000,20231212T120000,20231214T120000,\r\n DESCRIPTION:Remember to pay the rent\r\n")
 
-    icsData := []byte(`
+	icsData := []byte(`
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Your Product//EN
@@ -32,17 +32,16 @@ END:VEVENT
 END:VCALENDAR
 `)
 
+	//
+	//scanner := bufio.NewScanner(bytes.NewReader(icsDataFoldedSpace))
+	//scanner.Split(splitFunc)
 
-    // 
-    //scanner := bufio.NewScanner(bytes.NewReader(icsDataFoldedSpace))
-    //scanner.Split(splitFunc)
-
-    //for scanner.Scan() {
-    //    line := scanner.Text()
-    //    fmt.Printf("----%s----\n", line)
-    //}
-    //
-    //os.Exit(1)
+	//for scanner.Scan() {
+	//    line := scanner.Text()
+	//    fmt.Printf("----%s----\n", line)
+	//}
+	//
+	//os.Exit(1)
 
 	// RRULE:FREQ=MONTHLY;BYMONTHDAY=25
 
@@ -107,7 +106,7 @@ func parseRRule(event *ics.VEvent) string {
 	eventCleaned := strings.Replace(event.Serialize(), "\r\n ", "", -1)
 
 	scanner := bufio.NewScanner(strings.NewReader(eventCleaned))
-    scanner.Split(splitFunc)
+	scanner.Split(splitFunc)
 	var lines []string
 
 	for scanner.Scan() {
@@ -140,32 +139,32 @@ func parseRRule(event *ics.VEvent) string {
 
 // https://icalendar.org/iCalendar-RFC-5545/3-1-content-lines.html
 func splitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
-    // Look for the first occurrence of "\r\n" in the data.
-    if i := bytes.Index(data, []byte("\r\n")); i >= 0 {
+	// Look for the first occurrence of "\r\n" in the data.
+	if i := bytes.Index(data, []byte("\r\n")); i >= 0 {
 
-        // Request more data.
-        if len(data) == i+1 {
-            return 0, nil, nil
-        }
+		// Request more data.
+		if len(data) == i+1 {
+			return 0, nil, nil
+		}
 
-        // Check if the next character is a space.
-        if len(data) > i+2 && data[i+2] == ' ' {
-            // The next character is a space, so this is not the end of the line.
-            return 0, nil, nil
-        }
+		// Check if the next character is a space.
+		if len(data) > i+2 && data[i+2] == ' ' {
+			// The next character is a space, so this is not the end of the line.
+			return 0, nil, nil
+		}
 
-        // Check if the next character is a HTAB.
-        //if len(data) > i+2 && data[i+2] == '\t' {
-        //    // The next character is a HTAB, so this is not the end of the line.
-        //    return 0, nil, nil
-        //}
-        // We have a full "\r\n"-terminated line.
-        return i + 2, data[:i], nil
-    }
-    // If we're at EOF, we have a final, non-terminated line. Return it.
-    if atEOF {
-        return len(data), data, nil
-    }
-    // Request more data.
-    return 0, nil, nil
+		// Check if the next character is a HTAB.
+		//if len(data) > i+2 && data[i+2] == '\t' {
+		//    // The next character is a HTAB, so this is not the end of the line.
+		//    return 0, nil, nil
+		//}
+		// We have a full "\r\n"-terminated line.
+		return i + 2, data[:i], nil
+	}
+	// If we're at EOF, we have a final, non-terminated line. Return it.
+	if atEOF {
+		return len(data), data, nil
+	}
+	// Request more data.
+	return 0, nil, nil
 }

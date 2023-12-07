@@ -12,14 +12,14 @@ import (
 type Parser struct {
 	notifications []notify.Notification
 	conf          config.Config
-    start time.Time
+	start         time.Time
 }
 
 func NewParser(c config.Config, start time.Time) *Parser {
 	return &Parser{
 		notifications: []notify.Notification{},
 		conf:          c,
-        start: start,
+		start:         start,
 	}
 }
 
@@ -30,14 +30,14 @@ func (p *Parser) Parse(data []byte) error {
 		return fmt.Errorf("calendar parse error: %w", err)
 	}
 
-    alarms := NewAlarms(p.conf, p.start)
+	alarms := NewAlarms(p.conf, p.start)
 
 	for _, event := range cal.Events() {
 
 		et := newEventTime(event)
 		et.parse()
 		fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
-		eventTime, err := et.nextTime() 
+		eventTime, err := et.nextTime()
 		if err != nil {
 			if eventTime.IsZero() {
 				fmt.Println("error:", err)
@@ -45,18 +45,17 @@ func (p *Parser) Parse(data []byte) error {
 			}
 		}
 
+		als := alarms.Get(eventTime)
 
-        als := alarms.Get(eventTime)
+		for _, alarm := range als {
 
-        for _, alarm := range als {
-
-            n := buildNotification(event)
-            n.Time = alarm.Time
-            n.EventTime = eventTime
-            n.Type = alarm.Type
-            p.notifications = append(p.notifications, n)
-        }
-    }
+			n := buildNotification(event)
+			n.Time = alarm.Time
+			n.EventTime = eventTime
+			n.Type = alarm.Type
+			p.notifications = append(p.notifications, n)
+		}
+	}
 
 	return nil
 }
@@ -81,4 +80,3 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 
 	return n
 }
-

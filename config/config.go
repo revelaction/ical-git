@@ -6,15 +6,15 @@ import (
 )
 
 type Config struct {
-	TZ         string `toml:"timezone"`
+	TZ         string        `toml:"timezone"`
 	DaemonTick time.Duration `toml:"tick"`
-	Icon       string `toml:"icon"`
+	Icon       string        `toml:"icon"`
 
 	alarms []Alarm
 
-    Notifiers []string
-    Telegram Telegram
-    Desktop Desktop
+	Notifiers []string
+	Telegram  Telegram
+	Desktop   Desktop
 }
 
 type Alarm struct {
@@ -24,29 +24,27 @@ type Alarm struct {
 }
 
 type Telegram struct {
-	Token string 
+	Token  string
 	ChatId int64 `toml:"chat_id"`
-
 }
 
 type Desktop struct {
-    Icon string
+	Icon string
 }
 
 var errConfNotDuration = errors.New("the value given can not be parsed to a Duration")
 
 func (c *Config) AlarmsAllowed() []Alarm {
-    als := []Alarm{}
-    for _, al := range c.alarms {
-        for _, n := range c.Notifiers {
-            if n == al.Type {
-                als = append(als, al) 
-            }
-        }
-    }
+	als := []Alarm{}
+	for _, al := range c.alarms {
+		for _, n := range c.Notifiers {
+			if n == al.Type {
+				als = append(als, al)
+			}
+		}
+	}
 
-    return als
+	return als
 }
 
 type Alarms []Alarm
-
