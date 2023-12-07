@@ -33,6 +33,8 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 
 	tickAlarms := []Alarm{}
 	for _, alarm := range s.conf.AlarmsAllowed() {
+		fmt.Printf("alarm %#v\n", alarm)
+
 		alTime, err := alarmTime(eventTime, alarm.When)
 		if err != nil {
 			fmt.Println("error:", err)

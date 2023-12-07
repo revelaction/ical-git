@@ -27,6 +27,7 @@ func NewScheduler(c config.Config, start time.Time) *Scheduler {
 func (s *Scheduler) Schedule(notifications []notify.Notification) error {
 
 	for _, n := range notifications {
+
 		f := s.getNotifyFunc(n)
 		dur := n.Time.Sub(s.start)
 		fmt.Printf("Notification for %#v with trigger in  %s", n, dur)
