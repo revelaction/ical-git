@@ -6,19 +6,20 @@ import (
 	"github.com/arran4/golang-ical"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
-	"github.com/sosodev/duration"
 	"time"
 )
 
 type Parser struct {
 	notifications []notify.Notification
 	conf          config.Config
+    start time.Time
 }
 
-func NewParser(c config.Config) *Parser {
+func NewParser(c config.Config, start time.Time) *Parser {
 	return &Parser{
 		notifications: []notify.Notification{},
 		conf:          c,
+        start: start,
 	}
 }
 
@@ -29,12 +30,14 @@ func (p *Parser) Parse(data []byte) error {
 		return fmt.Errorf("calendar parse error: %w", err)
 	}
 
+    alarms := NewAlarms(p.conf, p.start)
+
 	for _, event := range cal.Events() {
 
 		et := newEventTime(event)
 		et.parse()
 		fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
-		eventTime, err := et.nextTime()
+		eventTime, err := et.nextTime() // TODO nextTime(now)
 		if err != nil {
 			if eventTime.IsZero() {
 				fmt.Println("error:", err)
@@ -42,69 +45,26 @@ func (p *Parser) Parse(data []byte) error {
 			}
 		}
 
-        //get alrmsfor this period
 
-        //NewAlarmController(conf)
-        // knows the 
-        // create alarm.go under ical??? 
-        //alarm.GetForTick(eventime) []{time.time, type} 
+        als := alarms.Get(eventTime)
 
-		for _, alarm := range p.conf.Alarms {
-			alarmTime, err := calculateAlarmTime(eventTime, alarm.When)
-			if err != nil {
-				fmt.Println("error:", err)
-				continue
-			}
+        for _, alarm := range als {
 
-            
+            n := buildNotification(event)
+            n.Time = alarm.Time
+            n.EventTime = eventTime
+            n.Type = alarm.Type
+            p.notifications = append(p.notifications, n)
+        }
 
-			// TODO format()
-			fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.When, alarmTime)
-
-			tickDuration, _ := time.ParseDuration(p.conf.DaemonTick)
-
-			if isInTickPeriod(alarmTime, tickDuration) {
-				n := buildNotification(event)
-				n.Time = alarmTime
-				n.EventTime = eventTime
-				n.Type = alarm.Type
-				p.notifications = append(p.notifications, n)
-			}
-
-			// if alarm in tick, (apply offset -3), build Notification
-		}
-	}
+        // if alarm in tick, (apply offset -3), build Notification
+    }
 
 	return nil
 }
 
 func (p *Parser) Notifications() []notify.Notification {
 	return p.notifications
-}
-
-func calculateAlarmTime(eventTime time.Time, iso8601Duration string) (time.Time, error) {
-
-	d, err := duration.Parse(iso8601Duration)
-	if err != nil {
-		return time.Time{}, fmt.Errorf("error parsing duration: %w", err)
-	}
-
-	alarmTime := eventTime.Add(d.ToTimeDuration())
-	return alarmTime, nil
-}
-
-func isInTickPeriod(t time.Time, duration time.Duration) bool {
-	now := time.Now()
-
-	if t.Before(now) {
-		return false
-	}
-
-	if t.After(now.Add(duration)) {
-		return false
-	}
-
-	return true
 }
 
 func buildNotification(event *ics.VEvent) notify.Notification {

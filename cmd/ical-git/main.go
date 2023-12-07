@@ -6,14 +6,13 @@ import (
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
-	"github.com/revelaction/ical-git/notify/notifier"
+	"github.com/revelaction/ical-git/notify/schedule"
 	"github.com/BurntSushi/toml"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-	//"github.com/revelaction/ical-git/notify/telegram"
 )
 
 // configFile is the config file path (absolute path)
@@ -45,8 +44,8 @@ func main() {
 
 	go func() {
 
+        // ctx, cancel := load(conf) TODO
         conf := loadConfig()
-
 		ctx, cancel := context.WithCancel(context.Background())
 		go tick(ctx, conf)
 
@@ -82,6 +81,7 @@ func main() {
 
 func tick(ctx context.Context, conf config.Config) {
 
+    now := time.Now()
 	tick, err := time.ParseDuration(conf.DaemonTick)
 	if err != nil {
 		os.Exit(1)
@@ -91,7 +91,7 @@ func tick(ctx context.Context, conf config.Config) {
 	defer ticker.Stop()
 
 	for {
-		run(conf)
+		run(conf, now)
 
 		select {
 		case <-ctx.Done():
@@ -99,19 +99,19 @@ func tick(ctx context.Context, conf config.Config) {
 			return
 		case <-ticker.C:
 			log.Printf("starting tick ----------------")
-			run(conf)
+			run(conf, now)
 			log.Printf("end tick ----------------")
 		}
 	}
 }
 
-func run(conf config.Config) {
+func run(conf config.Config, start time.Time) {
 
 	log.Printf("start run()")
 	f := filesystem.New("../ical-testdata")
 	ch := f.GetCh()
 
-	p := ical.NewParser(conf)
+	p := ical.NewParser(conf, start)
 	for content := range ch {
 		err := p.Parse(content)
 		if err != nil {
@@ -120,7 +120,8 @@ func run(conf config.Config) {
 
 	}
 
-    ntf := notifier.NewN(conf)
+    ntf := schedule.NewScheduler(conf)
+    //ntf.Schedule(p.Notifications) TODO
 
     //create supported notifers in conf
 	for _, n := range p.Notifications() {

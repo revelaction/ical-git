@@ -1,4 +1,4 @@
-package notifier
+package schedule
 
 import (
 	"time"
@@ -9,8 +9,7 @@ import (
 	"github.com/revelaction/ical-git/notify/telegram"
 )
 
-// TODO better name Scheduler
-type N struct {
+type Scheduler struct {
     telegram notify.Notifier
     desktop notify.Notifier
 	conf config.Config
@@ -21,36 +20,36 @@ type N struct {
 // generate possible notification accoreding to configs
 // if notfication.Time is in TickPeriod schedule with AfterFunc
 
-func NewN(c config.Config) *N {
-	return &N{
+func NewScheduler(c config.Config) *Scheduler {
+	return &Scheduler{
 		conf: c,
 	}
 }
 
-func (n *N) Notify(nt notify.Notification) error {
+func (s *Scheduler) Notify(nt notify.Notification) error {
     
     var f func()
 
 	switch nt.Type {
 	case "telegram":
-        if  n.telegram == nil {
-            n.telegram = telegram.New(n.conf)
+        if  s.telegram == nil {
+            s.telegram = telegram.New(s.conf)
         } 
 
         f = func() {
-            err :=  n.telegram.Notify(nt)
+            err :=  s.telegram.Notify(nt)
             if err != nil {
                 fmt.Printf("Could not deliver telegram notfication: %s", err)
             }
         }
 
     case "desktop":
-        if  n.desktop == nil {
-            n.desktop = desktop.New(n.conf)
+        if  s.desktop == nil {
+            s.desktop = desktop.New(s.conf)
         } 
 
         f = func() {
-            err :=  n.desktop.Notify(nt)
+            err :=  s.desktop.Notify(nt)
             if err != nil {
                 fmt.Printf("Could not deliver desktop notfication: %s", err)
             }
@@ -59,18 +58,19 @@ func (n *N) Notify(nt notify.Notification) error {
 
     // get the start from the struct New:
     // get the tick from conf
+    // if alarm
     // find the duration TODO
     timer := time.AfterFunc(2*time.Second, f)
 
-    n.timers = append(n.timers, timer)
+    s.timers = append(s.timers, timer)
 
 
 
     return nil
 }
 
-func (n *N) StopScheduled() {
-    for _, tmr := range n.timers {
+func (s *Scheduler) StopScheduled() {
+    for _, tmr := range s.timers {
         tmr.Stop()
     }
 }
