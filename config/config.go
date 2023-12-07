@@ -10,7 +10,7 @@ type Config struct {
 	DaemonTick time.Duration `toml:"tick"`
 	Icon       string `toml:"icon"`
 
-	Alarms []Alarm
+	alarms []Alarm
 
     Notifiers []string
     Telegram Telegram
@@ -35,14 +35,17 @@ type Desktop struct {
 
 var errConfNotDuration = errors.New("the value given can not be parsed to a Duration")
 
-func (c *Config) IsNotifierAllowed(notifier string) bool {
-    for _, n := range c.Notifiers {
-        if n == notifier {
-            return true
+func (c *Config) AlarmsAllowed() []Alarm {
+    als := []Alarm{}
+    for _, al := range c.alarms {
+        for _, n := range c.Notifiers {
+            if n == al.Type {
+                als = append(als, al) 
+            }
         }
     }
 
-    return false
+    return als
 }
 
 type Alarms []Alarm

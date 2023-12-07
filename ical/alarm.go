@@ -32,7 +32,7 @@ func NewAlarms(c config.Config, start time.Time) *Alarms {
 func (s *Alarms) Get(eventTime time.Time) []Alarm {
 
     tickAlarms := []Alarm{} 
-    for _, alarm := range s.conf.Alarms {
+    for _, alarm := range s.conf.AlarmsAllowed() {
         alTime, err := alarmTime(eventTime, alarm.When)
         if err != nil {
             fmt.Println("error:", err)

@@ -14,26 +14,41 @@ type Scheduler struct {
     desktop notify.Notifier
 	conf config.Config
     timers []*time.Timer
+    start time.Time
 }
 
-func NewScheduler(c config.Config) *Scheduler {
+func NewScheduler(c config.Config, start time.Time) *Scheduler {
 	return &Scheduler{
 		conf: c,
+        start: start,
 	}
 }
 
-func (s *Scheduler) Notify(nt notify.Notification) error {
+func (s *Scheduler) Schedule(notifications []notify.Notification) error {
     
+    for _, n := range notifications {
+        f := s.getNotifyFunc(n)
+        dur := n.Time.Sub(s.start) 
+        fmt.Printf("Notification for %#v with trigger in  %s", n, dur)
+        timer := time.AfterFunc(dur, f)
+        s.timers = append(s.timers, timer)
+    }
+
+    return nil
+}
+
+func (s *Scheduler) getNotifyFunc(n notify.Notification) func() {
+
     var f func()
 
-	switch nt.Type {
+	switch n.Type {
 	case "telegram":
         if  s.telegram == nil {
             s.telegram = telegram.New(s.conf)
         } 
 
         f = func() {
-            err :=  s.telegram.Notify(nt)
+            err :=  s.telegram.Notify(n)
             if err != nil {
                 fmt.Printf("Could not deliver telegram notfication: %s", err)
             }
@@ -45,24 +60,14 @@ func (s *Scheduler) Notify(nt notify.Notification) error {
         } 
 
         f = func() {
-            err :=  s.desktop.Notify(nt)
-            if err != nil {
+            err :=  s.desktop.Notify(n)
+            if err != nil{
                 fmt.Printf("Could not deliver desktop notfication: %s", err)
             }
         }
     }
 
-    // get the start from the struct New:
-    // get the tick from conf
-    // if alarm
-    // find the duration TODO
-    timer := time.AfterFunc(2*time.Second, f)
-
-    s.timers = append(s.timers, timer)
-
-
-
-    return nil
+    return f
 }
 
 func (s *Scheduler) StopScheduled() {

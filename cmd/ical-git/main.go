@@ -111,20 +111,8 @@ func run(conf config.Config, start time.Time) {
 
 	}
 
-    ntf := schedule.NewScheduler(conf)
-    //ntf.Schedule(p.Notifications) TODO
-
-    //create supported notifers in conf
-	for _, n := range p.Notifications() {
-        // TODO move to ntf
-        if !conf.IsNotifierAllowed(n.Type) {
-            continue
-        }
-        fmt.Println("-----------", n)
-		_ = ntf.Notify(n)
-	}
-
+    ntf := schedule.NewScheduler(conf, start)
+    ntf.Schedule(p.Notifications()) 
 	log.Printf("end run()")
-
 }
 
