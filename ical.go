@@ -7,25 +7,15 @@ import (
 	"github.com/teambition/rrule-go"
 	"strings"
 	"time"
+    "bytes"
+    //"os"
 )
 
 func main() {
 	// Define the ICS file contents
-	icsData := []byte(`
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Your Company//Your Product//EN
-BEGIN:VEVENT
-UID:123456789
-DTSTART;TZID=Europe/Berlin:20221226T150000
-DTEND;TZID=Europe/Berlin:20231226T160000
-SUMMARY:Pay Rent
-DESCRIPTION:Remember to pay the rent.
-END:VEVENT
-END:VCALENDAR
-`)
+	//icsDataFoldedSpace := []byte("RDATE;TZID=Europe/Berlin:20231211T120000,20231212T120000,20231214T120000,\r\n 20231218T120000,20231211T120000,20231212T120000,20231214T120000,\r\n DESCRIPTION:Remember to pay the rent\r\n")
 
-	icsData = []byte(`
+    icsData := []byte(`
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Your Product//EN
@@ -36,11 +26,23 @@ DTSTART;TZID=Europe/Berlin:20231206T120000
 DTEND;TZID=Europe/Berlin:20231206T130000
 DTSTAMP:20231201T090000Z
 UID:unique-id-12345@example.com
-SUMMARY:5 events
-RDATE;TZID=Europe/Berlin:20231211T120000,20231212T120000,20231214T120000,20231218T120000
+SUMMARY: lots of events
+RDATE;TZID=Europe/Berlin:20231211T120000,20231212T120000,20231214T120000,20231218T120000,20231211T120000,20231212T120000,20231214T120000,20231218T120000,20231211T120000,20231212T120000,20231214T120000,20231218T120000
 END:VEVENT
 END:VCALENDAR
 `)
+
+
+    // 
+    //scanner := bufio.NewScanner(bytes.NewReader(icsDataFoldedSpace))
+    //scanner.Split(splitFunc)
+
+    //for scanner.Scan() {
+    //    line := scanner.Text()
+    //    fmt.Printf("----%s----\n", line)
+    //}
+    //
+    //os.Exit(1)
 
 	// RRULE:FREQ=MONTHLY;BYMONTHDAY=25
 
@@ -72,18 +74,17 @@ END:VCALENDAR
 		//start := events[0].GetProperty(ics.ComponentPropertyDtStart).Value
 
 		icalSerialized := events[0].Serialize()
-		fmt.Printf("lipo:\n%v\n", icalSerialized)
+		fmt.Printf("\n%v\n", icalSerialized)
 
 		linesStr := parseRRule(events[0])
 
-		fmt.Printf("lipo:\n%v\n", linesStr)
+		fmt.Printf("\n%v\n", linesStr)
 
 		//icalStr := "DTSTART:" + start + "\nRRULE:" + rule
 		//fmt.Println("ical str: ", icalStr)
 
 		//icalStr = "DTSTART;TZID=Europe/Berlin:20231226T150000\nRRULE:FREQ=MONTHLY;BYMONTHDAY=-6"
 		s, _ := rrule.StrToRRuleSet(linesStr)
-		//fmt.Printf("lipo %v#", events[0].GetProperty(ics.ComponentPropertyDtStart))
 		//fmt.Println("Date of the set:", s.String())
 		//fmt.Printf("Set DTStart: %v#\n", s.GetDTStart())
 		next := s.Iterator()
@@ -106,11 +107,12 @@ func parseRRule(event *ics.VEvent) string {
 	eventCleaned := strings.Replace(event.Serialize(), "\r\n ", "", -1)
 
 	scanner := bufio.NewScanner(strings.NewReader(eventCleaned))
+    scanner.Split(splitFunc)
 	var lines []string
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Printf("-------------------%s--------------", line)
+		fmt.Printf("----%s----\n", line)
 
 		if strings.HasPrefix(line, "DTSTART") {
 			lines = append([]string{line}, lines...)
@@ -134,4 +136,36 @@ func parseRRule(event *ics.VEvent) string {
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+// https://icalendar.org/iCalendar-RFC-5545/3-1-content-lines.html
+func splitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
+    // Look for the first occurrence of "\r\n" in the data.
+    if i := bytes.Index(data, []byte("\r\n")); i >= 0 {
+
+        // Request more data.
+        if len(data) == i+1 {
+            return 0, nil, nil
+        }
+
+        // Check if the next character is a space.
+        if len(data) > i+2 && data[i+2] == ' ' {
+            // The next character is a space, so this is not the end of the line.
+            return 0, nil, nil
+        }
+
+        // Check if the next character is a HTAB.
+        //if len(data) > i+2 && data[i+2] == '\t' {
+        //    // The next character is a HTAB, so this is not the end of the line.
+        //    return 0, nil, nil
+        //}
+        // We have a full "\r\n"-terminated line.
+        return i + 2, data[:i], nil
+    }
+    // If we're at EOF, we have a final, non-terminated line. Return it.
+    if atEOF {
+        return len(data), data, nil
+    }
+    // Request more data.
+    return 0, nil, nil
 }

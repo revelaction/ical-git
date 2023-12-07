@@ -42,12 +42,21 @@ func (p *Parser) Parse(data []byte) error {
 			}
 		}
 
+        //get alrmsfor this period
+
+        //NewAlarmController(conf)
+        // knows the 
+        // create alarm.go under ical??? 
+        //alarm.GetForTick(eventime) []{time.time, type} 
+
 		for _, alarm := range p.conf.Alarms {
 			alarmTime, err := calculateAlarmTime(eventTime, alarm.When)
 			if err != nil {
 				fmt.Println("error:", err)
 				continue
 			}
+
+            
 
 			// TODO format()
 			fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.When, alarmTime)

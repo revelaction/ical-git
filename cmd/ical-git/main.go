@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/revelaction/ical-git/config"
-	"github.com/revelaction/ical-git/notify"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
-	"github.com/revelaction/ical-git/notify/desktop"
-	"github.com/revelaction/ical-git/notify/telegram"
+	"github.com/revelaction/ical-git/notify/notifier"
 	"github.com/BurntSushi/toml"
 	"log"
 	"os"
@@ -122,49 +120,19 @@ func run(conf config.Config) {
 
 	}
 
+    ntf := notifier.NewN(conf)
 
     //create supported notifers in conf
 	for _, n := range p.Notifications() {
+        // TODO move to ntf
         if !conf.IsNotifierAllowed(n.Type) {
             continue
         }
         fmt.Println("-----------", n)
-
-        // get type
-        // is supported? then 
-        // getNotifierFortype notify.New(type)
-        // save it as map here.
-
-		// get type of notifuication build notifier.
-		// AFterFunc, schedule
-        not := notifier(n.Type, conf)
-		_ = not.Notify(n)
+		_ = ntf.Notify(n)
 	}
 
 	log.Printf("end run()")
 
 }
 
-var tg *telegram.Telegram
-var dk *desktop.Desktop
-
-func notifier(notifierType string, conf config.Config) notify.Notifier {
-	switch notifierType {
-	case "telegram":
-        if tg == nil {
-            tg = telegram.New(conf)
-        } 
-
-        fmt.Println("hier notifier")
-        return tg
-        
-	case "desktop":
-        if dk == nil {
-            dk = desktop.New(conf)
-        }
-
-        return dk
-    }
-
-    return nil
-}
