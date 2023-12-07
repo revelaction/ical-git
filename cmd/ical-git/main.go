@@ -25,10 +25,6 @@ func loadConfig() config.Config {
 		log.Fatal(err)
 	}
 
-	if err := conf.Validate(); err != nil {
-		log.Fatal(err)
-	}
-
     return conf
 }
 
@@ -82,12 +78,7 @@ func main() {
 func tick(ctx context.Context, conf config.Config) {
 
     now := time.Now()
-	tick, err := time.ParseDuration(conf.DaemonTick)
-	if err != nil {
-		os.Exit(1)
-	}
-
-	ticker := time.NewTicker(tick)
+	ticker := time.NewTicker(conf.DaemonTick)
 	defer ticker.Stop()
 
 	for {

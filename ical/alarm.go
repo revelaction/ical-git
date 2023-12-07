@@ -8,7 +8,7 @@ import (
 )
 
 type Alarms struct {
-    alarms []Alarm 
+    //alarms []Alarm 
     conf config.Config
     
     //start is the of the start of the program
@@ -18,10 +18,11 @@ type Alarms struct {
 type Alarm struct {
 	Type string 
 	Time time.Time  
+    Diff string
 }
 
 func NewAlarms(c config.Config, start time.Time) *Alarms {
-	return &Alarms{
+    return &Alarms{
 		conf: c,
         start: start, 
 	}
@@ -29,28 +30,42 @@ func NewAlarms(c config.Config, start time.Time) *Alarms {
 
 //Get returns the alarms to be trigger in this tick
 func (s *Alarms) Get(eventTime time.Time) []Alarm {
+
+    tickAlarms := []Alarm{} 
     for _, alarm := range s.conf.Alarms {
-        alarmTime, err := calculateAlarmTime(eventTime, alarm.When)
+        alTime, err := alarmTime(eventTime, alarm.When)
         if err != nil {
             fmt.Println("error:", err)
             continue
         }
 
-        // TODO format()
-        fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.When, alarmTime)
+        fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.When, alTime)
 
-        tickDuration, _ := time.ParseDuration(s.conf.DaemonTick)
-
-        if isInTickPeriod(alarmTime, tickDuration) {
-
+        if s.isInTickPeriod(alTime) {
+            tickAlarms = append(tickAlarms, Alarm{Type: alarm.Type, Time: alTime, Diff: alarm.When})
         }
 
-        // if alarm in tick, (apply offset -3), build Notification
+        // TODO if alarm in tick, (apply offset -3), build Notification
     }
-    return nil
+
+    return tickAlarms
 }
 
-func calculateAlarmTime(eventTime time.Time, iso8601Duration string) (time.Time, error) {
+func (s *Alarms) isInTickPeriod(t time.Time) bool {
+
+    
+	if t.Before(s.start) {
+		return false
+	}
+
+	if t.After(s.start.Add(s.conf.DaemonTick)) {
+		return false
+	}
+
+	return true
+}
+
+func alarmTime(eventTime time.Time, iso8601Duration string) (time.Time, error) {
 
 	d, err := duration.Parse(iso8601Duration)
 	if err != nil {
@@ -61,18 +76,5 @@ func calculateAlarmTime(eventTime time.Time, iso8601Duration string) (time.Time,
 	return alarmTime, nil
 }
 
-func isInTickPeriod(t time.Time, duration time.Duration) bool {
-	now := time.Now()
-
-	if t.Before(now) {
-		return false
-	}
-
-	if t.After(now.Add(duration)) {
-		return false
-	}
-
-	return true
-}
 
 

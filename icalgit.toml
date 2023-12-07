@@ -11,6 +11,7 @@ alarms = [
 	{type = "desktop", when = "-P6D"}, 
 	{type = "telegram", when = "-P4D"}, 
 	{type = "desktop", when = "-P4D"}, 
+	{type = "desktop", when = "-P3D"}, 
 ]
 
 #notifiers = ["telegram", "desktop"]

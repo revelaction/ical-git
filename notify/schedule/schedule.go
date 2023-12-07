@@ -16,10 +16,6 @@ type Scheduler struct {
     timers []*time.Timer
 }
 
-// notifier receives the potencial notification
-// generate possible notification accoreding to configs
-// if notfication.Time is in TickPeriod schedule with AfterFunc
-
 func NewScheduler(c config.Config) *Scheduler {
 	return &Scheduler{
 		conf: c,

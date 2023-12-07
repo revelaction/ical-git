@@ -37,7 +37,7 @@ func (p *Parser) Parse(data []byte) error {
 		et := newEventTime(event)
 		et.parse()
 		fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
-		eventTime, err := et.nextTime() // TODO nextTime(now)
+		eventTime, err := et.nextTime() 
 		if err != nil {
 			if eventTime.IsZero() {
 				fmt.Println("error:", err)
@@ -56,8 +56,6 @@ func (p *Parser) Parse(data []byte) error {
             n.Type = alarm.Type
             p.notifications = append(p.notifications, n)
         }
-
-        // if alarm in tick, (apply offset -3), build Notification
     }
 
 	return nil

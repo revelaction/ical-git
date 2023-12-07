@@ -7,7 +7,7 @@ import (
 
 type Config struct {
 	TZ         string `toml:"timezone"`
-	DaemonTick string `toml:"tick"`
+	DaemonTick time.Duration `toml:"tick"`
 	Icon       string `toml:"icon"`
 
 	Alarms []Alarm
@@ -19,7 +19,7 @@ type Config struct {
 
 type Alarm struct {
 	Type string `toml:"type"`
-	// ISO8601
+	// ISO8601 TODO Diff
 	When string `toml:"when"`
 }
 
@@ -34,15 +34,6 @@ type Desktop struct {
 }
 
 var errConfNotDuration = errors.New("the value given can not be parsed to a Duration")
-
-func (c *Config) Validate() error {
-	_, err := time.ParseDuration(c.DaemonTick)
-	if err != nil {
-		return errConfNotDuration
-	}
-
-	return nil
-}
 
 func (c *Config) IsNotifierAllowed(notifier string) bool {
     for _, n := range c.Notifiers {
