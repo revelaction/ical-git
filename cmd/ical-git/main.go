@@ -28,6 +28,13 @@ func loadConfig() config.Config {
 	return conf
 }
 
+func initialize() context.CancelFunc {
+    conf := loadConfig()
+    ctx, cancel := context.WithCancel(context.Background())
+    go tick(ctx, conf)
+    return cancel
+}
+
 func main() {
 
 	signalChan := make(chan os.Signal, 1)
@@ -40,10 +47,7 @@ func main() {
 
 	go func() {
 
-		// ctx, cancel := load(conf) TODO
-		conf := loadConfig()
-		ctx, cancel := context.WithCancel(context.Background())
-		go tick(ctx, conf)
+        cancel:=  initialize()
 
 		for {
 			select {
@@ -53,11 +57,8 @@ func main() {
 					log.Printf("SIGHUP called")
 					log.Printf("canceling previous ctx")
 					cancel()
-					log.Printf("Initializing: read new conf, cancel AfterFuncs...")
-					//create new context
-					log.Printf("creating new task context")
-					ctx, cancel = context.WithCancel(context.Background())
-					go tick(ctx, conf)
+					log.Printf("Initializing: read new conf")
+                    cancel = initialize()
 
 				case os.Interrupt:
 					log.Printf("Interrupt called")
@@ -87,6 +88,10 @@ func tick(ctx context.Context, conf config.Config) {
 		select {
 		case <-ctx.Done():
 			log.Printf("run: received call for Done. returning")
+            // here the 
+            // TODO we need the real one.
+            //ntf := schedule.NewScheduler(conf, now)
+            //ntf.StopScheduled()
 			return
 		case <-ticker.C:
 			log.Printf("starting tick ----------------")

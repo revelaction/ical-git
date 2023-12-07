@@ -30,7 +30,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification) error {
 
 		f := s.getNotifyFunc(n)
 		dur := n.Time.Sub(s.start)
-		fmt.Printf("Notification for %#v with trigger in  %s", n, dur)
+		fmt.Printf("Notification for %#v with trigger in  %s\n\n", n, dur)
 		timer := time.AfterFunc(dur, f)
 		s.timers = append(s.timers, timer)
 	}
