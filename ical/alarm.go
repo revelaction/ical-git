@@ -33,7 +33,7 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 
 	tickAlarms := []Alarm{}
 	for _, alarm := range s.conf.AlarmsAllowed() {
-		fmt.Printf("alarm %#v\n", alarm)
+		//fmt.Printf("alarm %#v\n", alarm)
 
 		alTime, err := alarmTime(eventTime, alarm.When)
 		if err != nil {
@@ -41,7 +41,7 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 			continue
 		}
 
-		fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.When, alTime)
+		//fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.When, alTime)
 
 		if s.isInTickPeriod(alTime) {
 			tickAlarms = append(tickAlarms, Alarm{Type: alarm.Type, Time: alTime, Diff: alarm.When})

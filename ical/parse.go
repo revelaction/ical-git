@@ -7,6 +7,7 @@ import (
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
 	"time"
+	"log/slog"
 )
 
 type Parser struct {
@@ -37,6 +38,7 @@ func (p *Parser) Parse(data []byte) error {
 		et := newEventTime(event)
 		et.parse()
 		fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
+        slog.Info("Next Event time", "eventtime", et)
 		eventTime, err := et.nextTime()
 		if err != nil {
 			if eventTime.IsZero() {

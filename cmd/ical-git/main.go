@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-// configFile is the config file path (absolute path)
+// configFile is the config file path
 const configFile = "icalgit.toml"
 
 func loadConfig() config.Config {
@@ -90,6 +90,7 @@ func main() {
 func tick(ctx context.Context, conf config.Config) {
 
 	now := time.Now()
+    slog.Info("Start time", "now", now)
 	ticker := time.NewTicker(conf.DaemonTick)
 	defer ticker.Stop()
 
@@ -98,23 +99,23 @@ func tick(ctx context.Context, conf config.Config) {
 
 		select {
 		case <-ctx.Done():
-			log.Printf("run: received call for Done. returning")
+			slog.Info("run: received call for Done. returning")
 			// here the
 			// TODO we need the real one.
 			//ntf := schedule.NewScheduler(conf, now)
 			//ntf.StopScheduled()
 			return
 		case <-ticker.C:
-			log.Printf("starting tick ----------------")
+			slog.Info("starting tick")
 			run(conf, now)
-			log.Printf("end tick ----------------")
+			slog.Info("ending tick")
 		}
 	}
 }
 
 func run(conf config.Config, start time.Time) {
 
-	log.Printf("start run()")
+	slog.Info("starting run")
 	f := filesystem.New("../ical-testdata")
 	ch := f.GetCh()
 
@@ -129,5 +130,5 @@ func run(conf config.Config, start time.Time) {
 
 	ntf := schedule.NewScheduler(conf, start)
 	ntf.Schedule(p.Notifications())
-	log.Printf("end run()")
+	slog.Info("ending run")
 }
