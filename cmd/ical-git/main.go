@@ -38,7 +38,14 @@ func initialize() context.CancelFunc {
 
 func main() {
 
-    logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+    logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+        ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
+            if a.Key == slog.TimeKey {
+                return slog.Attr{}
+            }
+            return a
+        },
+    }))
     slog.SetDefault(logger)
 
 	signalChan := make(chan os.Signal, 1)
