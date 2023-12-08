@@ -14,23 +14,24 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"flag"
 )
 
 // configFile is the config file path
-const configFile = "icalgit.toml"
+const configPathDefault = "icalgit.toml"
 
-func loadConfig() config.Config {
+func loadConfig(path string) config.Config {
 	// Config file
 	var conf config.Config
-	if _, err := toml.DecodeFile(configFile, &conf); err != nil {
+	if _, err := toml.DecodeFile(path, &conf); err != nil {
 		log.Fatal(err)
 	}
 
 	return conf
 }
 
-func initialize() context.CancelFunc {
-	conf := loadConfig()
+func initialize(path string) context.CancelFunc {
+	conf := loadConfig(path)
 	ctx, cancel := context.WithCancel(context.Background())
 	go tick(ctx, conf)
 	return cancel
@@ -38,6 +39,13 @@ func initialize() context.CancelFunc {
 
 func main() {
 
+	//flag.Usage = func() { fmt.Fprintf(os.Stderr, "%s\n", usage) }
+	var configPath string
+	flag.StringVar(&configPath, "c", configPathDefault, "the config file")
+	flag.StringVar(&configPath, "config", configPathDefault, "the config file")
+	flag.Parse()
+
+    // logger
     logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
         ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
             if a.Key == slog.TimeKey {
@@ -58,7 +66,7 @@ func main() {
 
 	go func() {
 
-		cancel := initialize()
+		cancel := initialize(configPath)
 
 		for {
 			select {
@@ -69,7 +77,7 @@ func main() {
 					log.Printf("canceling previous ctx")
 					cancel()
 					log.Printf("Initializing: read new conf")
-					cancel = initialize()
+					cancel = initialize(configPath)
 
 				case os.Interrupt:
 					log.Printf("Interrupt called")
