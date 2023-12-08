@@ -42,9 +42,9 @@ func renderNotification(n notify.Notification) (string, error) {
 🚦 Status: <b>{{.Status}}</b>
 {{if .Attendees}}
 Attendees:
-{{range .Attendees}}
-{{.}}
-{{end}}
+{{- range .Attendees}}
+🔸{{.}}
+{{- end}}
 {{end}}
 `
     // Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
