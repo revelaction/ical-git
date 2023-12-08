@@ -9,7 +9,7 @@ alarms = [
 	{type = "desktop", when = "-P5D"}, 
 	{type = "desktop", when = "-P6D"}, 
 	{type = "telegram", when = "-P4D"}, 
-	{type = "desktop", when = "-P3DT11H20M"}, 
+	{type = "desktop", when = "-P2DT23H08M"}, 
 	{type = "desktop", when = "-P3D"}, 
 ]
 
