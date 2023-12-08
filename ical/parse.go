@@ -82,5 +82,15 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 		n.Description = descriptionProp.Value
 	}
 
+	locationProp := event.GetProperty(ics.ComponentPropertyLocation)
+	if nil != locationProp {
+		n.Location = locationProp.Value
+	}
+
+	statusProp := event.GetProperty(ics.ComponentPropertyStatus)
+	if nil != statusProp {
+		n.Status = statusProp.Value
+	}
+
 	return n
 }

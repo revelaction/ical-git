@@ -15,7 +15,9 @@ type Notification struct {
 	TimeZone    *time.Location
 	Summary     string
 	Description string
+	Location    string
 	Type        string
 	Diff        string
 	Time        time.Time
+	Status      string 
 }
