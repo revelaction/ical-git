@@ -33,13 +33,13 @@ func (fs *FileSystem) GetCh() <-chan []byte {
 			}
 
 			if strings.HasSuffix(strings.ToLower(info.Name()), ".ical") || strings.HasSuffix(strings.ToLower(info.Name()), ".ics") {
-                slog.Info("🗓️ icalendar file", "path", path)
 				content, err := os.ReadFile(path)
 				if err != nil {
 					return nil
 				}
 
 				fs.ch <- content
+                slog.Info("🗓️  icalendar file", "path", path)
 			}
 
 			return nil

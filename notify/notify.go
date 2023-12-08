@@ -16,5 +16,6 @@ type Notification struct {
 	Summary     string
 	Description string
 	Type        string
+	Diff        string
 	Time        time.Time
 }
