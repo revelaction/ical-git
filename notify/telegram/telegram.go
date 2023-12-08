@@ -5,6 +5,8 @@ import (
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
 	"time"
+	"bytes"
+    "text/template"
 )
 
 type Notifier interface {
@@ -36,13 +38,42 @@ func New(conf config.Config) *Telegram {
 }
 
 func (t *Telegram) Notify(n notify.Notification) error {
-	message := n.Summary + " " + n.EventTime.Format(time.RFC822)
+
+    message, err:= renderNotification(n)
+    if err != nil {
+        return err
+    }
+
 	msg := tg.NewMessage(t.conf.Telegram.ChatId, message)
 	msg.ParseMode = "markdown"
-	_, err := t.bot.Send(msg)
+	_, err = t.bot.Send(msg)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func renderNotification(n notify.Notification) (string, error) {
+    const tpl = `
+    **{{.Summary}}**
+
+    📅 **{{.EventTime.Format "Monday, 2006-01-02"}} {{.EventTime.Format "🕒 15:04"}}** 🌍 {{.TimeZone}}
+
+    📌 Location: **{{.Location}}**
+    📝 Description: {{.Description}}
+    🚦 Status: **{{.Status}}**
+`
+    // Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
+    t, err := template.New("notification").Parse(tpl)
+    if err != nil {
+        return "", err
+    }
+
+    var buf bytes.Buffer
+    if err := t.Execute(&buf, n); err != nil {
+        return "", err
+    }
+
+    return buf.String(), nil
 }

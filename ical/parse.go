@@ -92,5 +92,12 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 		n.Status = statusProp.Value
 	}
 
+	attendees := event.Attendees()
+	if len(attendees) > 0 {
+        for _, attendee := range attendees {
+            n.Attendees = append(n.Attendees, attendee.Email())
+        }
+	}
+
 	return n
 }

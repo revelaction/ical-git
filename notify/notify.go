@@ -20,4 +20,5 @@ type Notification struct {
 	Diff        string
 	Time        time.Time
 	Status      string 
+	Attendees   []string 
 }

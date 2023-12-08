@@ -36,9 +36,16 @@ func (d *Desktop) Notify(n notify.Notification) error {
 func renderNotification(n notify.Notification) (string, error) {
     const tpl = `
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.TimeZone}}
+
 📌 Location: <b>{{.Location}}</b>
 📝 Description: {{.Description}}
 🚦 Status: <b>{{.Status}}</b>
+{{if .Attendees}}
+Attendees:
+{{range .Attendees}}
+{{.}}
+{{end}}
+{{end}}
 `
     // Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
     t, err := template.New("notification").Parse(tpl)
