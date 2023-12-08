@@ -8,6 +8,7 @@ import (
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/schedule"
+	"log/slog"
 	"log"
 	"os"
 	"os/signal"
@@ -36,6 +37,9 @@ func initialize() context.CancelFunc {
 }
 
 func main() {
+
+    logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+    slog.SetDefault(logger)
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGHUP)
