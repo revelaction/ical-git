@@ -37,9 +37,9 @@ func (p *Parser) Parse(data []byte) error {
 
 		et := newEventTime(event)
 		et.parse()
-		fmt.Printf("-------------------------rrule: %v\n", et.joinLines())
-        slog.Info("Next Event time", "eventtime", et)
+
 		eventTime, err := et.nextTime()
+        slog.Info("Next Event time", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate(), "is_guessed", et.isGuessed())
 		if err != nil {
 			if eventTime.IsZero() {
 				fmt.Println("error:", err)

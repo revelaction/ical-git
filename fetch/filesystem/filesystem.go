@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+    "log/slog"
 )
 
 // FileSystem implements the fetch.Fetcher interface
@@ -32,6 +33,7 @@ func (fs *FileSystem) GetCh() <-chan []byte {
 			}
 
 			if strings.HasSuffix(strings.ToLower(info.Name()), ".ical") || strings.HasSuffix(strings.ToLower(info.Name()), ".ics") {
+                slog.Info("🗓️ icalendar file", "path", path)
 				content, err := os.ReadFile(path)
 				if err != nil {
 					return nil

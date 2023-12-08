@@ -98,7 +98,7 @@ func main() {
 func tick(ctx context.Context, conf config.Config) {
 
 	now := time.Now()
-    slog.Info("Start time", "now", now)
+    slog.Info("🕒 Start time", "start", now.Format(time.RFC3339))
 	ticker := time.NewTicker(conf.DaemonTick)
 	defer ticker.Stop()
 
@@ -123,8 +123,8 @@ func tick(ctx context.Context, conf config.Config) {
 
 func run(conf config.Config, start time.Time) {
 
-	slog.Info("starting run")
-	f := filesystem.New("../ical-testdata")
+	slog.Info("🚀 starting run")
+	f := filesystem.New(conf.FetcherFilesystem.Directory)
 	ch := f.GetCh()
 
 	p := ical.NewParser(conf, start)
@@ -133,10 +133,9 @@ func run(conf config.Config, start time.Time) {
 		if err != nil {
 			fmt.Printf("error: %v+", err)
 		}
-
 	}
 
 	ntf := schedule.NewScheduler(conf, start)
 	ntf.Schedule(p.Notifications())
-	slog.Info("ending run")
+	slog.Info("🏁 ending run")
 }

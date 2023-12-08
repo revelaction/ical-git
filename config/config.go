@@ -12,9 +12,11 @@ type Config struct {
 
 	Alarms []Alarm
 
+    FetcherFilesystem  FetcherFilesystem `toml:"fetcher_filesystem"`
+
 	Notifiers []string
-	Telegram  Telegram
-	Desktop   Desktop
+	Telegram  Telegram `toml:"notifier_telegram"`
+	Desktop   Desktop  `toml:"notifier_desktop"`
 }
 
 type Alarm struct {
@@ -30,6 +32,10 @@ type Telegram struct {
 
 type Desktop struct {
 	Icon string
+}
+
+type FetcherFilesystem struct {
+    Directory string
 }
 
 var errConfNotDuration = errors.New("the value given can not be parsed to a Duration")

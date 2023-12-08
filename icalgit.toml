@@ -16,9 +16,12 @@ alarms = [
 #notifiers = ["telegram", "desktop"]
 notifiers = ["desktop"]
 
-[telegram]
+[fetcher_filesystem]
+directory = "testdata"
+
+[notifier_telegram]
 token = "yuu3b3k"
 chat_id = 588488
 
-[desktop]
+[notifier_desktop]
 icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"

@@ -18,7 +18,6 @@ type EventTime struct {
 	rDate   []string
 	// TODO deprecate this is config
 	timeZone    *time.Location
-	hasFloating bool
 	guessed     bool
 }
 
@@ -181,7 +180,6 @@ func (et *EventTime) nextTime() (time.Time, error) {
 	s, err := rrule.StrToRRuleSet(et.joinLines())
 	if err != nil {
 		t, err := et.guessEventTimeForError(err)
-		fmt.Println("-----------", t)
 		if !t.IsZero() {
 			et.guessed = true
 			// check if after now
