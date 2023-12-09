@@ -68,9 +68,26 @@ func (p *Parser) Notifications() []notify.Notification {
 	return p.notifications
 }
 
+func buildEventDuration(event *ics.VEvent) time.Duration {
+    // duration
+    start, err:= event.GetStartAt()
+    if err != nil {
+        return 0
+    }
+
+    end, err := event.GetEndAt()
+    if err != nil {
+        return 0
+    }
+
+    return end.Sub(start)
+}
+
 func buildNotification(event *ics.VEvent) notify.Notification {
 
 	n := notify.Notification{}
+
+    n.Duration = buildEventDuration(event)
 
 	summaryProp := event.GetProperty(ics.ComponentPropertySummary)
 	if nil != summaryProp {
