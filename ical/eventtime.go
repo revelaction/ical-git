@@ -17,8 +17,8 @@ type EventTime struct {
 	rRule   []string
 	rDate   []string
 	// TODO deprecate this is config
-	timeZone    *time.Location
-	guessed     bool
+	timeZone *time.Location
+	guessed  bool
 }
 
 func newEventTime(vEvent *ics.VEvent) *EventTime {

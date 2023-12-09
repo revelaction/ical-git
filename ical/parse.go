@@ -6,8 +6,8 @@ import (
 	"github.com/arran4/golang-ical"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
-	"time"
 	"log/slog"
+	"time"
 )
 
 type Parser struct {
@@ -39,7 +39,7 @@ func (p *Parser) Parse(data []byte) error {
 		et.parse()
 
 		eventTime, err := et.nextTime()
-        slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate(), "is_guessed", et.isGuessed())
+		slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate(), "is_guessed", et.isGuessed())
 		if err != nil {
 			if eventTime.IsZero() {
 				fmt.Println("error:", err)
@@ -50,13 +50,13 @@ func (p *Parser) Parse(data []byte) error {
 		als := alarms.Get(eventTime)
 
 		for _, alarm := range als {
-            // To notification
+			// To notification
 			n := buildNotification(event)
 			n.Time = alarm.Time
 			n.EventTime = eventTime
 			n.Type = alarm.Type
-            n.Diff = alarm.Diff
-            
+			n.Diff = alarm.Diff
+
 			p.notifications = append(p.notifications, n)
 		}
 	}
@@ -94,9 +94,9 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 
 	attendees := event.Attendees()
 	if len(attendees) > 0 {
-        for _, attendee := range attendees {
-            n.Attendees = append(n.Attendees, attendee.Email())
-        }
+		for _, attendee := range attendees {
+			n.Attendees = append(n.Attendees, attendee.Email())
+		}
 	}
 
 	return n

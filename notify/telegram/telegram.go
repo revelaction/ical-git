@@ -1,12 +1,12 @@
 package telegram
 
 import (
+	"bytes"
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
+	"text/template"
 	"time"
-	"bytes"
-    "text/template"
 )
 
 type Notifier interface {
@@ -39,10 +39,10 @@ func New(conf config.Config) *Telegram {
 
 func (t *Telegram) Notify(n notify.Notification) error {
 
-    message, err:= renderNotification(n)
-    if err != nil {
-        return err
-    }
+	message, err := renderNotification(n)
+	if err != nil {
+		return err
+	}
 
 	msg := tg.NewMessage(t.conf.Telegram.ChatId, message)
 	msg.ParseMode = "markdown"
@@ -55,7 +55,7 @@ func (t *Telegram) Notify(n notify.Notification) error {
 }
 
 func renderNotification(n notify.Notification) (string, error) {
-    const tpl = `
+	const tpl = `
     **{{.Summary}}**
 
     📅 **{{.EventTime.Format "Monday, 2006-01-02"}} {{.EventTime.Format "🕒 15:04"}}** 🌍 {{.TimeZone}}
@@ -64,16 +64,16 @@ func renderNotification(n notify.Notification) (string, error) {
     📝 Description: {{.Description}}
     🚦 Status: **{{.Status}}**
 `
-    // Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
-    t, err := template.New("notification").Parse(tpl)
-    if err != nil {
-        return "", err
-    }
+	// Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
+	t, err := template.New("notification").Parse(tpl)
+	if err != nil {
+		return "", err
+	}
 
-    var buf bytes.Buffer
-    if err := t.Execute(&buf, n); err != nil {
-        return "", err
-    }
+	var buf bytes.Buffer
+	if err := t.Execute(&buf, n); err != nil {
+		return "", err
+	}
 
-    return buf.String(), nil
+	return buf.String(), nil
 }

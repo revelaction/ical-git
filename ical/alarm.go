@@ -35,7 +35,7 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 	for _, alarm := range s.conf.AlarmsAllowed() {
 
 		alTime, err := alarmTime(eventTime, alarm.When)
-        //slog.Info("🔔 Alarm", "diff", alarm.When, "type", alarm.Type, "alarm_time", alTime)
+		//slog.Info("🔔 Alarm", "diff", alarm.When, "type", alarm.Type, "alarm_time", alTime)
 		if err != nil {
 			fmt.Println("error:", err)
 			continue

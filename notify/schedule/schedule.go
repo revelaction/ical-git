@@ -6,8 +6,8 @@ import (
 	"github.com/revelaction/ical-git/notify"
 	"github.com/revelaction/ical-git/notify/desktop"
 	"github.com/revelaction/ical-git/notify/telegram"
-	"time"
 	"log/slog"
+	"time"
 )
 
 type Scheduler struct {
@@ -31,7 +31,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification) error {
 
 		f := s.getNotifyFunc(n)
 		dur := n.Time.Sub(s.start)
-        slog.Info("⏰ Notification", "time", n.Time, "diff", n.Diff, "type", n.Type, "summary", n.Summary, "event_time", n.EventTime, "trigger_in", dur)
+		slog.Info("⏰ Notification", "time", n.Time, "diff", n.Diff, "type", n.Type, "summary", n.Summary, "event_time", n.EventTime, "trigger_in", dur)
 		timer := time.AfterFunc(dur, f)
 		s.timers = append(s.timers, timer)
 	}
@@ -72,7 +72,7 @@ func (s *Scheduler) getNotifyFunc(n notify.Notification) func() {
 	return f
 }
 
-func (s *Scheduler) StopScheduled() {
+func (s *Scheduler) StopTimers() {
 	for _, tmr := range s.timers {
 		tmr.Stop()
 	}

@@ -2,10 +2,10 @@ package filesystem
 
 import (
 	"github.com/revelaction/ical-git/fetch"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
-    "log/slog"
 )
 
 // FileSystem implements the fetch.Fetcher interface
@@ -39,7 +39,7 @@ func (fs *FileSystem) GetCh() <-chan []byte {
 				}
 
 				fs.ch <- content
-                slog.Info("🗓️  icalendar file", "path", path)
+				slog.Info("🗓️  icalendar file", "path", path)
 			}
 
 			return nil
