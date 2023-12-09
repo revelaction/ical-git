@@ -173,12 +173,15 @@ func (et *EventTime) guessEventTimeForError(err error) (time.Time, error) {
 // an error ocurred.
 // it tries to guess the time of a event with custom VTIMEZONE. (TODO remove the guessed and return bool gor the guess)
 // TODO nextTime(now) and bring the start time
+// TODO return error if rrule can not parse
+// let parser call guess(conf.timezone)
 func (et *EventTime) nextTime() (time.Time, error) {
 
 	now := time.Now()
 
 	s, err := rrule.StrToRRuleSet(et.joinLines())
 	if err != nil {
+        // TODO move to method and call it from parser.
 		t, err := et.guessEventTimeForError(err)
 		if !t.IsZero() {
 			et.guessed = true
@@ -190,6 +193,7 @@ func (et *EventTime) nextTime() (time.Time, error) {
 		return time.Time{}, nil
 	}
 
+    // needed?
 	if !et.hasRRule() && !et.hasRDate() {
 		dtStart := s.GetDTStart()
 
