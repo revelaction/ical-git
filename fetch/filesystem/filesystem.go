@@ -11,22 +11,27 @@ import (
 // FileSystem implements the fetch.Fetcher interface
 type FileSystem struct {
 	rootDir string
-	ch      chan []byte
+	ch      chan fetch.File
 }
 
 // New creates a new instance of FileSystem
 func New(rootDir string) fetch.Fetcher {
 	return &FileSystem{
 		rootDir: rootDir,
-		ch:      make(chan []byte),
+		ch:      make(chan fetch.File),
 	}
 }
 
 // GetCh implements the fetch.Fetcher interface method
-func (fs *FileSystem) GetCh() <-chan []byte {
+func (fs *FileSystem) GetCh() <-chan fetch.File {
 	go func() {
-		// TODO
-		filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, _ error) (err error) {
+		defer close(fs.ch)
+        filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, err error) (error) {
+
+            if err != nil {
+				fs.ch <- fetch.File{Path: path, Error: err}
+                return err 
+            }
 
 			if info.IsDir() {
 				return nil
@@ -38,14 +43,13 @@ func (fs *FileSystem) GetCh() <-chan []byte {
 					return nil
 				}
 
-				fs.ch <- content
+                fs.ch <- fetch.File{Path: path, Content: content}
 				slog.Info("🗓️  icalendar file", "path", path)
 			}
 
 			return nil
 		})
 
-		defer close(fs.ch)
 	}()
 
 	return fs.ch

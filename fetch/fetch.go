@@ -1,5 +1,13 @@
 package fetch
 
-type Fetcher interface {
-	GetCh() <-chan []byte
+type File struct {
+	Path string
+    Content []byte
+    Error error
 }
+
+type Fetcher interface {
+	GetCh() <-chan File
+}
+
+
