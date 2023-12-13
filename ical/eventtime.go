@@ -16,19 +16,14 @@ type EventTime struct {
 	dtStart string
 	rRule   []string
 	rDate   []string
-	// TODO deprecate this is config
-	timeZone *time.Location
 	guessed  bool
 }
 
 func newEventTime(vEvent *ics.VEvent) *EventTime {
-	//validate in config // TODO
-	loc, _ := time.LoadLocation("Europe/Berlin")
 	return &EventTime{
 		vEvent:   vEvent,
 		rRule:    []string{},
 		rDate:    []string{},
-		timeZone: loc,
 	}
 }
 
@@ -124,19 +119,34 @@ func (et *EventTime) hasTzId() bool {
 	return false
 }
 
-func (et *EventTime) parseDtStartInLocation() (time.Time, error) {
-	// The layout for an iCalendar floating date-time value
-	const layout = "20060102T150405"
-	components := strings.Split(et.dtStart, ":")
-	dateTime := components[1]
+// nextTime returns the next ocurrence of a event
+// It can return a zero time indicating that the event is in the past or that
+// an error ocurred.
+// it tries to guess the time of a event with custom VTIMEZONE. (TODO remove the guessed and return bool gor the guess)
+// TODO nextTime(now) and bring the start time
+// TODO return error if rrule can not parse
+// let parser call guess(conf.timezone)
+func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 
-	t, err := time.ParseInLocation(layout, dateTime, et.timeZone)
+	s, err := rrule.StrToRRuleSet(et.joinLines())
 	if err != nil {
 		return time.Time{}, err
 	}
 
-	return t, nil
+	//if !et.hasRRule() && !et.hasRDate() {
+	//	dtStart := s.GetDTStart()
+
+	//	if dtStart.After(now) {
+	//		return dtStart, nil
+	//	}
+
+	//	// expired
+	//	return time.Time{}, nil
+	//}
+
+	return s.After(now, false), nil
 }
+
 
 //func (et *EventTime) format() string {
 //    return fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.Duration, alarmTime)
@@ -150,60 +160,38 @@ func (et *EventTime) joinLines() string {
 	return strings.Join(s, "\n")
 }
 
-// golang-ical, rrule  do not support custom timezones
-// try to find one
+// golang-ical, rrule packages do not support custom timezones like:
 // DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
-func (et *EventTime) guessEventTimeForError(err error) (time.Time, error) {
-	if !et.hasRRule() && et.hasDtStart() {
+// try to check map to config TZ Location
+func (et *EventTime) guess(loc *time.Location) (time.Time, error) {
+    // TODO remove indentation 
+	if et.hasDtStart() {
 		if et.isFloating() && et.hasTzId() {
-			guessTime, errParse := et.parseDtStartInLocation()
+			guessTime, errParse := et.parseDtStartInLocation(loc)
 			if errParse != nil {
-				return time.Time{}, fmt.Errorf("error %w: error %w ", err, errParse)
+                return time.Time{}, fmt.Errorf("error: %w", errParse)
 			}
 
-			return guessTime, fmt.Errorf("error %w: guess event time ok", err)
+            et.guessed = true
+			return guessTime, nil
 		}
 	}
 
-	return time.Time{}, fmt.Errorf("Could not guess event time: %w", err)
+    // no dstart TODO
+	return time.Time{}, fmt.Errorf("Could not guess event time: %w")
 }
 
-// nextTime returns the next ocurrence of a event
-// It can return a zero time indicating that the event is in the past or that
-// an error ocurred.
-// it tries to guess the time of a event with custom VTIMEZONE. (TODO remove the guessed and return bool gor the guess)
-// TODO nextTime(now) and bring the start time
-// TODO return error if rrule can not parse
-// let parser call guess(conf.timezone)
-func (et *EventTime) nextTime() (time.Time, error) {
+func (et *EventTime) parseDtStartInLocation(loc *time.Location) (time.Time, error) {
+	// The layout for an iCalendar floating date-time value
+	const layout = "20060102T150405"
+	components := strings.Split(et.dtStart, ":")
+	dateTime := components[1]
 
-	now := time.Now()
-
-	s, err := rrule.StrToRRuleSet(et.joinLines())
+	t, err := time.ParseInLocation(layout, dateTime, loc)
 	if err != nil {
-        // TODO move to method and call it from parser.
-		t, err := et.guessEventTimeForError(err)
-		if !t.IsZero() {
-			et.guessed = true
-			// check if after now
-			if t.After(now) {
-				return t, err
-			}
-		}
-		return time.Time{}, nil
+		return time.Time{}, err
 	}
 
-    // needed?
-	if !et.hasRRule() && !et.hasRDate() {
-		dtStart := s.GetDTStart()
-
-		if dtStart.After(now) {
-			return dtStart, nil
-		}
-
-		// expired
-		return time.Time{}, nil
-	}
-
-	return s.After(now, false), nil
+	return t, nil
 }
+

@@ -6,7 +6,7 @@ import (
 )
 
 type Config struct {
-	TZ         string        `toml:"timezone"`
+	Location   Location      `toml:"timezone"`
 	DaemonTick time.Duration `toml:"tick"`
 	Icon       string        `toml:"icon"`
 
@@ -17,6 +17,19 @@ type Config struct {
 	Notifiers []string
 	Telegram  Telegram `toml:"notifier_telegram"`
 	Desktop   Desktop  `toml:"notifier_desktop"`
+}
+
+type Location struct {
+    *time.Location
+}
+
+func (l *Location) UnmarshalText(text []byte) error {
+    loc, err := time.LoadLocation(string(text))
+    if err != nil {
+        return err
+    }
+    l.Location = loc
+    return nil
 }
 
 type Alarm struct {
