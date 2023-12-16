@@ -6,7 +6,7 @@
 **ical-git** is a lightweight calendar application written in Go. 
 
 > [!NOTE]  
-> Work in progress
+> Alpha state
  
 The calendar data is a collection of iCal files under version control. 
 
