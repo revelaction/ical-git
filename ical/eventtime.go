@@ -133,16 +133,16 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 		return time.Time{}, err
 	}
 
-	//if !et.hasRRule() && !et.hasRDate() {
-	//	dtStart := s.GetDTStart()
+	if !et.hasRRule() && !et.hasRDate() {
+		dtStart := s.GetDTStart()
 
-	//	if dtStart.After(now) {
-	//		return dtStart, nil
-	//	}
+		if dtStart.After(now) {
+			return dtStart, nil
+		}
 
-	//	// expired
-	//	return time.Time{}, nil
-	//}
+		// expired
+		return time.Time{}, nil
+	}
 
 	return s.After(now, false), nil
 }
