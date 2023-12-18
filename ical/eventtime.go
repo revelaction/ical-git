@@ -122,9 +122,6 @@ func (et *EventTime) hasTzId() bool {
 // nextTime returns the next ocurrence of a event
 // It can return a zero time indicating that the event is in the past or that
 // an error ocurred.
-// it tries to guess the time of a event with custom VTIMEZONE. (TODO remove the guessed and return bool gor the guess)
-// TODO nextTime(now) and bring the start time
-// TODO return error if rrule can not parse
 // let parser call guess(conf.timezone)
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 
