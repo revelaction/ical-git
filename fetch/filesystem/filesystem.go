@@ -26,12 +26,12 @@ func New(rootDir string) fetch.Fetcher {
 func (fs *FileSystem) GetCh() <-chan fetch.File {
 	go func() {
 		defer close(fs.ch)
-        filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, err error) (error) {
+		filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, err error) error {
 
-            if err != nil {
+			if err != nil {
 				fs.ch <- fetch.File{Path: path, Error: err}
-                return err 
-            }
+				return err
+			}
 
 			if info.IsDir() {
 				return nil
@@ -43,7 +43,7 @@ func (fs *FileSystem) GetCh() <-chan fetch.File {
 					return nil
 				}
 
-                fs.ch <- fetch.File{Path: path, Content: content}
+				fs.ch <- fetch.File{Path: path, Content: content}
 				slog.Info("🗓️  icalendar file", "path", path)
 			}
 

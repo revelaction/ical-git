@@ -20,16 +20,16 @@ type Config struct {
 }
 
 type Location struct {
-    *time.Location
+	*time.Location
 }
 
 func (l *Location) UnmarshalText(text []byte) error {
-    loc, err := time.LoadLocation(string(text))
-    if err != nil {
-        return err
-    }
-    l.Location = loc
-    return nil
+	loc, err := time.LoadLocation(string(text))
+	if err != nil {
+		return err
+	}
+	l.Location = loc
+	return nil
 }
 
 type Alarm struct {

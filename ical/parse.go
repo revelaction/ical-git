@@ -39,17 +39,17 @@ func (p *Parser) Parse(data []byte) error {
 		et.parse()
 
 		eventTime, err := et.nextTime(p.start)
-        if err != nil {
-            // 
-		    //slog.Error("📅 Event", )
-            // TODO conf shoudl be already location 
-            eventTime, err = et.guess(p.conf.Location.Location)
-            if err != nil {
-                return err
-            }
+		if err != nil {
+			//
+			//slog.Error("📅 Event", )
+			// TODO conf shoudl be already location
+			eventTime, err = et.guess(p.conf.Location.Location)
+			if err != nil {
+				return err
+			}
 
-            return nil
-        }
+			return nil
+		}
 
 		slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate(), "is_guessed", et.isGuessed())
 
@@ -75,25 +75,25 @@ func (p *Parser) Notifications() []notify.Notification {
 }
 
 func buildEventDuration(event *ics.VEvent) time.Duration {
-    // duration
-    start, err:= event.GetStartAt()
-    if err != nil {
-        return 0
-    }
+	// duration
+	start, err := event.GetStartAt()
+	if err != nil {
+		return 0
+	}
 
-    end, err := event.GetEndAt()
-    if err != nil {
-        return 0
-    }
+	end, err := event.GetEndAt()
+	if err != nil {
+		return 0
+	}
 
-    return end.Sub(start)
+	return end.Sub(start)
 }
 
 func buildNotification(event *ics.VEvent) notify.Notification {
 
 	n := notify.Notification{}
 
-    n.Duration = buildEventDuration(event)
+	n.Duration = buildEventDuration(event)
 
 	summaryProp := event.GetProperty(ics.ComponentPropertySummary)
 	if nil != summaryProp {

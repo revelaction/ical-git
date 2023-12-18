@@ -89,7 +89,7 @@ func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler, start
 	defer ticker.Stop()
 
 	for {
-        run(conf, start, sc)
+		run(conf, start, sc)
 
 		select {
 		case <-ctx.Done():
@@ -97,7 +97,7 @@ func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler, start
 			return
 		case <-ticker.C:
 			slog.Info("⚙️  starting new tick work")
-            run(conf, start, sc)
+			run(conf, start, sc)
 			slog.Info("⚙️  ending tick work")
 		}
 	}
@@ -111,10 +111,10 @@ func run(conf config.Config, start time.Time, sc *schedule.Scheduler) {
 
 	p := ical.NewParser(conf, start)
 	for f := range ch {
-        if f.Error != nil {
-	        slog.Info("fetch Error", "error", f.Error)
-            os.Exit(1) // TODO
-        }
+		if f.Error != nil {
+			slog.Info("fetch Error", "error", f.Error)
+			os.Exit(1) // TODO
+		}
 		err := p.Parse(f.Content)
 		if err != nil {
 			fmt.Printf("error: %v+", err)

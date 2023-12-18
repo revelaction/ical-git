@@ -16,14 +16,14 @@ type EventTime struct {
 	dtStart string
 	rRule   []string
 	rDate   []string
-	guessed  bool
+	guessed bool
 }
 
 func newEventTime(vEvent *ics.VEvent) *EventTime {
 	return &EventTime{
-		vEvent:   vEvent,
-		rRule:    []string{},
-		rDate:    []string{},
+		vEvent: vEvent,
+		rRule:  []string{},
+		rDate:  []string{},
 	}
 }
 
@@ -147,11 +147,6 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 	return s.After(now, false), nil
 }
 
-
-//func (et *EventTime) format() string {
-//    return fmt.Printf("📅%s duration %s ⏰%s \n\n", eventTime, alarm.Duration, alarmTime)
-//}
-
 func (et *EventTime) joinLines() string {
 
 	s := []string{et.dtStart}
@@ -164,20 +159,20 @@ func (et *EventTime) joinLines() string {
 // DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
 // try to check map to config TZ Location
 func (et *EventTime) guess(loc *time.Location) (time.Time, error) {
-    // TODO remove indentation 
+	// TODO remove indentation
 	if et.hasDtStart() {
 		if et.isFloating() && et.hasTzId() {
 			guessTime, errParse := et.parseDtStartInLocation(loc)
 			if errParse != nil {
-                return time.Time{}, fmt.Errorf("error: %w", errParse)
+				return time.Time{}, fmt.Errorf("error: %w", errParse)
 			}
 
-            et.guessed = true
+			et.guessed = true
 			return guessTime, nil
 		}
 	}
 
-    // no dstart TODO
+	// no dstart TODO
 	return time.Time{}, fmt.Errorf("Could not guess event time: %w")
 }
 
@@ -194,4 +189,3 @@ func (et *EventTime) parseDtStartInLocation(loc *time.Location) (time.Time, erro
 
 	return t, nil
 }
-
