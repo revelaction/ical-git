@@ -118,7 +118,11 @@ func run(conf config.Config, start time.Time, sc *schedule.Scheduler) {
 
 func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("⚙️  initializing: loading config", "path", path)
-	conf, err := config.Load(path)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatalf("Failed to read config file: %v", err)
+	}
+	conf, err := config.Load(data)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
