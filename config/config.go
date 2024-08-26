@@ -44,13 +44,10 @@ type Whend struct {
 type Alarm struct {
 	Type  string        `toml:"type"`
 	When  string        `toml:"when"`
-	Whend Whend
+	Duration time.Duration
 }
 
-
 type Alarms []Alarm
-
-
 
 type Telegram struct {
 	Token  string
