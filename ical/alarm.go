@@ -34,7 +34,7 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 	tickAlarms := []Alarm{}
 	for _, alarm := range s.conf.AlarmsAllowed() {
 
-		alTime, err := alarmTime(eventTime, alarm.When)
+		alTime := alarmTime(eventTime, alarm.Duration)
 		//slog.Info("🔔 Alarm", "diff", alarm.When, "type", alarm.Type, "alarm_time", alTime)
 		if err != nil {
 			fmt.Println("error:", err)
@@ -64,13 +64,6 @@ func (s *Alarms) isInTickPeriod(t time.Time) bool {
 	return true
 }
 
-func alarmTime(eventTime time.Time, iso8601Duration string) (time.Time, error) {
-
-	d, err := duration.Parse(iso8601Duration)
-	if err != nil {
-		return time.Time{}, fmt.Errorf("error parsing duration: %w", err)
-	}
-
-	alarmTime := eventTime.Add(d.ToTimeDuration())
-	return alarmTime, nil
+func alarmTime(eventTime time.Time, dur time.Duration) time.Time {
+	return eventTime.Add(dur)
 }
