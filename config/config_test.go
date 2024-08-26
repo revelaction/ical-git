@@ -42,13 +42,13 @@ func TestAlarmsAllowed(t *testing.T) {
 	}
 
 	expectedAlarms := []Alarm{
-		{Type: "desktop", When: "-P1D"},
-		{Type: "desktop", When: "-PT15M"},
-		{Type: "desktop", When: "-PT1H"},
-		{Type: "desktop", When: "-P5D"},
-		{Type: "desktop", When: "-P6D"},
-		{Type: "desktop", When: "-P2DT22H49M"},
-		{Type: "desktop", When: "-P3D"},
+		{Type: "desktop", When: "-P1D", Whend: -24 * time.Hour},
+		{Type: "desktop", When: "-PT15M", Whend: -15 * time.Minute},
+		{Type: "desktop", When: "-PT1H", Whend: -1 * time.Hour},
+		{Type: "desktop", When: "-P5D", Whend: -5 * 24 * time.Hour},
+		{Type: "desktop", When: "-P6D", Whend: -6 * 24 * time.Hour},
+		{Type: "desktop", When: "-P2DT22H49M", Whend: -2*24*time.Hour - 22*time.Hour - 49*time.Minute},
+		{Type: "desktop", When: "-P3D", Whend: -3 * 24 * time.Hour},
 	}
 
 	actualAlarms := conf.AlarmsAllowed()
