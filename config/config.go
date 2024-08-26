@@ -2,8 +2,10 @@ package config
 
 import (
 	"errors"
-	"time"
 	"fmt"
+	"time"
+
+	"github.com/BurntSushi/toml"
 	"github.com/sosodev/duration"
 )
 
