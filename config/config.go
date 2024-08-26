@@ -3,6 +3,8 @@ package config
 import (
 	"errors"
 	"time"
+	"fmt"
+	"github.com/sosodev/duration"
 )
 
 type Config struct {
@@ -33,11 +35,6 @@ func (l *Location) UnmarshalText(text []byte) error {
 	return nil
 }
 
-import (
-	"fmt"
-	"github.com/sosodev/duration"
-)
-
 func (a *Alarm) UnmarshalText(text []byte) error {
 	iso8601Duration := string(text)
 	d, err := duration.Parse(iso8601Duration)
@@ -55,6 +52,8 @@ type Alarm struct {
 	When string        `toml:"when"`
 	Whend time.Duration `toml:"-"`
 }
+
+type Alarms []Alarm
 
 type Telegram struct {
 	Token  string
@@ -84,4 +83,3 @@ func (c *Config) AlarmsAllowed() []Alarm {
 	return als
 }
 
-type Alarms []Alarm
