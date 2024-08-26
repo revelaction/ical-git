@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/BurntSushi/toml"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
@@ -20,16 +19,6 @@ import (
 // configFile is the config file path
 const configPathDefault = "icalgit.toml"
 
-func loadConfig(path string) config.Config {
-	// Config file
-	var conf config.Config
-	if _, err := toml.DecodeFile(path, &conf); err != nil {
-		log.Fatal(err)
-	}
-
-    slog.Info("yo", conf)
-	return conf
-}
 
 func main() {
 
@@ -129,7 +118,7 @@ func run(conf config.Config, start time.Time, sc *schedule.Scheduler) {
 
 func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("⚙️  initializing: loading config", "path", path)
-	conf := loadConfig(path)
+	conf := config.LoadConfig(path)
 
 	slog.Info("⚙️  initializing: creating new context")
 	ctx, cancel := context.WithCancel(context.Background())
