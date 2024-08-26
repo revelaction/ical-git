@@ -33,9 +33,19 @@ func (l *Location) UnmarshalText(text []byte) error {
 	return nil
 }
 
+import (
+	"fmt"
+	"github.com/sosodev/duration"
+)
+
 func (a *Alarm) UnmarshalText(text []byte) error {
-	// Implementation to decode the When field into Whend as time.Duration
-	// This method body will be implemented in the next steps
+	iso8601Duration := string(text)
+	d, err := duration.Parse(iso8601Duration)
+	if err != nil {
+		return fmt.Errorf("error parsing duration: %w", err)
+	}
+
+	a.Whend = d.ToTimeDuration()
 	return nil
 }
 
