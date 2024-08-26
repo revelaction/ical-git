@@ -15,7 +15,7 @@ alarms = [
 	{type = "desktop", when = "-PT1H"},  
 ]
 `
-	conf, err := config.Load(testToml)
+	conf, err := Load(testToml)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}
@@ -46,7 +46,7 @@ alarms = [
 	{type = "telegram", when = "-PT1H"},  
 ]
 `
-	conf, err := config.Load(testToml)
+	conf, err := Load(testToml)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}
