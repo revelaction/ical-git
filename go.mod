@@ -7,7 +7,7 @@ require (
 	github.com/arran4/golang-ical v0.3.1
 	github.com/gen2brain/beeep v0.0.0-20230907135156-1a38885a97fc
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
-	github.com/sosodev/duration v1.2.0
+	github.com/sosodev/duration v1.3.1
 	github.com/teambition/rrule-go v1.8.2
 )
 

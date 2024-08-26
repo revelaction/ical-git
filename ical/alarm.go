@@ -11,7 +11,7 @@ type Alarms struct {
 	//alarms []Alarm
 	conf config.Config
 
-	//start is the of the start of the program
+	//start is the of the start of the program or after SIGHUP
 	start time.Time
 }
 
