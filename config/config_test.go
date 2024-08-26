@@ -91,9 +91,20 @@ alarms = [
 		t.Fatalf("Expected 1 alarm, got %d", len(conf.Alarms))
 	}
 
-    // -PD1
-	expectedDuration := - 24 * time.Hour
+	expectedDuration := -24 * time.Hour
 	if conf.Alarms[0].Duration != expectedDuration {
 		t.Fatalf("Expected duration %v, got %v", expectedDuration, conf.Alarms[0].Duration)
+	}
+}
+
+func TestAlarmDurationParseError(t *testing.T) {
+	var testToml = []byte(`
+alarms = [
+	{type = "desktop", when = "invalid-duration"},  
+]
+`)
+	_, err := Load(testToml)
+	if err == nil {
+		t.Fatalf("Expected an error due to invalid duration, but got none")
 	}
 }
