@@ -1,9 +1,7 @@
 package ical
 
 import (
-	"fmt"
 	"github.com/revelaction/ical-git/config"
-	"github.com/sosodev/duration"
 	"time"
 )
 
@@ -36,10 +34,6 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 
 		alTime := eventTime.Add(alarm.Duration)
 		//slog.Info("🔔 Alarm", "diff", alarm.When, "type", alarm.Type, "alarm_time", alTime)
-		if err != nil {
-			fmt.Println("error:", err)
-			continue
-		}
 
 		if s.isInTickPeriod(alTime) {
 			tickAlarms = append(tickAlarms, Alarm{Type: alarm.Type, Time: alTime, Diff: alarm.When})
