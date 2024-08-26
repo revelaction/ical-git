@@ -86,3 +86,10 @@ func LoadConfig(path string) (Config, error) {
 
 	return conf, nil
 }
+func parseWhen(when string) (time.Duration, error) {
+	d, err := duration.Parse(when)
+	if err != nil {
+		return 0, fmt.Errorf("error parsing duration: %w", err)
+	}
+	return d.ToTimeDuration(), nil
+}
