@@ -7,14 +7,14 @@ import (
 
 
 func TestAlarmsAllowedDesktop(t *testing.T) {
-	const testToml = `
+	const testToml = []byte(`
 notifiers = ["desktop"]
 alarms = [
 	{type = "desktop", when = "-P1D"},  
 	{type = "desktop", when = "-PT15M"},  
 	{type = "desktop", when = "-PT1H"},  
 ]
-`
+`)
 	conf, err := Load(testToml)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
@@ -38,14 +38,14 @@ alarms = [
 }
 
 func TestAlarmsAllowedTelegram(t *testing.T) {
-	const testToml = `
+	const testToml = []byte(`
 notifiers = ["telegram"]
 alarms = [
 	{type = "telegram", when = "-P1D"},  
 	{type = "telegram", when = "-PT15M"},  
 	{type = "telegram", when = "-PT1H"},  
 ]
-`
+`)
 	conf, err := Load(testToml)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
