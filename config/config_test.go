@@ -7,6 +7,7 @@ import (
 
 
 
+
 func TestAlarmsAllowedDesktop(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
