@@ -19,7 +19,6 @@ import (
 // configFile is the config file path
 const configPathDefault = "icalgit.toml"
 
-
 func main() {
 
 	//flag.Usage = func() { fmt.Fprintf(os.Stderr, "%s\n", usage) }

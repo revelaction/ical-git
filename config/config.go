@@ -38,8 +38,8 @@ func (l *Location) UnmarshalText(text []byte) error {
 }
 
 type Alarm struct {
-	Type  string        `toml:"type"`
-	When  string        `toml:"when"`
+	Type     string `toml:"type"`
+	When     string `toml:"when"`
 	Duration time.Duration
 }
 
@@ -74,9 +74,8 @@ func (c *Config) AlarmsAllowed() []Alarm {
 }
 
 func Load(data []byte) (Config, error) {
-	// Config file
 	var conf Config
-	if _, err := toml.Decode(data, &conf); err != nil {
+	if _, err := toml.Decode(string(data), &conf); err != nil {
 		return Config{}, err
 	}
 

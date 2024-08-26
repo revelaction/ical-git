@@ -1,7 +1,9 @@
 package config
 
+
 import (
 	"testing"
+	"time"
 )
 
 func TestTomlParseError(t *testing.T) {
@@ -18,11 +20,6 @@ alarms = [
 		t.Fatalf("Expected an error due to bad TOML content, but got none")
 	}
 }
-
-import (
-	"testing"
-	"time"
-)
 
 func TestAlarmsAllowedDesktop(t *testing.T) {
 	var testToml = []byte(`
