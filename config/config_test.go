@@ -2,6 +2,25 @@ package config
 
 import (
 	"testing"
+)
+
+func TestTomlParseError(t *testing.T) {
+	var badToml = []byte(`
+notifiers = ["desktop"]
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+	{type = "desktop", when = "-PT15M"},  
+	{type = "desktop", when = "-PT1H"},  
+	invalid-toml-content
+`)
+	_, err := Load(badToml)
+	if err == nil {
+		t.Fatalf("Expected an error due to bad TOML content, but got none")
+	}
+}
+
+import (
+	"testing"
 	"time"
 )
 
