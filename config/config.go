@@ -37,10 +37,6 @@ func (l *Location) UnmarshalText(text []byte) error {
 	return nil
 }
 
-type Whend struct {
-	time.Duration
-}
-
 type Alarm struct {
 	Type  string        `toml:"type"`
 	When  string        `toml:"when"`
@@ -86,6 +82,7 @@ func LoadConfig(path string) (Config, error) {
 
 	return conf, nil
 }
+
 func parseWhen(when string) (time.Duration, error) {
 	d, err := duration.Parse(when)
 	if err != nil {
