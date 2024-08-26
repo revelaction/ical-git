@@ -96,6 +96,5 @@ func loadConfig(path string) Config {
 		log.Fatal(err)
 	}
 
-    slog.Info("yo", conf)
 	return conf
 }
