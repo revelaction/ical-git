@@ -27,6 +27,7 @@ func loadConfig(path string) config.Config {
 		log.Fatal(err)
 	}
 
+    slog.Info("yo", conf)
 	return conf
 }
 
@@ -88,8 +89,9 @@ func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler, start
 	ticker := time.NewTicker(conf.DaemonTick)
 	defer ticker.Stop()
 
+	run(conf, start, sc)
+
 	for {
-		run(conf, start, sc)
 
 		select {
 		case <-ctx.Done():

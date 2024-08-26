@@ -35,24 +35,31 @@ func (l *Location) UnmarshalText(text []byte) error {
 	return nil
 }
 
-func (a *Alarm) UnmarshalText(text []byte) error {
+type Whend struct {
+	time.Duration
+}
+
+type Alarm struct {
+	Type  string        `toml:"type"`
+	When  string        `toml:"when"`
+	Whend Whend
+}
+
+
+type Alarms []Alarm
+
+func (a *Whend) UnmarshalText(text []byte) error {
 	iso8601Duration := string(text)
 	d, err := duration.Parse(iso8601Duration)
 	if err != nil {
 		return fmt.Errorf("error parsing duration: %w", err)
 	}
 
-	a.Whend = d.ToTimeDuration()
+    a.Duration = d.ToTimeDuration()
+
 	return nil
 }
 
-type Alarm struct {
-	Type  string        `toml:"type"`
-	When  string        `toml:"when"`
-	Whend time.Duration `toml:"-"`
-}
-
-type Alarms []Alarm
 
 type Telegram struct {
 	Token  string
