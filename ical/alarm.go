@@ -64,6 +64,3 @@ func (s *Alarms) isInTickPeriod(t time.Time) bool {
 	return true
 }
 
-func alarmTime(eventTime time.Time, dur time.Duration) time.Time {
-	return eventTime.Add(dur)
-}
