@@ -7,13 +7,12 @@ import (
 )
 
 
-func TestAlarmsAllowedDesktop(t *testing.T) {
+func TestAlarmsAllowedTelegram(t *testing.T) {
 	const testToml = `
-notifiers = ["desktop"]
+notifiers = ["telegram"]
 alarms = [
-	{type = "desktop", when = "-P1D"},  
-	{type = "desktop", when = "-PT15M"},  
-	{type = "desktop", when = "-PT1H"},  
+	{type = "telegram", when = "-P1D"},  
+	{type = "telegram", when = "-PT15M"},  
 ]
 `
 	var conf Config
@@ -22,9 +21,8 @@ alarms = [
 	}
 
 	expectedAlarms := []Alarm{
-		{Type: "desktop", When: "-P1D"},
-		{Type: "desktop", When: "-PT15M"},
-		{Type: "desktop", When: "-PT1H"},
+		{Type: "telegram", When: "-P1D"},
+		{Type: "telegram", When: "-PT15M"},
 	}
 
 	actualAlarms := conf.AlarmsAllowed()
