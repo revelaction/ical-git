@@ -3,7 +3,6 @@ package config
 import (
 	"testing"
 
-	"github.com/BurntSushi/toml"
 )
 
 
@@ -16,7 +15,6 @@ alarms = [
 	{type = "desktop", when = "-PT1H"},  
 ]
 `
-	var conf Config
 	conf, err := config.Load(testToml)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
@@ -48,7 +46,6 @@ alarms = [
 	{type = "telegram", when = "-PT1H"},  
 ]
 `
-	var conf Config
 	conf, err := config.Load(testToml)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
