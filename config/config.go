@@ -47,9 +47,8 @@ func (a *Alarm) UnmarshalText(text []byte) error {
 }
 
 type Alarm struct {
-	Type string `toml:"type"`
-	// ISO8601 TODO Diff
-	When string        `toml:"when"`
+	Type  string        `toml:"type"`
+	When  string        `toml:"when"`
 	Whend time.Duration `toml:"-"`
 }
 
