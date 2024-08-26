@@ -7,26 +7,11 @@ import (
 )
 
 const testToml = `
-timezone = "Europe/Berlin"
-tick = "24h"
-
 alarms = [
 	{type = "desktop", when = "-P1D"},  
 	{type = "desktop", when = "-PT15M"},  
 	{type = "desktop", when = "-PT1H"},  
 ]
-
-notifiers = ["desktop"]
-
-[fetcher_filesystem]
-directory = "testdata"
-
-[notifier_telegram]
-token = "yuu3b3k"
-chat_id = 588488
-
-[notifier_desktop]
-icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
 `
 
 func TestAlarmsAllowedDesktop(t *testing.T) {
