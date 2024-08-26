@@ -3,8 +3,8 @@ package config
 import (
 	"testing"
 	"time"
-
 )
+
 
 
 func TestAlarmsAllowedDesktop(t *testing.T) {
