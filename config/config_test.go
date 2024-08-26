@@ -17,7 +17,8 @@ alarms = [
 ]
 `
 	var conf Config
-	if err := config.Load(testToml, &conf); err != nil {
+	conf, err := config.Load(testToml)
+	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}
 
@@ -48,7 +49,8 @@ alarms = [
 ]
 `
 	var conf Config
-	if err := config.Load(testToml, &conf); err != nil {
+	conf, err := config.Load(testToml)
+	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}
 
