@@ -33,10 +33,17 @@ func (l *Location) UnmarshalText(text []byte) error {
 	return nil
 }
 
+func (a *Alarm) UnmarshalText(text []byte) error {
+	// Implementation to decode the When field into Whend as time.Duration
+	// This method body will be implemented in the next steps
+	return nil
+}
+
 type Alarm struct {
 	Type string `toml:"type"`
 	// ISO8601 TODO Diff
-	When string `toml:"when"`
+	When string        `toml:"when"`
+	Whend time.Duration `toml:"-"`
 }
 
 type Telegram struct {
