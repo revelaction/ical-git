@@ -5,9 +5,6 @@ import (
 	"time"
 )
 
-
-
-
 func TestAlarmsAllowedDesktop(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
@@ -22,7 +19,7 @@ alarms = [
 		t.Fatalf("Failed to load config: %v", err)
 	}
 
-    expectedLen := 3
+	expectedLen := 3
 	actualAlarms := conf.AlarmsAllowed()
 
 	if len(actualAlarms) != expectedLen {
@@ -44,7 +41,7 @@ alarms = [
 		t.Fatalf("Failed to load config: %v", err)
 	}
 
-    expectedLen := 3
+	expectedLen := 3
 	actualAlarms := conf.AlarmsAllowed()
 
 	if len(actualAlarms) != expectedLen {
@@ -52,7 +49,6 @@ alarms = [
 	}
 
 }
-
 
 func TestAlarmsAllowedNoTelegram(t *testing.T) {
 	var testToml = []byte(`
@@ -68,7 +64,7 @@ alarms = [
 		t.Fatalf("Failed to load config: %v", err)
 	}
 
-    expectedLen := 0
+	expectedLen := 0
 	actualAlarms := conf.AlarmsAllowed()
 
 	if len(actualAlarms) != expectedLen {
