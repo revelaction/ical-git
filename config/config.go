@@ -50,17 +50,6 @@ type Alarm struct {
 
 type Alarms []Alarm
 
-func (a *Whend) UnmarshalText(text []byte) error {
-	iso8601Duration := string(text)
-	d, err := duration.Parse(iso8601Duration)
-	if err != nil {
-		return fmt.Errorf("error parsing duration: %w", err)
-	}
-
-    a.Duration = d.ToTimeDuration()
-
-	return nil
-}
 
 
 type Telegram struct {
