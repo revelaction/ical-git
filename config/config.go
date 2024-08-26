@@ -89,12 +89,12 @@ func (c *Config) AlarmsAllowed() []Alarm {
 	return als
 }
 
-func loadConfig(path string) Config {
+func LoadConfig(path string) (Config, error) {
 	// Config file
 	var conf Config
 	if _, err := toml.DecodeFile(path, &conf); err != nil {
-		log.Fatal(err)
+		return Config{}, err
 	}
 
-	return conf
+	return conf, nil
 }
