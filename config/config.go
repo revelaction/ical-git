@@ -80,6 +80,13 @@ func LoadConfig(path string) (Config, error) {
 		return Config{}, err
 	}
 
+	for i, alarm := range conf.Alarms {
+		duration, err := parseWhen(alarm.When)
+		if err != nil {
+			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)
+		}
+		conf.Alarms[i].Duration = duration
+	}
 	return conf, nil
 }
 
