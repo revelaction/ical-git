@@ -50,6 +50,27 @@ alarms = [
 
 }
 
+func TestAlarmDuration(t *testing.T) {
+	var testToml = []byte(`
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+`)
+	conf, err := Load(testToml)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	if len(conf.Alarms) != 1 {
+		t.Fatalf("Expected 1 alarm, got %d", len(conf.Alarms))
+	}
+
+	expectedDuration := 24 * time.Hour
+	if conf.Alarms[0].Duration != expectedDuration {
+		t.Fatalf("Expected duration %v, got %v", expectedDuration, conf.Alarms[0].Duration)
+	}
+}
+
 func TestAlarmsAllowedNoTelegram(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
