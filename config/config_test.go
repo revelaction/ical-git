@@ -7,6 +7,7 @@ import (
 )
 
 const testToml = `
+notifiers = ["desktop"]
 alarms = [
 	{type = "desktop", when = "-P1D"},  
 	{type = "desktop", when = "-PT15M"},  
