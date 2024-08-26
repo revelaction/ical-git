@@ -28,6 +28,7 @@ func (l *Location) UnmarshalText(text []byte) error {
 	if err != nil {
 		return err
 	}
+
 	l.Location = loc
 	return nil
 }
