@@ -17,8 +17,8 @@ alarms = [
 ]
 `
 	var conf Config
-	if _, err := toml.Decode(testToml, &conf); err != nil {
-		t.Fatalf("Failed to decode TOML: %v", err)
+	if err := config.Load(testToml, &conf); err != nil {
+		t.Fatalf("Failed to load config: %v", err)
 	}
 
 	expectedAlarms := []Alarm{
@@ -48,8 +48,8 @@ alarms = [
 ]
 `
 	var conf Config
-	if _, err := toml.Decode(testToml, &conf); err != nil {
-		t.Fatalf("Failed to decode TOML: %v", err)
+	if err := config.Load(testToml, &conf); err != nil {
+		t.Fatalf("Failed to load config: %v", err)
 	}
 
 	expectedAlarms := []Alarm{
