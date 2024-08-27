@@ -21,7 +21,7 @@ func TestGetAlarms(t *testing.T) {
 	`)
 
 	// Load the configuration
-	conf, err := config.Load([]byte(tomlConfig))
+	conf, err := config.Load(tomlConfig)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}
