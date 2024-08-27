@@ -157,14 +157,14 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 	}
 
     
-    // TODO test with also RDATE
+    // If it also has RDATE this also works properly
 	if et.hasRRule() {
         // time can be Zero
         return s.After(now, false), nil
     }
 
-    // Seems to be BUG in github.com/teambition/rrule-go The buggy value will
-    // be correct now as teambition does not consider the DTSTART
+    // Seems to be BUG in github.com/teambition/rrule-go. 
+    // teambition does not consider the DTSTART when RDATE but no RRULE
     if et.hasRDate() {
         // According to the iCalendar specification (RFC 5545), DTSTART is a
         // required property for VEVENT components
