@@ -35,7 +35,7 @@ func (p *Parser) Parse(data []byte) error {
 
 	for _, event := range cal.Events() {
 
-		et := newEventTime(event)
+		et := newEventTime(event.Serialize())
 		et.parse()
 
 		eventTime, err := et.nextTime(p.start)

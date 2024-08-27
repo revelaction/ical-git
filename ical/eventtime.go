@@ -12,16 +12,16 @@ import (
 
 // TODO to event
 type EventTime struct {
-	vEvent  *ics.VEvent
+	Event   string
 	dtStart string
 	rRule   []string
 	rDate   []string
 	guessed bool
 }
 
-func newEventTime(vEvent *ics.VEvent) *EventTime {
+func newEventTime(event string) *EventTime {
 	return &EventTime{
-		vEvent: vEvent,
+		Event:  event,
 		rRule:  []string{},
 		rDate:  []string{},
 	}
@@ -87,7 +87,7 @@ func (et *EventTime) isGuessed() bool {
 // golang-ical properly break lines when serialize()
 // we remove the space to make sure simple scanner works properly
 func (et *EventTime) serialize() string {
-	return strings.Replace(et.vEvent.Serialize(), "\r\n ", "", -1)
+	return et.Event
 }
 
 // TODO err
