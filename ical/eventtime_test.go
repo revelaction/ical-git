@@ -132,3 +132,17 @@ END:VEVENT`
 		t.Errorf("isFloating() = true; want false")
 	}
 }
+func TestHasDtStartEmpty(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+SUMMARY:Empty DTSTART Event
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	if et.hasDtStart() {
+		t.Errorf("hasDtStart() = true; want false")
+	}
+}
