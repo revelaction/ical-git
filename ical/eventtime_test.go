@@ -132,7 +132,7 @@ END:VEVENT`
 	}
 }
 
-func TestNextTimeDtStartEmpty(t *testing.T) {
+func TestNextTimeDtStartEmptyError(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
 DTSTAMP:20240109T090000Z

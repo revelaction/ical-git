@@ -141,6 +141,9 @@ func (et *EventTime) hasTzId() bool {
 // the timezone of the returned nextTime comes from the Event self, not the Config one
 // It can return a zero time indicating that the event is in the past or that
 // an error ocurred when parsing with rrule package.
+//  - not existant DTSTART line
+//  - a bad DTSTART line or RRULE or RDATE 
+//      - not parseable TZID in DTSTART
 // now can be in a diferent location as nextTime
 // if the next eventTime is floating there is not error and will be interpreted as local TODO
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
@@ -149,7 +152,6 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 	if err != nil {
 		return time.Time{}, err
 	}
-	// TODO always read DTSTART to determine if floating!
 
 	if !et.hasRRule() && !et.hasRDate() {
 		dtStart := s.GetDTStart()
