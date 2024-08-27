@@ -118,7 +118,8 @@ func (et *EventTime) hasTzId() bool {
 	return false
 }
 
-// nextTime returns the next ocurrence of a event
+// nextTime returns the next Time of a event
+// the timezone is the Event one, not the Config one
 // It can return a zero time indicating that the event is in the past or that
 // an error ocurred.
 // let parser call guess(conf.timezone)
