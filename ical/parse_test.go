@@ -9,7 +9,7 @@ import (
 
 func TestParse(t *testing.T) {
 	// Setup
-	conf, err := config.Load(`
+	configData := []byte(`
 timezone = "Europe/Berlin"
 tick = "24h"
 
@@ -38,6 +38,7 @@ chat_id = 588488
 [notifier_desktop]
 icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
 `)
+	conf, err := config.Load(configData)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}
