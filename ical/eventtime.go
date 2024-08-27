@@ -148,6 +148,7 @@ func (et *EventTime) hasTzId() bool {
 // floating DTSTART do not give error
 // now can be in a diferent location as nextTime
 // if the next eventTime is floating there is not error and will be interpreted as local TODO
+// TODO RDATE does semmes to be properly supported by teambition. See tests
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 
 	s, err := rrule.StrToRRuleSet(et.joinLines())

@@ -344,17 +344,17 @@ func TestNextTimeRDateUTC(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
 DTSTAMP:20240109T090000Z
-DTSTART: 20250401T000000Z
-RDATE: 20260402T000000Z
-RDATE: 20270402T000000Z
-RDATE: 20280402T000000Z
+DTSTART:20250401T000000Z
+RDATE:20260402T000000Z
+RDATE:20270402T000000Z
+RDATE:20280402T000000Z
 SUMMARY:Event with multiple RDATE
 END:VEVENT`
 
 	et := newEventTime(event)
 	et.parse()
 
-	now := time.Date(2024, 10, 1, 0, 0, 0, 0, time.UTC)
+	now := time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC)
 	nextTime, err := et.nextTime(now)
 	if err != nil {
 		t.Fatalf("nextTime failed: %v", err)
