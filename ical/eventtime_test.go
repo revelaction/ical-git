@@ -45,6 +45,46 @@ END:VEVENT`
 	}
 }
 
+func TestNextTimeUTC(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;20240401T000000Z
+SUMMARY:April 1st Event
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
+	nextTime, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	loc, _ := time.LoadLocation("UTC")
+	expectedTime := time.Date(2024, 4, 1, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+
+	if !et.hasDtStart() {
+		t.Errorf("hasDtStart() = false; want true")
+	}
+
+	if !et.hasZSuffix() {
+		t.Errorf("hasZSuffix() = false want true")
+	}
+
+	if et.hasTzId() {
+		t.Errorf("hasTzId() = true want false")
+	}
+
+	if et.isFloating() {
+		t.Errorf("isFloating() = true; want false")
+	}
+}
+
 func TestNextTimeInPast(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
@@ -218,6 +258,34 @@ END:VEVENT`
 	}
 }
 
+func TestNextTimeRRule1YearLater(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=America/New_York:20240401T000000
+RRULE:FREQ=MONTHLY;BYMONTHDAY=-6
+SUMMARY:Monthly Event on the 6th last day
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	now := time.Date(2025, 4, 10, 0, 0, 0, 0, time.UTC)
+	nextTime, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		t.Fatalf("Failed to load location: %v", err)
+	}
+	expectedTime := time.Date(2025, 4, 25, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+}
+
 func TestNextTimeBadRRuleError(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
@@ -244,17 +312,17 @@ func TestNextTimeRDate(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
 DTSTAMP:20240109T090000Z
-DTSTART;TZID=America/New_York:20240401T000000
-RDATE;TZID=America/New_York:20240402T000000
-RDATE;TZID=America/New_York:20240403T000000
-RDATE;TZID=America/New_York:20240404T000000
+DTSTART;TZID=America/New_York:20250401T000000
+RDATE;TZID=America/New_York:20260402T000000
+RDATE;TZID=America/New_York:20270403T000000
+RDATE;TZID=America/New_York:20280404T000000
 SUMMARY:Event with multiple RDATE
 END:VEVENT`
 
 	et := newEventTime(event)
 	et.parse()
 
-	now := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 	nextTime, err := et.nextTime(now)
 	if err != nil {
 		t.Fatalf("nextTime failed: %v", err)
@@ -264,11 +332,76 @@ END:VEVENT`
 	if err != nil {
 		t.Fatalf("Failed to load location: %v", err)
 	}
-	expectedTime := time.Date(2024, 4, 2, 0, 0, 0, 0, loc)
+	expectedTime := time.Date(2026, 4, 2, 0, 0, 0, 0, loc)
 	if !nextTime.Equal(expectedTime) {
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 }
+
+// Seems to be BUG in github.com/teambition/rrule-go
+// next should be 2025
+func TestNextTimeRDateUTC(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART: 20250401T000000Z
+RDATE: 20260402T000000Z
+RDATE: 20270402T000000Z
+RDATE: 20280402T000000Z
+SUMMARY:Event with multiple RDATE
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	now := time.Date(2024, 10, 1, 0, 0, 0, 0, time.UTC)
+	nextTime, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		t.Fatalf("Failed to load location: %v", err)
+	}
+	expectedTime := time.Date(2025, 4, 2, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+}
+
+// github.com/teambition/rrule-go works after the DTSTART time
+func TestNextTimeRDateAfterFirst(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=America/New_York:20240401T000000
+RDATE;TZID=America/New_York:20250402T000000
+RDATE;TZID=America/New_York:20260403T000000
+RDATE;TZID=America/New_York:20270404T000000
+SUMMARY:Event with multiple RDATE
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+    // After first
+	now := time.Date(2024, 10, 1, 0, 0, 0, 0, time.UTC)
+	nextTime, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		t.Fatalf("Failed to load location: %v", err)
+	}
+	expectedTime := time.Date(2025, 4, 2, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+}
+
 func TestNextTimeBadRDateError(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
