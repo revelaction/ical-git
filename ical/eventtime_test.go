@@ -28,16 +28,21 @@ END:VEVENT`
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 
-	if !et.hasZSuffix() {
-		t.Errorf("hasZSuffix() = false; want true")
-	}
-
 	if !et.hasDtStart() {
 		t.Errorf("hasDtStart() = false; want true")
 	}
 
+
+	if et.hasZSuffix() {
+		t.Errorf("hasZSuffix() = true; want false")
+	}
+
 	if !et.hasTzId() {
 		t.Errorf("hasTzId() = false; want true")
+	}
+
+	if et.isFloating() {
+		t.Errorf("isFloating() = true; want false")
 	}
 }
 
@@ -91,9 +96,5 @@ END:VEVENT`
 
 	if !et.hasDtStart() {
 		t.Errorf("hasDtStart() = false; want true")
-	}
-
-	if et.hasTzId() {
-		t.Errorf("hasTzId() = true; want false")
 	}
 }

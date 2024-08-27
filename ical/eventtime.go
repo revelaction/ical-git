@@ -89,9 +89,25 @@ func (et *EventTime) serialize() string {
 	return strings.Replace(et.Event, "\r\n ", "", -1)
 }
 
-// TODO err
+// In iCal format, floating events are represented by date-time values that do
+// not include a "Z" suffix (which would indicate UTC) and do not have an
+// associated TZID parameter.
+func (et *EventTime) isFloating() bool {
+    if et.hasZSuffix(){
+        return false
+    }
+
+    if et.hasTzId(){
+        return false
+    }
+
+    return true
+}
+
+
+
 func (et *EventTime) hasZSuffix() bool {
-	if matched, _ := regexp.MatchString(`\d{8}T\d{6}$`, et.dtStart); matched {
+	if matched, _ := regexp.MatchString(`\d{8}T\d{6}Z$`, et.dtStart); matched {
 		return true
 	}
 
@@ -159,7 +175,7 @@ func (et *EventTime) joinLines() string {
 func (et *EventTime) guess(loc *time.Location) (time.Time, error) {
 	// TODO remove indentation
 	if et.hasDtStart() {
-		if et.isFloating() && et.hasTzId() {
+		if et.hasZSuffix() && et.hasTzId() {
 			guessTime, errParse := et.parseDtStartInLocation(loc)
 			if errParse != nil {
 				return time.Time{}, fmt.Errorf("error: %w", errParse)
