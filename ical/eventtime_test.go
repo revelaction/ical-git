@@ -189,3 +189,30 @@ func TestHasDtStartEmptyStruct(t *testing.T) {
 		t.Errorf("hasDtStart() = true; want false")
 	}
 }
+func TestNextTimeRRule(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=America/New_York:20240401T000000
+RRULE:FREQ=MONTHLY;BYMONTHDAY=-6
+SUMMARY:Monthly Event on the 6th last day
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
+	nextTime, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		t.Fatalf("Failed to load location: %v", err)
+	}
+	expectedTime := time.Date(2024, 1, 25, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+}
