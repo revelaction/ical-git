@@ -24,7 +24,7 @@ notifiers = ["desktop"]
 		t.Fatalf("Failed to load config: %v", err)
 	}
 
-	start := time.Date(2024, 11, 1, 0, 0, 0, 0, time.UTC)
+	start := time.Date(2024, 11, 30, 0, 0, 0, 0, time.UTC)
 	parser := NewParser(conf, start)
 
 	// Test data
