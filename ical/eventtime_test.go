@@ -237,6 +237,8 @@ END:VEVENT`
 	}
 	t.Logf("Error message is: %s", err)
 }
+
+// TODO Why is rrule no doing properly
 func TestNextTimeRDate(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
