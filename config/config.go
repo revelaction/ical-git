@@ -39,8 +39,8 @@ func (l *Location) UnmarshalText(text []byte) error {
 
 type Alarm struct {
 	Type     string `toml:"type"`
-	When     string `toml:"when"`
-	Duration time.Duration
+	DurIso8601     string `toml:"when"`
+	Dur time.Duration
 }
 
 type Alarms []Alarm
@@ -80,17 +80,17 @@ func Load(data []byte) (Config, error) {
 	}
 
 	for i, alarm := range conf.Alarms {
-		duration, err := parseWhen(alarm.When)
+		dur, err := parseDurIso8601(alarm.DurIso8601)
 		if err != nil {
 			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)
 		}
-		conf.Alarms[i].Duration = duration
+		conf.Alarms[i].Dur = dur
 	}
 	return conf, nil
 }
 
-func parseWhen(when string) (time.Duration, error) {
-	d, err := duration.Parse(when)
+func parseDurIso8601(isoDur string) (time.Duration, error) {
+	d, err := duration.Parse(isoDur)
 	if err != nil {
 		return 0, fmt.Errorf("error parsing duration: %w", err)
 	}

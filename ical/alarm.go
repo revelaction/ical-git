@@ -14,9 +14,8 @@ type Alarms struct {
 }
 
 type Alarm struct {
-	Type string
+    config.Alarm
 	Time time.Time
-	Diff string
 }
 
 func NewAlarms(c config.Config, start time.Time) *Alarms {
@@ -32,14 +31,13 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 	tickAlarms := []Alarm{}
 	for _, alarm := range s.conf.AlarmsAllowed() {
 
-		alTime := eventTime.Add(alarm.Duration)
+		alarmTime := eventTime.Add(alarm.Dur)
 		//slog.Info("🔔 Alarm", "diff", alarm.When, "type", alarm.Type, "alarm_time", alTime)
 
-		if s.isInTickPeriod(alTime) {
-			tickAlarms = append(tickAlarms, Alarm{Type: alarm.Type, Time: alTime, Diff: alarm.When})
+		if s.isInTickPeriod(alarmTime) {
+            tickAlarms = append(tickAlarms, Alarm{alarm, time:alarmTime})
 		}
 
-		// TODO if alarm in tick, (apply offset -3), build Notification
 	}
 
 	return tickAlarms
