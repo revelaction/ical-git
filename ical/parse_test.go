@@ -50,6 +50,7 @@ END:VCALENDAR
 		t.Fatalf("Expected 1 notification, got %d", len(notifications))
 	}
 
+	t.Logf("Error message is: %#v", notifications)
 	notification := notifications[0]
 	if notification.Summary != "Simple Event" {
 		t.Errorf("Expected summary 'Simple Event', got '%s'", notification.Summary)
