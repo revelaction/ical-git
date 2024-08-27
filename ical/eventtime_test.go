@@ -27,6 +27,18 @@ END:VEVENT`
 	if !nextTime.Equal(expectedTime) {
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
+
+	if !et.isFloating() {
+		t.Errorf("isFloating() = false; want true")
+	}
+
+	if !et.hasDtStart() {
+		t.Errorf("hasDtStart() = false; want true")
+	}
+
+	if !et.hasTzId() {
+		t.Errorf("hasTzId() = false; want true")
+	}
 }
 
 func TestNextTimeInPast(t *testing.T) {
