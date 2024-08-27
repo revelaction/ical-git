@@ -156,35 +156,34 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 		return time.Time{}, err
 	}
 
-    
-    // If it also has RDATE this also works properly
+	// If it also has RDATE this also works properly
 	if et.hasRRule() {
-        // time can be Zero
-        return s.After(now, false), nil
-    }
+		// time can be Zero
+		return s.After(now, false), nil
+	}
 
-    // Seems to be BUG in github.com/teambition/rrule-go. 
-    // teambition does not consider the DTSTART when RDATE but no RRULE
-    if et.hasRDate() {
-        // According to the iCalendar specification (RFC 5545), DTSTART is a
-        // required property for VEVENT components
-        dtStart := s.GetDTStart()
+	// Seems to be BUG in github.com/teambition/rrule-go.
+	// teambition does not consider the DTSTART when RDATE but no RRULE
+	if et.hasRDate() {
+		// According to the iCalendar specification (RFC 5545), DTSTART is a
+		// required property for VEVENT components
+		dtStart := s.GetDTStart()
 
-        if dtStart.After(now) {
-            return dtStart, nil
-        }
+		if dtStart.After(now) {
+			return dtStart, nil
+		}
 
-        return s.After(now, false), nil
-    }
+		return s.After(now, false), nil
+	}
 
-    dtStart := s.GetDTStart()
+	dtStart := s.GetDTStart()
 
-    if dtStart.After(now) {
-        return dtStart, nil
-    }
+	if dtStart.After(now) {
+		return dtStart, nil
+	}
 
-    // expired
-    return time.Time{}, nil
+	// expired
+	return time.Time{}, nil
 }
 
 func (et *EventTime) joinLines() string {

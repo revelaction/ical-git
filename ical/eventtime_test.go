@@ -381,7 +381,7 @@ END:VEVENT`
 	et := newEventTime(event)
 	et.parse()
 
-    // After first
+	// After first
 	now := time.Date(2024, 10, 1, 0, 0, 0, 0, time.UTC)
 	nextTime, err := et.nextTime(now)
 	if err != nil {
@@ -503,7 +503,7 @@ END:VEVENT`
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 
-    // now after RDATE
+	// now after RDATE
 
 	now = time.Date(2027, 4, 11, 0, 0, 0, 0, time.UTC)
 	nextTime, err = et.nextTime(now)
@@ -515,6 +515,5 @@ END:VEVENT`
 	if !nextTime.Equal(expectedTime) {
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
-
 
 }
