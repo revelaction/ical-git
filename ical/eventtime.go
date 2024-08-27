@@ -3,7 +3,6 @@ package ical
 import (
 	"bufio"
 	"fmt"
-	"github.com/arran4/golang-ical"
 	"github.com/teambition/rrule-go"
 	"regexp"
 	"strings"
@@ -87,7 +86,7 @@ func (et *EventTime) isGuessed() bool {
 // golang-ical properly break lines when serialize()
 // we remove the space to make sure simple scanner works properly
 func (et *EventTime) serialize() string {
-	return et.Event
+	return strings.Replace(et.Event, "\r\n ", "", -1)
 }
 
 // TODO err
