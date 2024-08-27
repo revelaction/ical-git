@@ -123,6 +123,7 @@ func (et *EventTime) hasTzId() bool {
 // It can return a zero time indicating that the event is in the past or that
 // an error ocurred.
 // let parser call guess(conf.timezone)
+// now can be in a diferent location as nextTime
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 
 	s, err := rrule.StrToRRuleSet(et.joinLines())
