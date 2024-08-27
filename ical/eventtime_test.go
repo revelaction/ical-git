@@ -147,3 +147,10 @@ END:VEVENT`
 		t.Errorf("hasDtStart() = true; want false")
 	}
 }
+func TestHasDtStartEmptyStruct(t *testing.T) {
+	et := &EventTime{}
+
+	if et.hasDtStart() {
+		t.Errorf("hasDtStart() = true; want false")
+	}
+}
