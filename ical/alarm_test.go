@@ -10,14 +10,15 @@ import (
 func TestGetAlarms(t *testing.T) {
 	// Define a TOML configuration with one alarm 15 hours ago
 	tomlConfig := `
-	[timezone]
-		name = "UTC"
+	timezone = "UTC"
 	tick = "1h"
 	icon = "icon.png"
 
-	[[alarms]]
-	type = "desktop"
-	when = "PT15H"
+	alarms = [
+		{type = "desktop", when = "PT15H"},  
+	]
+
+	notifiers = ["desktop"]
 
 	[fetcher_filesystem]
 	directory = "/tmp"
