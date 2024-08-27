@@ -32,7 +32,6 @@ END:VEVENT`
 		t.Errorf("hasDtStart() = false; want true")
 	}
 
-
 	if et.hasZSuffix() {
 		t.Errorf("hasZSuffix() = true; want false")
 	}
@@ -99,7 +98,7 @@ END:VEVENT`
 	}
 }
 
-func TestNextTimeUnparsableTZ(t *testing.T) {
+func TestNextTimeUnparsableTZError(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
 DTSTAMP:20240109T090000Z
@@ -133,6 +132,39 @@ END:VEVENT`
 	}
 }
 
+func TestNextTimeDtStartEmpty(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+SUMMARY:April 1st Event
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
+	_, err := et.nextTime(now)
+	if err == nil {
+		t.Fatalf("nextTime should have failed due to unparsable timezone")
+	}
+
+	if et.hasDtStart() {
+		t.Errorf("hasDtStart() = true; want false")
+	}
+
+	if et.hasZSuffix() {
+		t.Errorf("hasZSuffix() = true; want false")
+	}
+
+	if et.hasTzId() {
+		t.Errorf("hasTzId() = true; want false")
+	}
+
+	if et.isFloating() {
+		t.Errorf("isFloating() = true; want false")
+	}
+}
+
 func TestHasDtStartEmpty(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
@@ -147,6 +179,7 @@ END:VEVENT`
 		t.Errorf("hasDtStart() = true; want false")
 	}
 }
+
 func TestHasDtStartEmptyStruct(t *testing.T) {
 	et := &EventTime{}
 

@@ -57,4 +57,3 @@ func (s *Alarms) isInTickPeriod(t time.Time) bool {
 
 	return true
 }
-

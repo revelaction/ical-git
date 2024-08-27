@@ -20,9 +20,9 @@ type EventTime struct {
 
 func newEventTime(event string) *EventTime {
 	return &EventTime{
-		Event:  event,
-		rRule:  []string{},
-		rDate:  []string{},
+		Event: event,
+		rRule: []string{},
+		rDate: []string{},
 	}
 }
 
@@ -93,18 +93,21 @@ func (et *EventTime) serialize() string {
 // not include a "Z" suffix (which would indicate UTC) and do not have an
 // associated TZID parameter.
 func (et *EventTime) isFloating() bool {
-    if et.hasZSuffix(){
-        return false
-    }
 
-    if et.hasTzId(){
-        return false
-    }
+	if !et.hasDtStart() {
+		return false
+	}
 
-    return true
+	if et.hasZSuffix() {
+		return false
+	}
+
+	if et.hasTzId() {
+		return false
+	}
+
+	return true
 }
-
-
 
 func (et *EventTime) hasZSuffix() bool {
 	if matched, _ := regexp.MatchString(`\d{8}T\d{6}Z$`, et.dtStart); matched {
@@ -137,8 +140,7 @@ func (et *EventTime) hasTzId() bool {
 // nextTime returns the next Time of a event
 // the timezone of the returned nextTime comes from the Event self, not the Config one
 // It can return a zero time indicating that the event is in the past or that
-// an error ocurred.
-// let parser call guess(conf.timezone)
+// an error ocurred when parsing with rrule package.
 // now can be in a diferent location as nextTime
 // if the next eventTime is floating there is not error and will be interpreted as local TODO
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
@@ -147,7 +149,7 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 	if err != nil {
 		return time.Time{}, err
 	}
-    // TODO always read DTSTART to determine if floating!
+	// TODO always read DTSTART to determine if floating!
 
 	if !et.hasRRule() && !et.hasRDate() {
 		dtStart := s.GetDTStart()
@@ -160,6 +162,7 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 		return time.Time{}, nil
 	}
 
+	// time can be Zero
 	return s.After(now, false), nil
 }
 
