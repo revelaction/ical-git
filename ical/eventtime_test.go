@@ -111,6 +111,7 @@ END:VEVENT`
 
 	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
 	_, err := et.nextTime(now)
+    t.Logf("Error message is: %s", err)
 	if err == nil {
 		t.Fatalf("nextTime should have failed due to unparsable timezone")
 	}
