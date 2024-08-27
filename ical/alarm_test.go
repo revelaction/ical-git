@@ -16,6 +16,8 @@ func TestGetAlarms(t *testing.T) {
 	alarms = [
 		{type = "desktop", when = "PT15H"},  
 	]
+
+	notifiers = ["desktop"]
 	`)
 
 	// Load the configuration
