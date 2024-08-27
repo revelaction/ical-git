@@ -217,3 +217,21 @@ END:VEVENT`
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 }
+func TestNextTimeBadRRule(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=America/New_York:20240401T000000
+RRULE:FREQ=INVALID;BYMONTHDAY=-6
+SUMMARY:Event with invalid RRULE
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
+	_, err := et.nextTime(now)
+	if err == nil {
+		t.Fatalf("nextTime should have failed due to invalid RRULE")
+	}
+}
