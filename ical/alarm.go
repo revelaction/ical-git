@@ -2,6 +2,7 @@ package ical
 
 import (
 	"github.com/revelaction/ical-git/config"
+	"log/slog"
 	"time"
 )
 
@@ -57,4 +58,3 @@ func (s *Alarms) isInTickPeriod(t time.Time) bool {
 
 	return true
 }
-
