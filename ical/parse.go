@@ -40,16 +40,11 @@ func (p *Parser) Parse(data []byte) error {
 
 		eventTime, err := et.nextTime(p.start)
 		if err != nil {
-			//
-			//slog.Error("📅 Event", )
-			// TODO conf shoudl be already location
-			eventTime, err = et.guess(p.conf.Location.Location)
-			if err != nil {
-				return err
-			}
+		    slog.Info("📅 Event", "event_time", eventTime, "error", err)
+            continue
 		}
 
-		slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate(), "is_guessed", et.isGuessed())
+		slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate())
 
 		als := alarms.Get(eventTime)
 

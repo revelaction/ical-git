@@ -2,7 +2,6 @@ package ical
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/teambition/rrule-go"
 	"regexp"
 	"strings"
@@ -15,7 +14,6 @@ type EventTime struct {
 	dtStart string
 	rRule   []string
 	rDate   []string
-	guessed bool
 }
 
 func newEventTime(event string) *EventTime {
@@ -76,10 +74,6 @@ func (et *EventTime) hasDtStart() bool {
 	}
 
 	return true
-}
-
-func (et *EventTime) isGuessed() bool {
-	return et.guessed
 }
 
 // content line (icalendar spec) should not be longer thant 75 chars.
@@ -192,40 +186,4 @@ func (et *EventTime) joinLines() string {
 	s = append(s, et.rRule...)
 	s = append(s, et.rDate...)
 	return strings.Join(s, "\n")
-}
-
-// golang-ical, rrule packages do not support custom timezones like:
-// DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
-// Try to support that with this method 
-func (et *EventTime) guess(loc *time.Location) (time.Time, error) {
-	if !et.hasDtStart() {
-	    return time.Time{}, fmt.Errorf("Event without parseable DTSTART")
-    }
-
-    if !et.hasZSuffix() && et.hasTzId() {
-        guessTime, errParse := et.parseDtStartInLocation(loc)
-        if errParse != nil {
-            return time.Time{}, fmt.Errorf("error: %w", errParse)
-        }
-
-        et.guessed = true
-        return guessTime, nil
-    }
-
-	// no dstart TODO
-	return time.Time{}, fmt.Errorf("Could not guess event time")
-}
-
-func (et *EventTime) parseDtStartInLocation(loc *time.Location) (time.Time, error) {
-	// The layout for an iCalendar floating date-time value
-	const layout = "20060102T150405"
-	components := strings.Split(et.dtStart, ":")
-	dateTime := components[1]
-
-	t, err := time.ParseInLocation(layout, dateTime, loc)
-	if err != nil {
-		return time.Time{}, err
-	}
-
-	return t, nil
 }
