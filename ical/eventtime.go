@@ -170,7 +170,7 @@ func (et *EventTime) guess(loc *time.Location) (time.Time, error) {
 	}
 
 	// no dstart TODO
-	return time.Time{}, fmt.Errorf("Could not guess event time: %w")
+	return time.Time{}, fmt.Errorf("Could not guess event time")
 }
 
 func (et *EventTime) parseDtStartInLocation(loc *time.Location) (time.Time, error) {
