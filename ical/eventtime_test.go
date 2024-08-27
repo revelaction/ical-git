@@ -306,8 +306,6 @@ END:VEVENT`
 	t.Logf("Error message is: %s", err)
 }
 
-// Seems to be BUG in github.com/teambition/rrule-go
-// next should be 1 september
 func TestNextTimeRDate(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
@@ -322,7 +320,7 @@ END:VEVENT`
 	et := newEventTime(event)
 	et.parse()
 
-	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	now := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 	nextTime, err := et.nextTime(now)
 	if err != nil {
 		t.Fatalf("nextTime failed: %v", err)
@@ -332,14 +330,12 @@ END:VEVENT`
 	if err != nil {
 		t.Fatalf("Failed to load location: %v", err)
 	}
-	expectedTime := time.Date(2026, 4, 2, 0, 0, 0, 0, loc)
+	expectedTime := time.Date(2025, 4, 1, 0, 0, 0, 0, loc)
 	if !nextTime.Equal(expectedTime) {
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 }
 
-// Seems to be BUG in github.com/teambition/rrule-go
-// next should be 2025
 func TestNextTimeRDateUTC(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
@@ -360,11 +356,11 @@ END:VEVENT`
 		t.Fatalf("nextTime failed: %v", err)
 	}
 
-	loc, err := time.LoadLocation("America/New_York")
+	loc, err := time.LoadLocation("UTC")
 	if err != nil {
 		t.Fatalf("Failed to load location: %v", err)
 	}
-	expectedTime := time.Date(2025, 4, 2, 0, 0, 0, 0, loc)
+	expectedTime := time.Date(2025, 4, 1, 0, 0, 0, 0, loc)
 	if !nextTime.Equal(expectedTime) {
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}

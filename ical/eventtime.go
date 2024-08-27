@@ -139,6 +139,7 @@ func (et *EventTime) hasTzId() bool {
 
 // nextTime returns the next Time of a event
 // the timezone of the returned nextTime comes from the Event self, not the Config one
+// now can be in a diferent tiemzone as nextTime
 // It can return a zero time indicating that the event is in the past or that
 // an error ocurres when parsing with rrule package.
 //   - not existant DTSTART line
@@ -146,9 +147,8 @@ func (et *EventTime) hasTzId() bool {
 //   - not parseable TZID in DTSTART
 //
 // floating DTSTART do not give error
-// now can be in a diferent location as nextTime
-// if the next eventTime is floating there is not error and will be interpreted as local TODO
-// TODO RDATE does semmes to be properly supported by teambition. See tests
+// if the next eventTime is floating there is not error and should be interpreted as local by the caller
+// RDATE does semmes to be properly supported by teambition. Custom logic to try to support
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 
 	s, err := rrule.StrToRRuleSet(et.joinLines())
@@ -156,19 +156,35 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 		return time.Time{}, err
 	}
 
-	if !et.hasRRule() && !et.hasRDate() {
-		dtStart := s.GetDTStart()
+    
+    // TODO test with also RDATE
+	if et.hasRRule() {
+        // time can be Zero
+        return s.After(now, false), nil
+    }
 
-		if dtStart.After(now) {
-			return dtStart, nil
-		}
+    // Seems to be BUG in github.com/teambition/rrule-go The buggy value will
+    // be correct now as teambition does not consider the DTSTART
+    if et.hasRDate() {
+        // According to the iCalendar specification (RFC 5545), DTSTART is a
+        // required property for VEVENT components
+        dtStart := s.GetDTStart()
 
-		// expired
-		return time.Time{}, nil
-	}
+        if dtStart.After(now) {
+            return dtStart, nil
+        }
 
-	// time can be Zero
-	return s.After(now, false), nil
+        return s.After(now, false), nil
+    }
+
+    dtStart := s.GetDTStart()
+
+    if dtStart.After(now) {
+        return dtStart, nil
+    }
+
+    // expired
+    return time.Time{}, nil
 }
 
 func (et *EventTime) joinLines() string {
