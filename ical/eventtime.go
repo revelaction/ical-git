@@ -83,8 +83,8 @@ func (et *EventTime) isGuessed() bool {
 }
 
 // content line (icalendar spec) should not be longer thant 75 chars.
-// golang-ical properly break lines when serialize()
-// we remove the space to make sure simple scanner works properly
+// golang-ical properly break lines when serialize() it adds a space after /r/n
+// we remove the sequence "\r\n " to make sure our simple scanner works properly
 func (et *EventTime) serialize() string {
 	return strings.Replace(et.Event, "\r\n ", "", -1)
 }
