@@ -9,27 +9,14 @@ import (
 
 func TestGetAlarms(t *testing.T) {
 	// Define a TOML configuration with one alarm 15 hours ago
-	tomlConfig := `
+	tomlConfig := []byte(`
 	timezone = "UTC"
 	tick = "1h"
-	icon = "icon.png"
 
 	alarms = [
 		{type = "desktop", when = "PT15H"},  
 	]
-
-	notifiers = ["desktop"]
-
-	[fetcher_filesystem]
-	directory = "/tmp"
-
-	[notifier_telegram]
-	token = "token"
-	chat_id = 123456
-
-	[notifier_desktop]
-	icon = "desktop_icon.png"
-	`
+	`)
 
 	// Load the configuration
 	conf, err := config.Load([]byte(tomlConfig))
