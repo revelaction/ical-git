@@ -234,4 +234,5 @@ END:VEVENT`
 	if err == nil {
 		t.Fatalf("nextTime should have failed due to invalid RRULE")
 	}
+    t.Logf("Error message is: %s", err)
 }
