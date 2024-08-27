@@ -38,9 +38,9 @@ func (l *Location) UnmarshalText(text []byte) error {
 }
 
 type Alarm struct {
-	Type     string `toml:"type"`
-	DurIso8601     string `toml:"when"`
-	Dur time.Duration
+	Type       string `toml:"type"`
+	DurIso8601 string `toml:"when"`
+	Dur        time.Duration
 }
 
 type Alarms []Alarm

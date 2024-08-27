@@ -40,8 +40,8 @@ func (p *Parser) Parse(data []byte) error {
 
 		eventTime, err := et.nextTime(p.start)
 		if err != nil {
-		    slog.Info("📅 Event", "event_time", eventTime, "error", err)
-            continue
+			slog.Info("📅 Event", "event_time", eventTime, "error", err)
+			continue
 		}
 
 		slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate())
@@ -51,10 +51,10 @@ func (p *Parser) Parse(data []byte) error {
 		for _, alarm := range als {
 			// To notification
 			n := buildNotification(event)
-			n.Time = alarm.Time
+			n.Time = alarm.time
 			n.EventTime = eventTime
 			n.Type = alarm.Type
-			n.Diff = alarm.Diff
+			n.DurIso8601 = alarm.DurIso8601
 
 			p.notifications = append(p.notifications, n)
 		}

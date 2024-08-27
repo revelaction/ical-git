@@ -17,7 +17,7 @@ type Notification struct {
 	Description string
 	Location    string
 	Type        string
-	Diff        string
+	DurIso8601  string
 	Time        time.Time
 	Status      string
 	Duration    time.Duration

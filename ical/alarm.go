@@ -14,8 +14,8 @@ type Alarms struct {
 }
 
 type Alarm struct {
-    config.Alarm
-	Time time.Time
+	config.Alarm
+	time time.Time
 }
 
 func NewAlarms(c config.Config, start time.Time) *Alarms {
@@ -35,7 +35,7 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 		//slog.Info("🔔 Alarm", "diff", alarm.When, "type", alarm.Type, "alarm_time", alTime)
 
 		if s.isInTickPeriod(alarmTime) {
-            tickAlarms = append(tickAlarms, Alarm{config.Alarm: alarm, Time: alarmTime})
+			tickAlarms = append(tickAlarms, Alarm{Alarm: alarm, time: alarmTime})
 		}
 
 	}

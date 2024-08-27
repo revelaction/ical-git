@@ -48,8 +48,8 @@ func TestGetInTick(t *testing.T) {
 
 	// 1 September 2024, 5:00
 	expectedAlarmTime := time.Date(2024, time.September, 1, 5, 0, 0, 0, time.UTC)
-	if result[0].Time != expectedAlarmTime {
-		t.Errorf("Expected alarm time %v, got %v", expectedAlarmTime, result[0].Time)
+	if result[0].time != expectedAlarmTime {
+		t.Errorf("Expected alarm time %v, got %v", expectedAlarmTime, result[0].time)
 	}
 }
 
