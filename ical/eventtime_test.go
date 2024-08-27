@@ -28,3 +28,25 @@ END:VEVENT`
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 }
+
+func TestNextTimeInPast(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=America/New_York:20240401T000000
+SUMMARY:April 1st Event
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	now := time.Date(2024, 9, 1, 0, 0, 0, 0, time.UTC)
+	nextTime, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	if !nextTime.IsZero() {
+		t.Errorf("nextTime() = %v; want empty time", nextTime)
+	}
+}
