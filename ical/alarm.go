@@ -35,7 +35,7 @@ func (s *Alarms) Get(eventTime time.Time) []Alarm {
 		//slog.Info("🔔 Alarm", "diff", alarm.When, "type", alarm.Type, "alarm_time", alTime)
 
 		if s.isInTickPeriod(alarmTime) {
-            tickAlarms = append(tickAlarms, Alarm{alarm, time:alarmTime})
+            tickAlarms = append(tickAlarms, Alarm{config.Alarm: alarm, Time: alarmTime})
 		}
 
 	}
