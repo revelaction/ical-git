@@ -198,18 +198,19 @@ func (et *EventTime) joinLines() string {
 // DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
 // try to check map to config TZ Location
 func (et *EventTime) guess(loc *time.Location) (time.Time, error) {
-	// TODO remove indentation
-	if et.hasDtStart() {
-		if et.hasZSuffix() && et.hasTzId() {
-			guessTime, errParse := et.parseDtStartInLocation(loc)
-			if errParse != nil {
-				return time.Time{}, fmt.Errorf("error: %w", errParse)
-			}
+	if !et.hasDtStart() {
+	    return time.Time{}, fmt.Errorf("Event without parseable DTSTART")
+    }
 
-			et.guessed = true
-			return guessTime, nil
-		}
-	}
+    if !et.hasZSuffix() && et.hasTzId() {
+        guessTime, errParse := et.parseDtStartInLocation(loc)
+        if errParse != nil {
+            return time.Time{}, fmt.Errorf("error: %w", errParse)
+        }
+
+        et.guessed = true
+        return guessTime, nil
+    }
 
 	// no dstart TODO
 	return time.Time{}, fmt.Errorf("Could not guess event time")
