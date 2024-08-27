@@ -7,7 +7,7 @@ import (
 	"github.com/revelaction/ical-git/config"
 )
 
-func TestParser_Parse(t *testing.T) {
+func TestParse(t *testing.T) {
 	// Setup
 	conf := config.Config{
 		Location: config.Location{
