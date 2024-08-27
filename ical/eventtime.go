@@ -135,17 +135,19 @@ func (et *EventTime) hasTzId() bool {
 }
 
 // nextTime returns the next Time of a event
-// the timezone is the Event one, not the Config one
+// the timezone of the returned nextTime comes from the Event self, not the Config one
 // It can return a zero time indicating that the event is in the past or that
 // an error ocurred.
 // let parser call guess(conf.timezone)
 // now can be in a diferent location as nextTime
+// if the next eventTime is floating there is not error and will be interpreted as local TODO
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 
 	s, err := rrule.StrToRRuleSet(et.joinLines())
 	if err != nil {
 		return time.Time{}, err
 	}
+    // TODO always read DTSTART to determine if floating!
 
 	if !et.hasRRule() && !et.hasRDate() {
 		dtStart := s.GetDTStart()
