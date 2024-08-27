@@ -28,8 +28,8 @@ END:VEVENT`
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 
-	if !et.isFloating() {
-		t.Errorf("isFloating() = false; want true")
+	if !et.hasZSuffix() {
+		t.Errorf("hasZSuffix() = false; want true")
 	}
 
 	if !et.hasDtStart() {

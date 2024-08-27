@@ -90,7 +90,7 @@ func (et *EventTime) serialize() string {
 }
 
 // TODO err
-func (et *EventTime) isFloating() bool {
+func (et *EventTime) hasZSuffix() bool {
 	if matched, _ := regexp.MatchString(`\d{8}T\d{6}$`, et.dtStart); matched {
 		return true
 	}
