@@ -196,7 +196,7 @@ func (et *EventTime) joinLines() string {
 
 // golang-ical, rrule packages do not support custom timezones like:
 // DTSTART;TZID=<a ref to a VTIMEZONE>:20231129T100000
-// try to check map to config TZ Location
+// Try to support that with this method 
 func (et *EventTime) guess(loc *time.Location) (time.Time, error) {
 	if !et.hasDtStart() {
 	    return time.Time{}, fmt.Errorf("Event without parseable DTSTART")

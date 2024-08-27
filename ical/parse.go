@@ -47,8 +47,6 @@ func (p *Parser) Parse(data []byte) error {
 			if err != nil {
 				return err
 			}
-
-			return nil
 		}
 
 		slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate(), "is_guessed", et.isGuessed())
