@@ -9,10 +9,37 @@ import (
 
 func TestParse(t *testing.T) {
 	// Setup
-	conf := config.Config{
-		Location: config.Location{
-			Location: time.UTC,
-		},
+	conf, err := config.Load(`
+timezone = "Europe/Berlin"
+tick = "24h"
+
+alarms = [
+	{type = "telegram", when = "-P7D"},  
+	{type = "desktop", when = "-P1D"},  
+	{type = "desktop", when = "-PT15M"},  
+	{type = "desktop", when = "-PT1H"},  
+	{type = "desktop", when = "-P5D"}, 
+	{type = "desktop", when = "-P6D"}, 
+	{type = "telegram", when = "-P4D"}, 
+	{type = "desktop", when = "-P2DT22H49M"}, 
+	{type = "desktop", when = "-P3D"}, 
+]
+
+#notifiers = ["telegram", "desktop"]
+notifiers = ["desktop"]
+
+[fetcher_filesystem]
+directory = "testdata"
+
+[notifier_telegram]
+token = "yuu3b3k"
+chat_id = 588488
+
+[notifier_desktop]
+icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
+`)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
 	}
 	start := time.Now()
 	parser := NewParser(conf, start)
