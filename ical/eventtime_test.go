@@ -22,7 +22,8 @@ END:VEVENT`
 		t.Fatalf("nextTime failed: %v", err)
 	}
 
-	expectedTime := time.Date(2024, 4, 1, 0, 0, 0, 0, time.FixedZone("America/New_York", -4*3600))
+	loc, _ := time.LoadLocation("America/New_York")
+	expectedTime := time.Date(2024, 4, 1, 0, 0, 0, 0, loc)
 	if !nextTime.Equal(expectedTime) {
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
