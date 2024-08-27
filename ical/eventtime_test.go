@@ -132,6 +132,7 @@ END:VEVENT`
 		t.Errorf("isFloating() = true; want false")
 	}
 }
+
 func TestHasDtStartEmpty(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
