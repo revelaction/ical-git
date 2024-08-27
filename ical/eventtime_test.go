@@ -111,7 +111,7 @@ END:VEVENT`
 
 	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
 	_, err := et.nextTime(now)
-    t.Logf("Error message is: %s", err)
+	t.Logf("Error message is: %s", err)
 	if err == nil {
 		t.Fatalf("nextTime should have failed due to unparsable timezone")
 	}
@@ -145,7 +145,7 @@ END:VEVENT`
 
 	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
 	_, err := et.nextTime(now)
-    t.Logf("Error message is: %s", err)
+	t.Logf("Error message is: %s", err)
 	if err == nil {
 		t.Fatalf("nextTime should have failed due to DTSTART empty line")
 	}
@@ -217,7 +217,8 @@ END:VEVENT`
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 }
-func TestNextTimeBadRRule(t *testing.T) {
+
+func TestNextTimeBadRRuleError(t *testing.T) {
 	event := `BEGIN:VEVENT
 UID:123456789
 DTSTAMP:20240109T090000Z
@@ -234,5 +235,5 @@ END:VEVENT`
 	if err == nil {
 		t.Fatalf("nextTime should have failed due to invalid RRULE")
 	}
-    t.Logf("Error message is: %s", err)
+	t.Logf("Error message is: %s", err)
 }
