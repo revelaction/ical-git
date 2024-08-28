@@ -39,7 +39,12 @@ END:VCALENDAR
 `)
 
 	// Parse the iCal data
-	err = parser.Parse(icalData)
+	file := fetch.File{
+		Path:    "",
+		Content: icalData,
+		Error:   nil,
+	}
+	err = parser.Parse(file)
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
