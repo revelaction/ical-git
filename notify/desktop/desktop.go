@@ -61,8 +61,14 @@ Attendees:
 		return "", err
 	}
 
+	type NotificationWrapper struct {
+		notify.Notification
+	}
+
+	wrapper := NotificationWrapper{Notification: n}
+
 	var buf bytes.Buffer
-	if err := t.Execute(&buf, n); err != nil {
+	if err := t.Execute(&buf, wrapper); err != nil {
 		return "", err
 	}
 
