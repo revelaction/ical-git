@@ -17,9 +17,6 @@ type Notification struct {
 	// EventTime is the time of the event. 
     // Its timezone (location) is derived from the ical VEVENT itself
 	EventTime time.Time
-
-	// EventTimeConf provides the event time adjusted to the location specified in the config
-	EventTimeConf func() time.Time
     // Type specifies the type of the notification. Currently a desktop or
     // telegram notification
 	Type string
