@@ -60,9 +60,15 @@ func renderNotification(n notify.Notification) (string, error) {
 
     📅 **{{.EventTime.Format "Monday, 2006-01-02"}} {{.EventTime.Format "🕒 15:04"}}** 🌍 {{.TimeZone}}
 
+    {{if .Location}}
     📌 Location: **{{.Location}}**
+    {{end}}
+    {{if .Description}}
     📝 Description: {{.Description}}
+    {{end}}
+    {{if .Status}}
     🚦 Status: **{{.Status}}**
+    {{end}}
 `
 	// Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
 	t, err := template.New("notification").Parse(tpl)
