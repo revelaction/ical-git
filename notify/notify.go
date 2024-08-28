@@ -40,7 +40,7 @@ type Notification struct {
 }
 
 // EventTimeConf returns the EventTime in the configured location
-func (n Notification) EventTimeConf(loc time.Location) time.Time {
+func (n Notification) EventTimeConf(loc *time.Location) time.Time {
     return n.EventTime.In(loc)
 }
 

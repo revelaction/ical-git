@@ -9,9 +9,6 @@ import (
 	"time"
 )
 
-type Notifier interface {
-	Notify(message string, level string) error
-}
 
 type message struct {
 	msg       string
@@ -21,7 +18,7 @@ type message struct {
 // Telegram
 type Telegram struct {
 	bot  *tg.BotAPI
-	conf config.Config
+	config config.Config
 }
 
 func New(conf config.Config) *Telegram {
@@ -33,20 +30,20 @@ func New(conf config.Config) *Telegram {
 
 	return &Telegram{
 		bot:  bot,
-		conf: conf,
+		config: conf,
 	}
 }
 
 func (t *Telegram) Notify(n notify.Notification) error {
 
-	message, err := renderNotification(n)
+	message, err := t.renderNotification(n)
 
 	if err != nil {
 		return err
 	}
 	//message = "YOLO"
 
-	msg := tg.NewMessage(t.conf.Telegram.ChatId, message)
+	msg := tg.NewMessage(t.config.Telegram.ChatId, message)
 	msg.ParseMode = "html"
 	_, err = t.bot.Send(msg)
 	if err != nil {
@@ -57,11 +54,25 @@ func (t *Telegram) Notify(n notify.Notification) error {
 }
 
 // https://core.telegram.org/bots/api#html-style
-func renderNotification(n notify.Notification) (string, error) {
+func (t *Telegram) renderNotification(n notify.Notification) (string, error) {
+
+    wrapper := struct {
+        notify.Notification 
+        EventTimeZone    string
+        EventTimeConf    time.Time
+        EventTimeZoneConf string
+    }{
+
+        Notification: n, 
+        EventTimeZone: n.EventTimeTz(),
+        EventTimeConf: n.EventTimeConf(t.config.Location.Location),
+        EventTimeZoneConf: t.config.Location.Location.String(),
+    }
 	const tpl = `
 <b>{{.Summary}}</b>
 
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
+📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
 
 {{if .Duration}}
 ⏳ Duration: <b>{{.Duration}}</b>
@@ -83,13 +94,13 @@ Attendees:
 {{end}}
 `
 	// Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
-	t, err := template.New("notification").Parse(tpl)
+	tmpl, err := template.New("notification").Parse(tpl)
 	if err != nil {
 		return "", err
 	}
 
 	var buf bytes.Buffer
-	if err := t.Execute(&buf, n); err != nil {
+	if err := tmpl.Execute(&buf, wrapper); err != nil {
 		return "", err
 	}
 

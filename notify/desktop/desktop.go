@@ -5,7 +5,7 @@ import (
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
 	"html/template"
-	//"time"
+	"time"
 	"bytes"
 )
 
@@ -23,7 +23,7 @@ func New(conf config.Config) *Desktop {
 // icon https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#directory_layout
 func (d *Desktop) Notify(n notify.Notification) error {
 
-	body, err := renderNotification(n)
+	body, err := d.renderNotification(n)
 	if err != nil {
 		return err
 	}
@@ -32,15 +32,24 @@ func (d *Desktop) Notify(n notify.Notification) error {
 	return nil
 }
 
-func renderNotification(n notify.Notification) (string, error) {
+func (d *Desktop) renderNotification(n notify.Notification) (string, error) {
 
-	type NotificationWrapper struct {
-		notify.Notification
-		EventTimeZone *time.Location
-	}
+    wrapper := struct {
+        notify.Notification 
+        EventTimeZone    string
+        EventTimeConf    time.Time
+        EventTimeZoneConf string
+    }{
+
+        Notification: n, 
+        EventTimeZone: n.EventTimeTz(),
+        EventTimeConf: n.EventTimeConf(d.config.Location.Location),
+        EventTimeZoneConf: d.config.Location.Location.String(),
+    }
 
 	const tpl = `
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
+📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
 
 {{if .Duration}}
 ⏳ Duration: <b>{{.Duration}}</b>
@@ -67,7 +76,6 @@ Attendees:
 		return "", err
 	}
 
-	wrapper := NotificationWrapper{Notification: n}
 
 	var buf bytes.Buffer
 	if err := t.Execute(&buf, wrapper); err != nil {
