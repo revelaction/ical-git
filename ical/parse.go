@@ -6,6 +6,7 @@ import (
 	"github.com/arran4/golang-ical"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
+	"github.com/revelaction/ical-git/fetch"
 	"log/slog"
 	"time"
 )
@@ -24,8 +25,9 @@ func NewParser(c config.Config, start time.Time) *Parser {
 	}
 }
 
-func (p *Parser) Parse(data []byte) error {
-	reader := bytes.NewReader(data)
+func (p *Parser) Parse(f fetch.File) error {
+
+	reader := bytes.NewReader(f.Content)
 	cal, err := ics.ParseCalendar(reader)
 	if err != nil {
 		return fmt.Errorf("calendar parse error: %w", err)
@@ -40,11 +42,11 @@ func (p *Parser) Parse(data []byte) error {
 
 		eventTime, err := et.nextTime(p.start)
 		if err != nil {
-			slog.Info("📅 Event", "event_time", eventTime, "error", err)
+			slog.Info("📅 Event", "📁", f.Path, "🔜", eventTime, "🚨", err)
 			continue
 		}
 
-		slog.Info("📅 Event", "event_time", eventTime, "has_rrule", et.hasRRule(), "has_rdate", et.hasRDate())
+		slog.Info("📅 Event", "📁", f.Path, "🔜", eventTime)
 
 		als := alarms.Get(eventTime)
 

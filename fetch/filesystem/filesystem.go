@@ -2,7 +2,6 @@ package filesystem
 
 import (
 	"github.com/revelaction/ical-git/fetch"
-	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -44,7 +43,6 @@ func (fs *FileSystem) GetCh() <-chan fetch.File {
 				}
 
 				fs.ch <- fetch.File{Path: path, Content: content}
-				slog.Info("🗓️  icalendar file", "path", path)
 			}
 
 			return nil

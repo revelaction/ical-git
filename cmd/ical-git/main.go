@@ -105,7 +105,7 @@ func run(conf config.Config, start time.Time, sc *schedule.Scheduler) {
 			slog.Info("fetch Error", "error", f.Error)
 			os.Exit(1) // TODO
 		}
-		err := p.Parse(f.Content)
+		err := p.Parse(f)
 		if err != nil {
 			fmt.Printf("error: %v+", err)
 		}
