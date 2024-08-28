@@ -26,6 +26,8 @@ func NewAlarms(c config.Config, start time.Time) *Alarms {
 }
 
 // Get returns the alarms to be trigger in this tick
+// the timezone of the eventTime comes from the event timezone, or (automatically) local if floating event
+// The alarms time returned by Get are also the timezone of the event
 func (s *Alarms) Get(eventTime time.Time) []Alarm {
 
 	tickAlarms := []Alarm{}
