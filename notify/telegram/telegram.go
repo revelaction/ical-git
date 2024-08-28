@@ -5,7 +5,7 @@ import (
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
-	"text/template"
+	"html/template"
 	"time"
 )
 
@@ -40,12 +40,14 @@ func New(conf config.Config) *Telegram {
 func (t *Telegram) Notify(n notify.Notification) error {
 
 	message, err := renderNotification(n)
+
 	if err != nil {
 		return err
 	}
+	//message = "YOLO"
 
 	msg := tg.NewMessage(t.conf.Telegram.ChatId, message)
-	msg.ParseMode = "markdown"
+	msg.ParseMode = "html"
 	_, err = t.bot.Send(msg)
 	if err != nil {
 		return err
@@ -54,21 +56,31 @@ func (t *Telegram) Notify(n notify.Notification) error {
 	return nil
 }
 
+// https://core.telegram.org/bots/api#html-style
 func renderNotification(n notify.Notification) (string, error) {
 	const tpl = `
-    **{{.Summary}}**
+<b>{{.Summary}}</b>
 
-    📅 **{{.EventTime.Format "Monday, 2006-01-02"}} {{.EventTime.Format "🕒 15:04"}}** 🌍 {{.EventTimeZone}}
+📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 
-    {{if .Location}}
-    📌 Location: **{{.Location}}**
-    {{end}}
-    {{if .Description}}
-    📝 Description: {{.Description}}
-    {{end}}
-    {{if .Status}}
-    🚦 Status: **{{.Status}}**
-    {{end}}
+{{if .Duration}}
+⏳ Duration: <b>{{.Duration}}</b>
+{{end}}
+{{if .Location}}
+📌 Location: <b>{{.Location}}</b>
+{{end}}
+{{if .Description}}
+📝 Description: {{.Description}}
+{{end}}
+{{if .Status}}
+🚦 Status: <b>{{.Status}}</b>
+{{end}}
+{{if .Attendees}}
+Attendees:
+{{- range .Attendees}}
+🔸{{.}}
+{{- end}}
+{{end}}
 `
 	// Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
 	t, err := template.New("notification").Parse(tpl)
