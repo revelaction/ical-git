@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/revelaction/ical-git/config"
+	"github.com/revelaction/ical-git/fetch"
 )
 
 func TestParse(t *testing.T) {
