@@ -48,10 +48,10 @@ func main() {
 			case s := <-signalChan:
 				switch s {
 				case syscall.SIGHUP:
-					slog.Info("⚙️  SIGHUP called")
-					slog.Info("⚙️  canceling previous ctx")
+					slog.Info("🔧  SIGHUP called")
+					slog.Info("🔧  canceling previous ctx")
 					cancel()
-					slog.Info("⚙️  stop previous timers")
+					slog.Info("🔧  stop previous timers")
 					scheduler.StopTimers()
 					cancel, scheduler = initialize(configPath)
 
@@ -83,12 +83,12 @@ func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler, start
 
 		select {
 		case <-ctx.Done():
-			slog.Info("⚙️  ticker goroutine: received cancel. Ending")
+			slog.Info("🔧 ticker goroutine: received cancel. Ending")
 			return
 		case <-ticker.C:
-			slog.Info("⚙️  starting new tick work")
+			slog.Info("🔧 starting new tick work")
 			run(conf, start, sc)
-			slog.Info("⚙️  ending tick work")
+			slog.Info("🔧 ending tick work")
 		}
 	}
 }
@@ -116,7 +116,7 @@ func run(conf config.Config, start time.Time, sc *schedule.Scheduler) {
 }
 
 func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
-	slog.Info("⚙️  initializing: loading config", "path", path)
+	slog.Info("🔧 Init: loading config", "path", path)
 	data, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatalf("Failed to read config file: %v", err)
@@ -126,16 +126,16 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	slog.Info("⚙️  initializing: creating new context")
+	slog.Info("🔧 Init: creating new context")
 	ctx, cancel := context.WithCancel(context.Background())
 
 	now := time.Now()
-	slog.Info("⚙️  initializing: 🕒 start time", "start", now.Format(time.RFC3339))
+	slog.Info("🔧 Init: ⏰ start time", "start", now.Format(time.RFC3339))
 
-	slog.Info("⚙️  initializing: creating new scheduler")
+	slog.Info("🔧 Init: creating new scheduler")
 	sc := schedule.NewScheduler(conf, now)
 
-	slog.Info("⚙️  initializing: creating new ticker goroutine")
+	slog.Info("🔧 Init: creating new ticker goroutine")
 	go tick(ctx, conf, sc, now)
 	return cancel, sc
 }
