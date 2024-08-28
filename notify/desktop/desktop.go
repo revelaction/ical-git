@@ -34,7 +34,7 @@ func (d *Desktop) Notify(n notify.Notification) error {
 
 func renderNotification(n notify.Notification) (string, error) {
 	const tpl = `
-📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.TimeZone}}
+📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 
 ⏳ Duration: <b>{{.Duration}}</b>
 📌 Location: <b>{{.Location}}</b>

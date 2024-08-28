@@ -17,8 +17,8 @@ type Notification struct {
 	// EventTime is the time of the event. 
     // Its timezone (location) is derived from the ical VEVENT itself
 	EventTime time.Time
-	// TimeZone is the location of the event
-    //TimeZone *time.Location
+	// EventTimeZone is the location of the event
+    EventTimeZone *time.Location
     // Type specifies the type of the notification. Currently a desktop or
     // telegram notification
 	Type string
@@ -26,7 +26,7 @@ type Notification struct {
     // time in ISO 8601 format
 	DurIso8601 string
 	// Duration is the length of the event
-	Duration time.Duration
+	Dur time.Duration
 	// Summary is a brief summary of the event
 	Summary string
 	// Description provides more details about the event
