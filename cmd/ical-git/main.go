@@ -51,7 +51,7 @@ func main() {
 					slog.Info("🔧  SIGHUP called")
 					slog.Info("🔧  canceling previous ctx")
 					cancel()
-					slog.Info("🔧  stop previous timers")
+					slog.Info("🔧 stop previous timers")
 					scheduler.StopTimers()
 					cancel, scheduler = initialize(configPath)
 
