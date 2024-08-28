@@ -36,7 +36,7 @@ func renderNotification(n notify.Notification) (string, error) {
 
 	type NotificationWrapper struct {
 		notify.Notification
-        EventTimeZone *time.Location
+		EventTimeZone *time.Location
 	}
 
 	const tpl = `
@@ -66,7 +66,6 @@ Attendees:
 	if err != nil {
 		return "", err
 	}
-
 
 	wrapper := NotificationWrapper{Notification: n}
 

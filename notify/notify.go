@@ -12,16 +12,16 @@ type Notifier interface {
 // current daemon Tick
 type Notification struct {
 	// Time is the time when the notification should be delivered
-    // Its timezone (location) is derived from the ical VEVENT itself
+	// Its timezone (location) is derived from the ical VEVENT itself
 	Time time.Time
-	// EventTime is the time of the event. 
-    // Its timezone (location) is derived from the ical VEVENT itself
+	// EventTime is the time of the event.
+	// Its timezone (location) is derived from the ical VEVENT itself
 	EventTime time.Time
-    // Type specifies the type of the notification. Currently a desktop or
-    // telegram notification
+	// Type specifies the type of the notification. Currently a desktop or
+	// telegram notification
 	Type string
-    // DurIso8601 is the duration between the event time and the notification
-    // time in ISO 8601 format
+	// DurIso8601 is the duration between the event time and the notification
+	// time in ISO 8601 format
 	DurIso8601 string
 	// Duration is the length of the event
 	Dur time.Duration
