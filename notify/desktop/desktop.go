@@ -33,6 +33,12 @@ func (d *Desktop) Notify(n notify.Notification) error {
 }
 
 func renderNotification(n notify.Notification) (string, error) {
+
+	type NotificationWrapper struct {
+		notify.Notification
+        EventTimeZone *time.Location
+	}
+
 	const tpl = `
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 
@@ -61,9 +67,6 @@ Attendees:
 		return "", err
 	}
 
-	type NotificationWrapper struct {
-		notify.Notification
-	}
 
 	wrapper := NotificationWrapper{Notification: n}
 

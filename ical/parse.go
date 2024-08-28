@@ -53,7 +53,6 @@ func (p *Parser) Parse(data []byte) error {
 			n := buildNotification(event)
 			n.Time = alarm.time
 			n.EventTime = eventTime
-			n.EventTimeZone = eventTime.Location()
 			n.Type = alarm.Type
 			n.DurIso8601 = alarm.DurIso8601
 
