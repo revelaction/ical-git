@@ -58,7 +58,7 @@ func renderNotification(n notify.Notification) (string, error) {
 	const tpl = `
     **{{.Summary}}**
 
-    📅 **{{.EventTime.Format "Monday, 2006-01-02"}} {{.EventTime.Format "🕒 15:04"}}** 🌍 {{.TimeZone}}
+    📅 **{{.EventTime.Format "Monday, 2006-01-02"}} {{.EventTime.Format "🕒 15:04"}}** 🌍 {{.EventTimeZone}}
 
     {{if .Location}}
     📌 Location: **{{.Location}}**
