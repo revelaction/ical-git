@@ -36,10 +36,18 @@ func renderNotification(n notify.Notification) (string, error) {
 	const tpl = `
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 
+{{if .Duration}}
 ⏳ Duration: <b>{{.Duration}}</b>
+{{end}}
+{{if .Location}}
 📌 Location: <b>{{.Location}}</b>
+{{end}}
+{{if .Description}}
 📝 Description: {{.Description}}
+{{end}}
+{{if .Status}}
 🚦 Status: <b>{{.Status}}</b>
+{{end}}
 {{if .Attendees}}
 Attendees:
 {{- range .Attendees}}
