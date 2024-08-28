@@ -34,7 +34,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification) error {
 		f := s.getNotifyFunc(n)
 		dur := n.Time.Sub(s.start)
 		slog.Info("⏰ Notification", "time", n.Time, "event_time", n.EventTime, "trigger_in", dur, "DurIso8601", n.DurIso8601, "type", n.Type, "summary", n.Summary)
-		dur = 3 * time.Second // Hack
+		//dur = 3 * time.Second // Hack
 		timer := time.AfterFunc(dur, f)
 		s.timers = append(s.timers, timer)
 	}
