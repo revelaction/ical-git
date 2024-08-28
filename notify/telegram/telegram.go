@@ -9,7 +9,6 @@ import (
 	"time"
 )
 
-
 type message struct {
 	msg       string
 	timeStamp time.Time
@@ -17,7 +16,7 @@ type message struct {
 
 // Telegram
 type Telegram struct {
-	bot  *tg.BotAPI
+	bot    *tg.BotAPI
 	config config.Config
 }
 
@@ -29,7 +28,7 @@ func New(conf config.Config) *Telegram {
 	}
 
 	return &Telegram{
-		bot:  bot,
+		bot:    bot,
 		config: conf,
 	}
 }
@@ -56,18 +55,18 @@ func (t *Telegram) Notify(n notify.Notification) error {
 // https://core.telegram.org/bots/api#html-style
 func (t *Telegram) renderNotification(n notify.Notification) (string, error) {
 
-    wrapper := struct {
-        notify.Notification 
-        EventTimeZone    string
-        EventTimeConf    time.Time
-        EventTimeZoneConf string
-    }{
+	wrapper := struct {
+		notify.Notification
+		EventTimeZone     string
+		EventTimeConf     time.Time
+		EventTimeZoneConf string
+	}{
 
-        Notification: n, 
-        EventTimeZone: n.EventTimeTz(),
-        EventTimeConf: n.EventTimeConf(t.config.Location.Location),
-        EventTimeZoneConf: t.config.Location.Location.String(),
-    }
+		Notification:      n,
+		EventTimeZone:     n.EventTimeTz(),
+		EventTimeConf:     n.EventTimeConf(t.config.Location.Location),
+		EventTimeZoneConf: t.config.Location.Location.String(),
+	}
 	const tpl = `
 <b>{{.Summary}}</b>
 

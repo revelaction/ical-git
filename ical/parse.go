@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/arran4/golang-ical"
 	"github.com/revelaction/ical-git/config"
-	"github.com/revelaction/ical-git/notify"
 	"github.com/revelaction/ical-git/fetch"
+	"github.com/revelaction/ical-git/notify"
 	"log/slog"
 	"time"
 )

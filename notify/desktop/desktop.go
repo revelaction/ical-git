@@ -1,12 +1,12 @@
 package desktop
 
 import (
+	"bytes"
 	"github.com/gen2brain/beeep"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
 	"html/template"
 	"time"
-	"bytes"
 )
 
 // Desktop implements the notify.Notifier interface
@@ -34,18 +34,18 @@ func (d *Desktop) Notify(n notify.Notification) error {
 
 func (d *Desktop) renderNotification(n notify.Notification) (string, error) {
 
-    wrapper := struct {
-        notify.Notification 
-        EventTimeZone    string
-        EventTimeConf    time.Time
-        EventTimeZoneConf string
-    }{
+	wrapper := struct {
+		notify.Notification
+		EventTimeZone     string
+		EventTimeConf     time.Time
+		EventTimeZoneConf string
+	}{
 
-        Notification: n, 
-        EventTimeZone: n.EventTimeTz(),
-        EventTimeConf: n.EventTimeConf(d.config.Location.Location),
-        EventTimeZoneConf: d.config.Location.Location.String(),
-    }
+		Notification:      n,
+		EventTimeZone:     n.EventTimeTz(),
+		EventTimeConf:     n.EventTimeConf(d.config.Location.Location),
+		EventTimeZoneConf: d.config.Location.Location.String(),
+	}
 
 	const tpl = `
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
@@ -75,7 +75,6 @@ Attendees:
 	if err != nil {
 		return "", err
 	}
-
 
 	var buf bytes.Buffer
 	if err := t.Execute(&buf, wrapper); err != nil {

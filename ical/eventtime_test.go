@@ -517,3 +517,56 @@ END:VEVENT`
 	}
 
 }
+
+func TestNextTimeRDateMultiValue(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=Europe/Paris:20221211T000000
+RDATE;TZID=Europe/Paris:20231211T000000,20231212T083000,20231214T150000,20231218T090000,20250108T000000
+SUMMARY:Event with multiple RDATE values
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	// before the first
+	now := time.Date(2022, 4, 1, 0, 0, 0, 0, time.UTC)
+	nextTime, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	loc, err := time.LoadLocation("Europe/Paris")
+	if err != nil {
+		t.Fatalf("Failed to load location: %v", err)
+	}
+	expectedTime := time.Date(2022, 12, 11, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+
+	// now after the first
+	now = time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)
+	nextTime, err = et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	expectedTime = time.Date(2023, 12, 11, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+
+	// now after all but the last
+	now = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	nextTime, err = et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	expectedTime = time.Date(2025, 01, 8, 0, 0, 0, 0, loc)
+	if !nextTime.Equal(expectedTime) {
+		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
+	}
+}
