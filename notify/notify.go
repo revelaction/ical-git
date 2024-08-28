@@ -43,3 +43,8 @@ type Notification struct {
 func (n Notification) EventTimeConf(loc time.Location) time.Time {
     return n.EventTime.In(loc)
 }
+
+// EventTimeTz extracts the location of EventTime as string
+func (n Notification) EventTimeTz() string {
+    return n.EventTime.Location().String()
+}
