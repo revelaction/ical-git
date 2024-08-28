@@ -38,3 +38,8 @@ type Notification struct {
 	// Attendees lists the people attending the event
 	Attendees []string
 }
+
+// EventTimeConf returns the EventTime in the configured location
+func (n Notification) EventTimeConf(loc time.Location) time.Time {
+    return n.EventTime.In(loc)
+}
