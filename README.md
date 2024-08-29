@@ -3,7 +3,7 @@
 [![GitHub Release](https://img.shields.io/badge/built_with-Go-00ADD8.svg?style=flat)]() 
 [![stability-wip](https://img.shields.io/badge/stability-WIP-f4d03f.svg?style=flat)]()
 
-**ical-git** is a lightweight calendar application written in Golang. 
+**ical-git** is a lightweight calendar application written in Go. 
 
 > [!NOTE]  
 > Alpha state
