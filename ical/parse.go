@@ -42,7 +42,7 @@ func (p *Parser) Parse(f fetch.File) error {
 
 		eventTime, err := et.nextTime(p.start)
 		if err != nil {
-			slog.Info("📅 Event", "📁", f.Path, "🎯", eventTime, "🚨", err)
+			slog.Info("📅 Event", "📁", filepath.Base(f.Path), "🎯", eventTime, "🚨", err)
 			continue
 		}
 
@@ -51,7 +51,7 @@ func (p *Parser) Parse(f fetch.File) error {
 		if !eventTime.IsZero() {
 			in = eventTime.Sub(p.start).Truncate(1 * time.Second)
 		}
-		slog.Info("📅 Event", "📁", f.Path, "🎯", eventTime, "🔥", in)
+		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "🎯", eventTime, "🔥", in)
 
 		als := alarms.Get(eventTime)
 
