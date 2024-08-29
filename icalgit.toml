@@ -11,7 +11,7 @@ alarms = [
 	#{type = "desktop", when = "-P2DT22H49M"}, 
 ]
 
-notifiers = ["telegram", "desktop"]
+#notifiers = ["telegram", "desktop"]
 notifiers = ["desktop"]
 
 [fetcher_filesystem]
