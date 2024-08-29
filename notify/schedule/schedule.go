@@ -7,6 +7,7 @@ import (
 	"github.com/revelaction/ical-git/notify/desktop"
 	"github.com/revelaction/ical-git/notify/telegram"
 	"log/slog"
+	"path/filepath"
 	"time"
 )
 
@@ -33,7 +34,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification) error {
 
 		f := s.getNotifyFunc(n)
 		dur := n.Time.Sub(s.start)
-		slog.Info("⏰", "event_time", n.EventTime, "alarm_time", n.Time, "trigger_in", dur, "DurIso8601", n.DurIso8601, "type", n.Type, "summary", n.Summary)
+		slog.Info("⏰ Alarm", "📁", filepath.Base(n.EventPath), "🎯", n.Time, "🔥", dur.Truncate(1 * time.Second), "durIso", n.DurIso8601, "type", n.Type)
 		//dur = 3 * time.Second // Hack
 		timer := time.AfterFunc(dur, f)
 		s.timers = append(s.timers, timer)
