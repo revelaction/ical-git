@@ -49,9 +49,9 @@ func (p *Parser) Parse(f fetch.File) error {
 		// For log
 		var in time.Duration
 		if !eventTime.IsZero() {
-			in = eventTime.Sub(p.start)
+			in = eventTime.Sub(p.start).Truncate(1 * time.Second)
 		}
-		slog.Info("📅 Event", "📁", f.Path, "🎯", eventTime, "in", in)
+		slog.Info("📅 Event", "📁", f.Path, "🎯", eventTime, "🔥", in)
 
 		als := alarms.Get(eventTime)
 
