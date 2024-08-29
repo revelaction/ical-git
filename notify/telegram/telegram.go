@@ -9,11 +9,6 @@ import (
 	"time"
 )
 
-type message struct {
-	msg       string
-	timeStamp time.Time
-}
-
 // Telegram
 type Telegram struct {
 	bot    *tg.BotAPI
