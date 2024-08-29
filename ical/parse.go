@@ -8,6 +8,7 @@ import (
 	"github.com/revelaction/ical-git/fetch"
 	"github.com/revelaction/ical-git/notify"
 	"log/slog"
+	"path/filepath"
 	"time"
 )
 
