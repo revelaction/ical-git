@@ -58,8 +58,6 @@ type FetcherFilesystem struct {
 	Directory string
 }
 
-var errConfNotDuration = errors.New("the value given can not be parsed to a Duration")
-
 func (c *Config) AlarmsAllowed() []Alarm {
 	als := []Alarm{}
 	for _, al := range c.Alarms {
