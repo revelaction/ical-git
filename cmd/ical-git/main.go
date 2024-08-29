@@ -126,6 +126,10 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
+	slog.Info("📝 Config:", "Daemon tick", conf.DaemonTick)
+	slog.Info("📝 Config:", "Location", conf.Location)
+	slog.Info("📝 Config:", "Alarms", conf.Alarms)
+
 	slog.Info("🔧 Init: creating new context")
 	ctx, cancel := context.WithCancel(context.Background())
 
