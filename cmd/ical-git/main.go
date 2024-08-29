@@ -129,7 +129,7 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("📝 Config:", "Daemon tick", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
 	for _, alarm := range conf.Alarms {
-		slog.Info("📝 Config: 🔔", "type", alarm.Type, "DirIso", alarm.DurIso8601, "dur", alarm.Dur)
+		slog.Info("📝 Config: 🔔", "type", alarm.Type, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
 	}
 
 	slog.Info("🔧 Init: creating new context")
