@@ -16,16 +16,32 @@ import (
 	"time"
 )
 
+// Version can be set at link time
+var Version string
+
 // configFile is the config file path
 const configPathDefault = "icalgit.toml"
+
 
 func main() {
 
 	//flag.Usage = func() { fmt.Fprintf(os.Stderr, "%s\n", usage) }
 	var configPath string
+	var versionFlag bool
+	flag.BoolVar(&versionFlag, "v", false, "print the version")
+	flag.BoolVar(&versionFlag, "version", false, "print the version")
 	flag.StringVar(&configPath, "c", configPathDefault, "the config file")
 	flag.StringVar(&configPath, "config", configPathDefault, "the config file")
 	flag.Parse()
+
+	if versionFlag {
+		if Version != "" {
+			fmt.Println(Version)
+			return
+		}
+		fmt.Println("(unknown)")
+		return
+	}
 
 	// logger
 	initializeLogger()
