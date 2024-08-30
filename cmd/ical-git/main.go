@@ -80,6 +80,10 @@ func main() {
 	select {}
 }
 
+// initialize reads the config and creates a goroutine (tick method) to
+// retrieve periodically the ical files and set alarms delivery timers
+// (goroutines).
+// initialize is run at the start or after a SIGHUB signal
 func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("🔧 Init: loading config", "path", path)
 	data, err := os.ReadFile(path)
@@ -108,6 +112,10 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	return cancel, sc
 }
 
+// tick is a goroutine to periodically retrieve the ical files an set alarms.
+// tick does not stop the alarm timers at the start. 
+// At the start of the tick, all alarms for the tick period are scheduled.
+// At the start of the next tick the is no alarms timers, so there is no need to close them.
 func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler) {
 
 	ticker := time.NewTicker(conf.DaemonTick)
