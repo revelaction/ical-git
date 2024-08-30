@@ -17,7 +17,7 @@ import (
 )
 
 // Version can be set at link time
-var Version string
+var BuildTag string
 
 // configFile is the config file path
 const configPathDefault = "icalgit.toml"
@@ -34,8 +34,8 @@ func main() {
 	flag.Parse()
 
 	if versionFlag {
-		if Version != "" {
-			fmt.Println(Version)
+		if BuildTag != "" {
+			fmt.Println(BuildTag)
 			return
 		}
 		fmt.Println("(unknown)")
