@@ -27,7 +27,7 @@ func NewScheduler(c config.Config) *Scheduler {
 }
 
 func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time.Time) error {
-    slog.Info("Scheduling notifications", "count", len(notifications))
+    slog.Info("🔔 Schedule", "count", len(notifications))
 
 	for _, n := range notifications {
 
