@@ -40,7 +40,7 @@ jobs:
           GOARCH: ${{ matrix.GOARCH }}
           GOARM: ${{ matrix.GOARM }}
       - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: ical-git-binaries
           path: ical-git-*
