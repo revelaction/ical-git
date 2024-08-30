@@ -9,9 +9,9 @@ import (
 	"log/slog"
 	"path/filepath"
 	"time"
-
-	const offset = 3 * time.Second
 )
+
+const offset = 3 * time.Second
 
 type Scheduler struct {
 	// TODO remove NOtfier from struct
