@@ -17,7 +17,7 @@ type Notification struct {
 	// EventTime is the time of the event.
 	// Its timezone (location) is derived from the ical VEVENT itself
 	EventTime time.Time
-	// EventPath is the path of the ics file containing the event 
+	// EventPath is the path of the ics file containing the event
 	EventPath string
 	// Type specifies the type of the notification. Currently a desktop or
 	// telegram notification

@@ -18,23 +18,21 @@ type Scheduler struct {
 
 	conf   config.Config
 	timers []*time.Timer
-	start  time.Time
 }
 
-func NewScheduler(c config.Config, start time.Time) *Scheduler {
+func NewScheduler(c config.Config) *Scheduler {
 	return &Scheduler{
-		conf:  c,
-		start: start,
+		conf: c,
 	}
 }
 
-func (s *Scheduler) Schedule(notifications []notify.Notification) error {
+func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time.Time) error {
 
 	for _, n := range notifications {
 
 		f := s.getNotifyFunc(n)
-		dur := n.Time.Sub(s.start)
-		slog.Info("🔔 Alarm", "📁", filepath.Base(n.EventPath), "🎯", n.Time, "🔥", dur.Truncate(1 * time.Second), "durIso", n.DurIso8601, "type", n.Type)
+		dur := n.Time.Sub(tickStart)
+		slog.Info("🔔 Alarm", "📁", filepath.Base(n.EventPath), "🎯", n.Time, "🔥", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type)
 		//dur = 3 * time.Second // Hack
 		timer := time.AfterFunc(dur, f)
 		s.timers = append(s.timers, timer)

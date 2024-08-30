@@ -61,7 +61,7 @@ func (p *Parser) Parse(f fetch.File) error {
 			n := buildNotification(event)
 			n.Time = alarm.time
 			n.EventTime = eventTime
-			n.EventPath = f.Path  
+			n.EventPath = f.Path
 			n.Type = alarm.Type
 			n.DurIso8601 = alarm.DurIso8601
 

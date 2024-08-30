@@ -104,7 +104,7 @@ alarms = [
 	}
 
 	expectedDuration := -24 * time.Hour
-	if conf.Alarms[0].Dur!= expectedDuration {
+	if conf.Alarms[0].Dur != expectedDuration {
 		t.Fatalf("Expected duration %v, got %v", expectedDuration, conf.Alarms[0].Dur)
 	}
 }

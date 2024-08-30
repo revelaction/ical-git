@@ -53,15 +53,15 @@ func (et *EventTime) parse() {
 }
 
 func (et *EventTime) hasRRule() bool {
-	return len(et.rRule)>0
+	return len(et.rRule) > 0
 }
 
 func (et *EventTime) hasRDate() bool {
-	return len(et.rDate)>0
+	return len(et.rDate) > 0
 }
 
 func (et *EventTime) hasDtStart() bool {
-	return et.dtStart != "" 
+	return et.dtStart != ""
 }
 
 // content line (icalendar spec) should not be longer thant 75 chars.

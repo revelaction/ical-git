@@ -22,7 +22,6 @@ var Version string
 // configFile is the config file path
 const configPathDefault = "icalgit.toml"
 
-
 func main() {
 
 	//flag.Usage = func() { fmt.Fprintf(os.Stderr, "%s\n", usage) }
@@ -61,68 +60,24 @@ func main() {
 
 		for {
 			s := <-signalChan
-            switch s {
-            case syscall.SIGHUP:
-                slog.Info("🔧  SIGHUP called")
-                slog.Info("🔧  canceling previous ctx")
-                cancel()
-                slog.Info("🔧 stop previous timers")
-                scheduler.StopTimers()
-                cancel, scheduler = initialize(configPath)
+			switch s {
+			case syscall.SIGHUP:
+				slog.Info("🔧 SIGHUP called")
+				slog.Info("🔧 canceling previous ctx")
+				cancel()
+				slog.Info("🔧 stop previous timers")
+				scheduler.StopTimers()
+				cancel, scheduler = initialize(configPath)
 
-            case os.Interrupt:
-                slog.Info("Interrupt called")
-                cancel()
-                os.Exit(1)
-            }
+			case os.Interrupt:
+				slog.Info("Interrupt called")
+				cancel()
+				os.Exit(1)
+			}
 		}
 	}()
 
 	select {}
-}
-
-// TODO make struct Daemon
-func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler, start time.Time) {
-
-	ticker := time.NewTicker(conf.DaemonTick)
-	defer ticker.Stop()
-
-	run(conf, start, sc)
-
-	for {
-
-		select {
-		case <-ctx.Done():
-			slog.Info("🔧 ticker goroutine: received cancel. Ending")
-			return
-		case <-ticker.C:
-			slog.Info("🔧 starting new tick work")
-			run(conf, start, sc)
-			slog.Info("🔧 ending tick work")
-		}
-	}
-}
-
-func run(conf config.Config, start time.Time, sc *schedule.Scheduler) {
-
-	slog.Info("🚀 starting run")
-	f := filesystem.New(conf.FetcherFilesystem.Directory)
-	ch := f.GetCh()
-
-	p := ical.NewParser(conf, start)
-	for f := range ch {
-		if f.Error != nil {
-			slog.Info("fetch Error", "error", f.Error)
-			os.Exit(1) // TODO
-		}
-		err := p.Parse(f)
-		if err != nil {
-			fmt.Printf("error: %v+", err)
-		}
-	}
-
-	sc.Schedule(p.Notifications())
-	slog.Info("🏁 ending run")
 }
 
 func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
@@ -136,24 +91,68 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	slog.Info("📝 Config:", "Daemon tick", conf.DaemonTick)
+	slog.Info("📝 Config:", "Daemon tick time", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
 	for _, alarm := range conf.Alarms {
 		slog.Info("📝 Config: 🔔", "type", alarm.Type, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
 	}
 
-	slog.Info("🔧 Init: creating new context")
+	// Create context to cance the tick goroutine on SIGHUP
 	ctx, cancel := context.WithCancel(context.Background())
 
-	now := time.Now()
-	slog.Info("🔧 Init: ⏰ start time", "start", now.Format(time.RFC3339))
-
 	slog.Info("🔧 Init: creating new scheduler")
-	sc := schedule.NewScheduler(conf, now)
+	sc := schedule.NewScheduler(conf)
 
-	slog.Info("🔧 Init: creating new ticker goroutine")
-	go tick(ctx, conf, sc, now)
+	slog.Info("🔧 Init: creating goroutine for time ticks")
+	go tick(ctx, conf, sc)
 	return cancel, sc
+}
+
+func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler) {
+
+	ticker := time.NewTicker(conf.DaemonTick)
+	defer ticker.Stop()
+
+	run(conf, sc)
+
+	for {
+
+		select {
+		case <-ctx.Done():
+			slog.Info("🔧 ticker goroutine: received cancel. Ending")
+			return
+		case <-ticker.C:
+			slog.Info("🔧 starting new tick work")
+			run(conf, sc)
+			slog.Info("🔧 ending tick work")
+		}
+	}
+}
+
+func run(conf config.Config, sc *schedule.Scheduler) {
+
+	slog.Info("🚀 starting run")
+
+	tickStart := time.Now()
+	slog.Info("⏰ Tick start time", "start", tickStart.Format(time.RFC3339))
+
+	f := filesystem.New(conf.FetcherFilesystem.Directory)
+	ch := f.GetCh()
+
+	p := ical.NewParser(conf, tickStart)
+	for f := range ch {
+		if f.Error != nil {
+			slog.Info("fetch Error", "error", f.Error)
+			os.Exit(1) // TODO
+		}
+		err := p.Parse(f)
+		if err != nil {
+			fmt.Printf("error: %v+", err)
+		}
+	}
+
+	sc.Schedule(p.Notifications(), tickStart)
+	slog.Info("🏁 ending run")
 }
 
 func initializeLogger() {
