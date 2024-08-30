@@ -27,13 +27,13 @@ func NewScheduler(c config.Config) *Scheduler {
 }
 
 func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time.Time) error {
-    slog.Info("🔔 Schedule", "count", len(notifications))
+    slog.Info("🚦 Schedule", "num_notifications", len(notifications))
 
 	for _, n := range notifications {
 
 		f := s.getNotifyFunc(n)
 		dur := n.Time.Sub(tickStart)
-		slog.Info("🔔 Alarm", "📁", filepath.Base(n.EventPath), "📌", n.Time, "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type)
+        slog.Info("🚦 Schedule 🔔", "📁", filepath.Base(n.EventPath), "📌", n.Time, "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type)
 		//dur = 3 * time.Second // Hack
 		timer := time.AfterFunc(dur, f)
 		s.timers = append(s.timers, timer)
