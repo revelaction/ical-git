@@ -9,6 +9,8 @@ import (
 	"log/slog"
 	"path/filepath"
 	"time"
+
+	const offset = 3 * time.Second
 )
 
 type Scheduler struct {
@@ -32,7 +34,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time
 	for _, n := range notifications {
 
 		f := s.getNotifyFunc(n)
-		dur := n.Time.Sub(tickStart)
+		dur := n.Time.Sub(tickStart) - offset
         slog.Info("🚦 Schedule 🔔", "📁", filepath.Base(n.EventPath), "📌", n.Time, "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type)
 		//dur = 3 * time.Second // Hack
 		timer := time.AfterFunc(dur, f)
