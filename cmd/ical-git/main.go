@@ -16,6 +16,22 @@ import (
 	"time"
 )
 
+const usage = `Usage:
+    ical=git [-c CONF_FILE] 
+
+Options:
+    -c, --config                load the configuration file at CONF_FILE instead of default
+    -v, --version               Print the version 
+    -h, --help                  Show this
+
+CONF_FILE is the toml configuration file 
+
+ical-git will react to a SIGHUP signal reloading the configuration file.
+
+Examples:
+    $ ical-git --config /path/to/config/file.toml # start the daemon with the configuration file
+    $ ical-git -v  # print version`
+
 // Version can be set at link time
 var BuildTag string
 
@@ -24,13 +40,16 @@ const configPathDefault = "icalgit.toml"
 
 func main() {
 
-	//flag.Usage = func() { fmt.Fprintf(os.Stderr, "%s\n", usage) }
 	var configPath string
-	var versionFlag bool
+	var versionFlag, helpFlag bool
+
+	flag.Usage = func() { fmt.Fprintf(os.Stderr, "%s\n", usage) }
 	flag.BoolVar(&versionFlag, "v", false, "print the version")
 	flag.BoolVar(&versionFlag, "version", false, "print the version")
 	flag.StringVar(&configPath, "c", configPathDefault, "the config file")
 	flag.StringVar(&configPath, "config", configPathDefault, "the config file")
+	flag.BoolVar(&helpFlag, "h", false, "print the version")
+	flag.BoolVar(&helpFlag, "help", false, "Show this")
 	flag.Parse()
 
 	if versionFlag {
@@ -39,6 +58,10 @@ func main() {
 			return
 		}
 		fmt.Println("(unknown)")
+		return
+	}
+	if helpFlag {
+		flag.Usage()
 		return
 	}
 
@@ -113,7 +136,7 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 }
 
 // tick is a goroutine to periodically retrieve the ical files an set alarms.
-// tick does not stop the alarm timers at the start. 
+// tick does not stop the alarm timers at the start.
 // At the start of the tick, all alarms for the tick period are scheduled.
 // At the start of the next tick the is no alarms timers, so there is no need to close them.
 func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler) {
