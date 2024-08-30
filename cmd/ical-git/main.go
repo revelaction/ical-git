@@ -95,7 +95,7 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	slog.Info("📝 Config:", "Daemon tick time", conf.DaemonTick)
+	slog.Info("📝 Config:", "tick_time", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
 	for _, alarm := range conf.Alarms {
 		slog.Info("📝 Config: 🔔", "type", alarm.Type, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
