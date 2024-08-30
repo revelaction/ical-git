@@ -44,27 +44,21 @@ func main() {
 		cancel, scheduler := initialize(configPath)
 
 		for {
-			select {
-			case s := <-signalChan:
-				switch s {
-				case syscall.SIGHUP:
-					slog.Info("🔧  SIGHUP called")
-					slog.Info("🔧  canceling previous ctx")
-					cancel()
-					slog.Info("🔧 stop previous timers")
-					scheduler.StopTimers()
-					cancel, scheduler = initialize(configPath)
+			s := <-signalChan
+            switch s {
+            case syscall.SIGHUP:
+                slog.Info("🔧  SIGHUP called")
+                slog.Info("🔧  canceling previous ctx")
+                cancel()
+                slog.Info("🔧 stop previous timers")
+                scheduler.StopTimers()
+                cancel, scheduler = initialize(configPath)
 
-				case os.Interrupt:
-					slog.Info("Interrupt called")
-					cancel()
-					os.Exit(1)
-				}
-				//case <-ctx.Done():
-				//	log.Printf("Done.")
-				//	os.Exit(1)
-				//}
-			}
+            case os.Interrupt:
+                slog.Info("Interrupt called")
+                cancel()
+                os.Exit(1)
+            }
 		}
 	}()
 
