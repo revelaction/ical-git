@@ -11,8 +11,6 @@ import (
 	"time"
 )
 
-const offset = 3 * time.Second
-
 type Scheduler struct {
 	// TODO remove NOtfier from struct
 	telegram notify.Notifier
@@ -28,13 +26,17 @@ func NewScheduler(c config.Config) *Scheduler {
 	}
 }
 
+// Schedule creates timers for the delivery of notifications.
+// The timers are closed only on SIGHUP, not on timer ticks. That means they
+// will be executed even if they are triggered in the tick boundary as they run
+// in its own goroutines.
 func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time.Time) error {
     slog.Info("🚦 Schedule", "num_notifications", len(notifications))
 
 	for _, n := range notifications {
 
 		f := s.getNotifyFunc(n)
-		dur := n.Time.Sub(tickStart) - offset
+		dur := n.Time.Sub(tickStart)
         slog.Info("🚦 Schedule 🔔", "📁", filepath.Base(n.EventPath), "📌", n.Time, "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type)
 		//dur = 3 * time.Second // Hack
 		timer := time.AfterFunc(dur, f)
