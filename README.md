@@ -120,6 +120,7 @@ sudo systemctl status ical-git.service
 sudo journalctl -u ical-git.service 
 ```
 ## ical files
+- Put your ical files in a directory of your choice, better under revision control. Make sure they are in the working directory of the service or, if not, point the `ExecStart` to the directory.
 
 ## ical configuration file
 
