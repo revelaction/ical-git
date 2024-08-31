@@ -224,14 +224,18 @@ directory = "/home/icalgit/path/to/my-cal-files"
 
 # Creating iCalendar Files
 
-To create your own iCalendar files, you can use a private Language Model (LLM) on your computer. Here are some steps to guide you through the process:
+**ical-git**'s simple design means it does not directly create iCalendar files. Instead, it relies on external sources to generate these files. Common sources include:
 
-1. **Install a Private LLM**: Ensure you have a private LLM installed on your computer. There are several open-source models available.
-2. **Generate iCalendar Content**: Use the LLM to generate iCalendar content. You can provide prompts or templates to guide the generation process.
-3. **Format the Output**: Ensure the generated content adheres to the iCalendar format. This includes proper syntax, event details, and other required fields.
-4. **Save the File**: Save the generated content as a `.ics` file in the directory specified in your configuration.
+- **Emails**: Many email clients and services allow you to create calendar events directly from email invitations. These events can be exported as iCalendar files.
+- **Appointments**: Calendar applications like Google Calendar, Outlook, or Apple Calendar can create and export events in the iCalendar format.
+- **Language Models (LLMs)**: Private LLMs can be used to generate iCalendar content based on prompts or templates. Ensure the generated content adheres to the iCalendar format, including proper syntax and required fields.
 
-Alternatively, you can copy and modify the existing iCalendar files from the `testdata` directory to suit your needs:
+To use these sources:
+
+1. **Export from Source**: Export the calendar event or generate the content from the LLM in the iCalendar format (`.ics` file).
+2. **Place in Directory**: Save the generated or exported `.ics` file in the directory specified in your `icalgit.toml` configuration file.
+
+Alternatively, you can copy and modify existing iCalendar files from the `testdata` directory to suit your needs:
 
 1. **Copy Files**: Copy the desired iCalendar files from the `testdata` directory to your working directory.
 2. **Modify Content**: Open the copied files and modify the event details, dates, and other relevant information to fit your requirements.
