@@ -25,4 +25,11 @@ To install ical-git, follow these steps:
 ## Examples
 
 
+```console
+crontab -e -u icalgit
+
+```
+```cron
+* * * * * cd /home/icalgit/icalgit/mi-ical-files && GIT_SSH_COMMAND="ssh -i /home/icalgit/.ssh/id_icalgit_nopassphrase -o IdentitiesOnly=yes" git pull origin main 
+```
 
