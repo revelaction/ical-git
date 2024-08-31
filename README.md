@@ -193,7 +193,9 @@ crontab -e -u icalgit
 
 # Creating iCalendar Files
 
-To create your own iCalendar files, you can use a private Language Model (LLM) on your computer. Alternatively, you can copy and modify the existing iCalendar files from the `testdata` directory to suit your needs.
+To create your own iCalendar files, you can use a private Language Model (LLM)
+on your computer. Alternatively, you can copy and modify the existing iCalendar
+files from the `testdata` directory to suit your needs.
 
 # Command line options
 
