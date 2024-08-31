@@ -262,18 +262,24 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
 
 ## Alarms
 
-- **alarms**: A list of alarm configurations. Each alarm specifies the type and when it should trigger.
+- **alarms**: A list of alarm configurations. Each alarm specifies the type and when it should trigger. The `when` field uses the ISO 8601 duration format to specify the time before the event when the alarm should trigger.
   - Example:
     ```toml
     alarms = [
-        {type = "desktop", when = "-P7D"},  
-        {type = "desktop", when = "-P1D"},  
-        {type = "desktop", when = "-PT1H"},  
-        {type = "telegram", when = "-P7D"},  
-        {type = "telegram", when = "-P1D"},  
-        {type = "telegram", when = "-PT1H"},  
+        {type = "desktop", when = "-P7D"},  # 7 days before the event
+        {type = "desktop", when = "-P1D"},  # 1 day before the event
+        {type = "desktop", when = "-PT1H"}, # 1 hour before the event
+        {type = "telegram", when = "-P7D"}, # 7 days before the event
+        {type = "telegram", when = "-P1D"}, # 1 day before the event
+        {type = "telegram", when = "-PT1H"},# 1 hour before the event
     ]
     ```
+  - ISO 8601 Duration Format Examples:
+    - `-P7D`: 7 days before the event
+    - `-P1D`: 1 day before the event
+    - `-PT1H`: 1 hour before the event
+    - `-PT30M`: 30 minutes before the event
+    - `-P1DT12H`: 1 day and 12 hours before the event
 
 ## Notifiers
 
