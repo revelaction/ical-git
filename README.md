@@ -45,7 +45,7 @@ defined in a config file.
 
 
 ## Binary
-#### Get the binary
+### Get the binary
 
 **ical-git** is a go binary.
 
@@ -64,7 +64,7 @@ mv incal-git /home/icalgit/bin/ical-git
 chmod +x /home/icalgit/bin/ical-git
 ```
 
-#### Build Manually
+### Build Manually
 
 To build `ical-git` manually from the source code, follow these steps:
 
