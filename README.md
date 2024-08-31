@@ -10,6 +10,14 @@
 directory for icalendar files and generates custom notifications defined in a
 config file.
 
+# Content
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Getting started](#getting-started)
+- [Examples](#examples)
+
 ## Features
 
 - **Version Control**: Utilizes iCal files under version control.
