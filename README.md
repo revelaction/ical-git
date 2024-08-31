@@ -10,6 +10,7 @@
 ## Features
 
 - **Lightweight**:
+- **Simplistic Calendar Application**: ical-git is a simplistic calendar application written in Go. It reads a directory for icalendar files and generates custom notifications defined in a config file.
 - **Version Control**: Utilizes iCal files under version control.
 - **Notifications**: Supports Telegram bots and local Linux desktop notifications.
 
