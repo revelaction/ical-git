@@ -122,6 +122,36 @@ sudo journalctl -u ical-git.service
 
 ## ical configuration file
 
+copy the toml file to the working directory `WorkingDirectory`
+
+```console
+cp icalgit.toml /home/icalgit/icalgit
+```
+
+Modify the path to point to your ical files directory path
+
+```toml
+...
+
+[fetcher_filesystem]
+directory = "/home/lipo/src/private/ical_caas"
+
+...
+```
+
+If you prefer to store the toml file in a different location, specify the path in the `ExecStart` line of the systemd service
+
+``` 
+[Service]
+User=icalgit
+Group=icalgit
+
+Type=simple
+WorkingDirectory=/home/icalgit/icalgit
+ExecStart=/home/icalgit/bin/ical-git --config /path/to/my-ical-files
+Restart=on-failure
+TimeoutSec=10
+```
 
 ## ical files
 
