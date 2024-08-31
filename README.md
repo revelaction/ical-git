@@ -6,11 +6,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/revelaction/ical-git)](https://goreportcard.com/report/github.com/revelaction/ical-git)
 [![GitHub Release](https://img.shields.io/github/v/release/revelaction/ical-git?style=flat)]() 
 
+**ical-git** is a simplistic calendar application written in Go. It reads a
+directory for icalendar files and generates custom notifications defined in a
+config file.
 
 ## Features
 
-- **Lightweight**:
-- **Simplistic Calendar Application**: ical-git is a simplistic calendar application written in Go. It reads a directory for icalendar files and generates custom notifications defined in a config file.
 - **Version Control**: Utilizes iCal files under version control.
 - **Notifications**: Supports Telegram bots and local Linux desktop notifications.
 
