@@ -254,9 +254,9 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
 
 ## General Settings
 
-- **timezone**: Specifies the timezone for the calendar events.
-  - Example: `timezone = "Europe/Berlin"`
-- **tick**: Defines the interval at which the daemon checks for events.
+- **timezone**: Specifies the timezone for the notifications. Both icalendar timezone and config timezone will be shown in the notification message
+  - Example: `timezone = "Europe/Rome"`
+- **tick**: Defines the interval at which the daemon checks for new events.
   - Example: `tick = "24h"`
 
 ## Alarms
