@@ -32,10 +32,10 @@ defined in a config file.
 # Features
 
 - **Conceptually Simple Design**: Offers a conceptually simple design that allows for a relatively simple private self-hosted calendar solution.
+- **Low resources computers**: Supports installation on Raspberry Pi Zero and other cheap microcomputers.
 - **Notifications**: Offers support for Telegram bots and local Linux desktop notifications to keep users informed.
 - **Customizable Configuration**: Allows users to define custom notifications through a TOML configuration file.
 - **Systemd Integration**: Facilitates seamless integration with systemd for service management and logging.
-- **Compatibility with Microcomputers**: Supports installation on Raspberry Pi Zero and other cheap microcomputers.
 
 # Installation
 
