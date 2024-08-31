@@ -6,7 +6,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/revelaction/ical-git)](https://goreportcard.com/report/github.com/revelaction/ical-git)
 [![GitHub Release](https://img.shields.io/github/v/release/revelaction/ical-git?style=flat)]() 
 
-**ical-git** is a simplistic calendar application daemon written in Go. It reads a directory for iCalendar files and generates custom notifications defined in a config file.
+**ical-git** is a simplistic calendar application daemon written in Go. It
+reads a directory of iCalendar files and generates custom notifications
+defined in a config file.
 
 # Content
 
