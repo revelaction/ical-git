@@ -204,7 +204,7 @@ crontab -e -u icalgit
 
 To create your own iCalendar files, you can use a private Language Model (LLM) on your computer. Here are some steps to guide you through the process:
 
-1. **Install a Private LLM**: Ensure you have a private LLM installed on your computer. There are several options available, such as Hugging Face's Transformers, GPT-3, or other open-source models.
+1. **Install a Private LLM**: Ensure you have a private LLM installed on your computer. There are several open-source models available.
 2. **Generate iCalendar Content**: Use the LLM to generate iCalendar content. You can provide prompts or templates to guide the generation process.
 3. **Format the Output**: Ensure the generated content adheres to the iCalendar format. This includes proper syntax, event details, and other required fields.
 4. **Save the File**: Save the generated content as a `.ics` file in the directory specified in your configuration.
@@ -214,8 +214,6 @@ Alternatively, you can copy and modify the existing iCalendar files from the `te
 1. **Copy Files**: Copy the desired iCalendar files from the `testdata` directory to your working directory.
 2. **Modify Content**: Open the copied files and modify the event details, dates, and other relevant information to fit your requirements.
 3. **Save Changes**: Save the modified files in the directory specified in your configuration.
-
-By following these steps, you can create or modify iCalendar files to suit your needs.
 
 # Command line options
 
