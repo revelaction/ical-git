@@ -25,8 +25,6 @@ config file.
     - [See logs](#see-logs)
   - [ical files](#ical-files)
   - [ical configuration file](#ical-configuration-file)
-- [Usage](#usage)
-- [Getting started](#getting-started)
 - [Examples](#examples)
 - [Creating iCalendar Files](#creating-icalendar-files)
 - [Command line options](#command-line-options)
@@ -181,12 +179,8 @@ update the TOML configuration file as follows:
 directory = "/home/icalgit/path/to/my-cal-files"
 ```
 
-## Usage
 
 
-
-
-# Getting Started
 
 
 # Examples
