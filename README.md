@@ -157,10 +157,12 @@ TimeoutSec=10
 
 Place your iCal files in a directory of your choice, preferably under revision
 control. Ensure that these files are located in the working directory of the
+service. 
 
-service. ```console
+```console
 mkdir /home/icalgit/icalgit/my-ical-files
 ```
+
 If you prefer to store them in a different directory, specify the path in the
 TOML configuration file. To specify a different directory for your iCal files,
 update the TOML configuration file as follows:
