@@ -4,7 +4,8 @@
 [![Test](https://github.com/revelaction/ical-git/actions/workflows/test.yml/badge.svg)](https://github.com/revelaction/ical-git/actions/workflows/test.yml)
 [![Test](https://github.com/revelaction/ical-git/actions/workflows/build.yml/badge.svg)](https://github.com/revelaction/ical-git/actions/workflows/build.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/revelaction/ical-git)](https://goreportcard.com/report/github.com/revelaction/ical-git)
-[![stability-wip](https://img.shields.io/badge/stability-WIP-f4d03f.svg?style=flat)]()
+[![GitHub Release](https://img.shields.io/github/v/release/revelaction/ical-git?style=flat)]() 
+
 
 ## Features
 
