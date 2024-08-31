@@ -34,6 +34,7 @@ defined in a config file.
 - **Notifications**: Offers support for Telegram bots and local Linux desktop notifications to keep users informed.
 - **Customizable Configuration**: Allows users to define custom notifications through a TOML configuration file.
 - **Systemd Integration**: Facilitates seamless integration with systemd for service management and logging.
+- **Conceptually Simple Design**: Offers a conceptually simple design that allows for a relatively simple self-hosted calendar solution.
 
 # Installation
 
