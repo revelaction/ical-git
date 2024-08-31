@@ -47,8 +47,6 @@ defined in a config file.
 ## Binary
 ### Get the binary
 
-**ical-git** is a go binary.
-
 On Linux, macOS, FreeBSD you can use the [pre-built binaries](https://github.com/revelaction/ical-git/releases/) 
 
 If your system has a supported version of Go, you can build from source
