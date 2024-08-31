@@ -18,12 +18,12 @@ config file.
 - [Getting started](#getting-started)
 - [Examples](#examples)
 
-## Features
+# Features
 
 - **Version Control**: Utilizes iCal files under version control.
 - **Notifications**: Supports Telegram bots and local Linux desktop notifications.
 
-## Installation
+# Installation
 
 
 ## Binary
@@ -125,10 +125,10 @@ sudo journalctl -u ical-git.service
 
 
 
-## Getting Started
+# Getting Started
 
 
-## Examples
+# Examples
 
 
 ```console
@@ -138,4 +138,25 @@ crontab -e -u icalgit
 ```cron
 * * * * * cd /home/icalgit/icalgit/mi-ical-files && GIT_SSH_COMMAND="ssh -i /home/icalgit/.ssh/id_icalgit_nopassphrase -o IdentitiesOnly=yes" git pull origin main 
 ```
+
+# Command line options
+
+
+```console
+    ical=git [-c CONF_FILE] 
+
+Options:
+    -c, --config                load the configuration file at CONF_FILE instead of default
+    -v, --version               Print the version 
+    -h, --help                  Show this
+
+CONF_FILE is the toml configuration file 
+
+ical-git will react to a SIGHUP signal reloading the configuration file.
+
+Examples:
+    $ ical-git --config /path/to/config/file.toml # start the daemon with the configuration file
+    $ ical-git -v  # print version`
+```
+
 
