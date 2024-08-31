@@ -134,7 +134,7 @@ Update the `directory` path in the TOML file to point to your iCal files directo
 ...
 
 [fetcher_filesystem]
-directory = "/home/lipo/src/private/ical_caas"
+directory = "/home/ical/path/to/my-ical-files"
 
 ...
 ```
