@@ -6,7 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/revelaction/ical-git)](https://goreportcard.com/report/github.com/revelaction/ical-git)
 [![GitHub Release](https://img.shields.io/github/v/release/revelaction/ical-git?style=flat)]() 
 
-**ical-git** is a simplistic calendar application written in Go. It reads a
+**ical-git** is a simplistic calendar application daemon written in Go. It reads a
 directory for icalendar files and generates custom notifications defined in a
 config file.
 
@@ -18,14 +18,18 @@ config file.
 ## Installation
 
 
-On Linux, macOS, FreeBSD and Windows you can use the [pre-built binaries](https://github.com/revelaction/ical-git/releases/) 
+On Linux, macOS, FreeBSD you can use the [pre-built binaries](https://github.com/revelaction/ical-git/releases/) 
 
 If your system has a supported version of Go, you can build from source
 
 ```console
 go install github.com/revelaction/ical-git/cmd/mankidown@latest
+```
 
 ## Usage
+
+
+
 
 ## Getting Started
 
