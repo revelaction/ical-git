@@ -125,19 +125,20 @@ sudo journalctl -u ical-git.service
 
 ## ical files
 
-Place your iCal files in a directory of your choice, preferably under revision control. Ensure that these files are located in the working directory of the service. If you prefer to store them in a different directory, specify the path in the TOML configuration file.
+Place your iCal files in a directory of your choice, preferably under revision
+control. Ensure that these files are located in the working directory of the
 
-```console
+service. ```console
 mkdir /home/icalgit/icalgit/my-ical-files
 ```
-
-To specify a different directory for your iCal files, update the TOML configuration file as follows:
+If you prefer to store them in a different directory, specify the path in the
+TOML configuration file. To specify a different directory for your iCal files,
+update the TOML configuration file as follows:
 
 ```toml
 [fetcher_filesystem]
 directory = "/home/icalgit/path/to/my-cal-files"
 ```
-
 
 ## Usage
 
