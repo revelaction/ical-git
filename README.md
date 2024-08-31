@@ -17,7 +17,13 @@ config file.
 
 ## Installation
 
-To install ical-git, follow these steps:
+
+On Linux, macOS, FreeBSD and Windows you can use the [pre-built binaries](https://github.com/revelaction/ical-git/releases/) 
+
+If your system has a supported version of Go, you can build from source
+
+```console
+go install github.com/revelaction/ical-git/cmd/mankidown@latest
 
 ## Usage
 
