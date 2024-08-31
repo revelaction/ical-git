@@ -14,6 +14,10 @@ config file.
 
 - [Features](#features)
 - [Installation](#installation)
+  - [Binary](#binary)
+  - [systemd service file](#systemd-service-file)
+  - [ical files](#ical-files)
+  - [ical configuration file](#ical-configuration-file)
 - [Usage](#usage)
 - [Getting started](#getting-started)
 - [Examples](#examples)
