@@ -35,6 +35,7 @@ defined in a config file.
 - **Notifications**: Offers support for Telegram bots and local Linux desktop notifications to keep users informed.
 - **Customizable Configuration**: Allows users to define custom notifications through a TOML configuration file.
 - **Systemd Integration**: Facilitates seamless integration with systemd for service management and logging.
+- **Compatibility with Microcomputers**: Supports installation on Raspberry Pi Zero and other cheap microcomputers.
 
 # Installation
 
