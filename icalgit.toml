@@ -1,6 +1,16 @@
+# Specifies the timezone for the notifications. Both icalendar timezone and config timezone will be shown in the notification message
 timezone = "Europe/Berlin"
+# Defines the interval at which the daemon checks for new events
 tick = "24h"
 
+# A list of alarm configurations. Each alarm specifies the type and when it should trigger.
+# The `when` field uses the ISO 8601 duration format to specify the time before the event when the alarm should trigger.
+# Example:
+# - `-P7D`: 7 days before the event
+# - `-P1D`: 1 day before the event
+# - `-PT1H`: 1 hour before the event
+# - `-PT30M`: 30 minutes before the event
+# - `-P1DT12H`: 1 day and 12 hours before the event
 alarms = [
 	{type = "desktop", when = "-P7D"},  
 	{type = "desktop", when = "-P1D"},  
@@ -11,15 +21,22 @@ alarms = [
 	#{type = "desktop", when = "-P2DT22H49M"}, 
 ]
 
+# A list of notifier types that are enabled
 #notifiers = ["telegram", "desktop"]
 notifiers = ["desktop"]
 
+# Specifies the directory where the iCal files are stored
 [fetcher_filesystem]
 directory = "testdata"
 
+# Configuration for the Telegram notifier
 [notifier_telegram]
+# The API token for the Telegram bot
 token = "yuu3b3k"
+# The chat ID to which the notifications will be sent
 chat_id = 588488
 
+# Configuration for the Desktop notifier
 [notifier_desktop]
+# The path to the icon file used for desktop notifications
 icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
