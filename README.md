@@ -248,6 +248,54 @@ To ensure your iCal files are periodically updated, you can set up a cron job to
 
 This cron job will run every minute, pulling the latest changes from the `main` branch of your repository. Adjust the schedule as needed.
 
+# Configuration File
+
+The `icalgit.toml` file is used to configure the behavior of the ical-git daemon. Below are the descriptions of the fields and their purposes.
+
+## General Settings
+
+- **timezone**: Specifies the timezone for the calendar events.
+  - Example: `timezone = "Europe/Berlin"`
+- **tick**: Defines the interval at which the daemon checks for events.
+  - Example: `tick = "24h"`
+
+## Alarms
+
+- **alarms**: A list of alarm configurations. Each alarm specifies the type and when it should trigger.
+  - Example:
+    ```toml
+    alarms = [
+        {type = "desktop", when = "-P7D"},  
+        {type = "desktop", when = "-P1D"},  
+        {type = "desktop", when = "-PT1H"},  
+        {type = "telegram", when = "-P7D"},  
+        {type = "telegram", when = "-P1D"},  
+        {type = "telegram", when = "-PT1H"},  
+    ]
+    ```
+
+## Notifiers
+
+- **notifiers**: A list of notifier types that are enabled.
+  - Example: `notifiers = ["desktop"]`
+
+## Fetcher Filesystem
+
+- **directory**: Specifies the directory where the iCal files are stored.
+  - Example: `directory = "testdata"`
+
+## Notifier Telegram
+
+- **token**: The API token for the Telegram bot.
+  - Example: `token = "yuu3b3k"`
+- **chat_id**: The chat ID to which the notifications will be sent.
+  - Example: `chat_id = 588488`
+
+## Notifier Desktop
+
+- **icon**: The path to the icon file used for desktop notifications.
+  - Example: `icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"`
+
 # Command line options
 
 
