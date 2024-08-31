@@ -12,6 +12,8 @@ ExecStart=/home/icalgit/bin/ical-git
 Restart=on-failure
 TimeoutSec=10
 
+ExecReload=/bin/kill -HUP $MAINPID
+
 # Hardening measures
 ####################
 
