@@ -28,6 +28,8 @@ config file.
 - [Usage](#usage)
 - [Getting started](#getting-started)
 - [Examples](#examples)
+- [Creating iCalendar Files](#creating-icalendar-files)
+- [Command line options](#command-line-options)
 
 # Features
 
