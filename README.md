@@ -191,6 +191,10 @@ crontab -e -u icalgit
 * * * * * cd /home/icalgit/icalgit/mi-ical-files && GIT_SSH_COMMAND="ssh -i /home/icalgit/.ssh/id_icalgit_nopassphrase -o IdentitiesOnly=yes" git pull origin main 
 ```
 
+# Creating iCalendar Files
+
+To create your own iCalendar files, you can use a private Language Model (LLM) on your computer. Alternatively, you can copy and modify the existing iCalendar files from the `testdata` directory to suit your needs.
+
 # Command line options
 
 
