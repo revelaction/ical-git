@@ -148,7 +148,7 @@ Group=icalgit
 
 Type=simple
 WorkingDirectory=/home/icalgit/icalgit
-ExecStart=/home/icalgit/bin/ical-git --config /path/to/my-ical-files
+ExecStart=/home/icalgit/bin/ical-git --config /path/to/my-file.toml
 Restart=on-failure
 TimeoutSec=10
 ```
