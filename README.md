@@ -119,10 +119,25 @@ sudo systemctl status ical-git.service
 ```console
 sudo journalctl -u ical-git.service 
 ```
-## ical files
-- Put your ical files in a directory of your choice, better under revision control. Make sure they are in the working directory of the service or, if not, point the `ExecStart` to the directory.
 
 ## ical configuration file
+
+
+## ical files
+
+Put your ical files in a directory of your choice, better under revision
+control. Make sure they are in the working directory of the service or, 
+
+```console
+mkdir /home/icalgit/icalgit/my-ical-files
+```
+
+if you want to put your files in another path, point to it in the toml configuration file
+
+``` 
+[fetcher_filesystem]
+directory = "/home/icalgit/path/to/my-cal-files"
+```
 
 
 ## Usage
