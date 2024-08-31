@@ -61,6 +61,30 @@ mv incal-git /home/icalgit/bin/ical-git
 chmod +x /home/icalgit/bin/ical-git
 ```
 
+#### Build Manually
+
+To build `ical-git` manually from the source code, follow these steps:
+
+1. **Clone the Repository**: Clone the `ical-git` repository to your local machine.
+
+    ```console
+    git clone https://github.com/revelaction/ical-git.git
+    cd ical-git
+    ```
+
+2. **Build the Binary**: Use `go build` with `ldflags` to include the Git tag in the binary.
+
+    ```console
+    go build -ldflags "-X main.BuildTag=$(git describe --tags)" ./cmd/ical-git
+    ```
+
+3. **Move the Binary**: Move the built binary to a suitable path and set the executable permission.
+
+    ```console
+    mv ical-git /home/icalgit/bin/ical-git
+    chmod +x /home/icalgit/bin/ical-git
+    ```
+
 ## systemd service file
 
 ### Modify the service file
