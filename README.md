@@ -25,6 +25,7 @@ defined in a config file.
     - [See logs](#see-logs)
   - [ical files](#ical-files)
   - [ical configuration file](#ical-configuration-file)
+- [Configuration File](#configuration-file)
 - [Creating iCalendar Files](#creating-icalendar-files)
 - [Managing iCal Files](#managing-ical-files)
 - [Command line options](#command-line-options)
