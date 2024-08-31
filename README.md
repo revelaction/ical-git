@@ -247,7 +247,7 @@ To ensure your iCal files are periodically updated, you can set up a cron job to
     crontab -e -u icalgit
     ```
 
-2. **Add the Cron Job**: Add a cron job to pull the latest changes from your repository.
+2. **Add the Cron Job**: Add a cron job to pull the latest changes from your repository. It's advisable to use a passphraseless SSH key to avoid issues with cron executing in a non-interactive session.
 
     ```cron
     * * * * * cd /home/icalgit/icalgit/my-ical-files && GIT_SSH_COMMAND="ssh -i /home/icalgit/.ssh/id_icalgit_nopassphrase -o IdentitiesOnly=yes" git pull origin main
