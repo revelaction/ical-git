@@ -125,6 +125,13 @@ To verify that your service is running as expected, you can check its status.
 sudo systemctl status ical-git.service 
 ```
 
+### Reload Configuration on SIGHUP
+`ical-git` can reload its configuration file when it receives the SIGHUP signal. To reload the configuration without restarting the service, use the following command:
+
+```console
+sudo systemctl reload ical-git.service
+```
+
 ### See logs
 
 ```console
