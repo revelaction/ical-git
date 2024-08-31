@@ -25,7 +25,9 @@ config file.
 
 ## Installation
 
-### Get the binary
+
+## Binary
+#### Get the binary
 
 **ical-git** is a go binary.
 
@@ -34,7 +36,7 @@ On Linux, macOS, FreeBSD you can use the [pre-built binaries](https://github.com
 If your system has a supported version of Go, you can build from source
 
 ```console
-go install github.com/revelaction/ical-git/cmd/mankidown@latest
+go install github.com/revelaction/ical-git/cmd/ical-git@latest
 ```
 
 Move the binary to a suitable path
@@ -43,6 +45,8 @@ Move the binary to a suitable path
 mv incal-git /home/icalgit/bin/ical-git
 chmod +x /home/icalgit/bin/ical-git
 ```
+
+## systemd service file
 
 ### Modify the service file
 
@@ -111,6 +115,9 @@ sudo systemctl status ical-git.service
 ```console
 sudo journalctl -u ical-git.service 
 ```
+## ical files
+
+## ical configuration file
 
 
 ## Usage
