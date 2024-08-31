@@ -31,8 +31,11 @@ defined in a config file.
 
 # Features
 
-- **Version Control**: Utilizes iCal files under version control.
-- **Notifications**: Supports Telegram bots and local Linux desktop notifications.
+- **Version Control**: Ensures iCal files are under version control for tracking changes and maintaining history.
+- **Notifications**: Offers support for Telegram bots and local Linux desktop notifications to keep users informed.
+- **Customizable Configuration**: Allows users to define custom notifications through a TOML configuration file.
+- **Systemd Integration**: Facilitates seamless integration with systemd for service management and logging.
+- **Cron Job Support**: Enables automated updates of iCal files through cron jobs for keeping calendars up-to-date.
 
 # Installation
 
