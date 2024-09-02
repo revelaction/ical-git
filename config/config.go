@@ -51,6 +51,8 @@ type FetcherFilesystem struct {
 	Directory string
 }
 
+// Load loads the configuration. Only alarms compatible with the notifiers are
+// present in conf.Alarms
 func Load(data []byte) (Config, error) {
 	var conf Config
 	if _, err := toml.Decode(string(data), &conf); err != nil {
