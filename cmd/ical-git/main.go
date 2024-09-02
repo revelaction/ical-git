@@ -4,10 +4,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"strings"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
-	"strings"
 	"github.com/revelaction/ical-git/notify/schedule"
 	"log"
 	"log/slog"
@@ -121,11 +121,11 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 
 	slog.Info("📝 Config:", "tick_time", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
+	slog.Info("📝 Config:", "notifiers", strings.Join(conf.Notifiers, ", "))
 	for _, alarm := range conf.Alarms {
-		slog.Info("📝 Config:", "type", alarm.Action, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
+		slog.Info("📝 Config: 🔔", "type", alarm.Action, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
 	}
-	notifiers := "Notifiers: " + strings.Join(conf.Notifiers, ", ")
-	slog.Info("📝 Config:", "notifiers", notifiers)
+
 
 	// Create context to cance the tick goroutine on SIGHUP
 	ctx, cancel := context.WithCancel(context.Background())
