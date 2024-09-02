@@ -3,7 +3,7 @@ package ical
 import (
 	"bytes"
 	"testing"
-	"alarm"
+	"github.com/revelaction/ical-git/alarm"
 	"github.com/arran4/golang-ical"
 )
 

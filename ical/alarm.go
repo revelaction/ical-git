@@ -1,7 +1,7 @@
 package ical
 
 import (
-	"alarm"
+	"github.com/revelaction/ical-git/alarm"
 	"ics"
 )
 
