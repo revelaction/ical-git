@@ -63,7 +63,8 @@ END:VCALENDAR
 	}
 }
 
-// start of the tick event is 1 decemberm, the event is at 10 -> we expect one alarm: -PT1H  
+// Test that an alarm 15 hours before an event at 20:00 on 1 September 2024
+// is within the tick period starting at 00:00 on 1 September 2024 and lasting 24 hours.
 func TestParseEvents(t *testing.T) {
 	// Setup
 	configData := []byte(`
