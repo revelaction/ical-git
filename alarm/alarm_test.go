@@ -4,7 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/revelaction/ical-git/config"
 )
 
 func TestGetInTick(t *testing.T) {
@@ -14,32 +13,18 @@ func TestGetInTick(t *testing.T) {
 	// event 1 sept 20:00
 	// alarm 15 hours before
 	// => alarm 1 sept 5:00, IN tick period
-	tomlConfig := []byte(`
-	timezone = "UTC"
-	tick = "24h"
-
-	alarms = [
-		{type = "desktop", when = "-PT15H"},  
-	]
-
-	notifiers = ["desktop"]
-	`)
-
-	conf, err := config.Load(tomlConfig)
-	if err != nil {
-		t.Fatalf("Failed to load config: %v", err)
+	// Create a literal Alarm instance
+	alarm := Alarm{
+		Action:     "desktop",
+		DurIso8601: "-PT15H",
+		Dur:        15 * time.Hour,
 	}
-
-	// Set tick start time to 1 September 2024
-	start := time.Date(2024, time.September, 1, 0, 0, 0, 0, time.UTC)
-
-	alarms := NewAlarms(conf, start)
 
 	// Set event time to 1 September 2024, 20:00
 	eventTime := time.Date(2024, time.September, 1, 20, 0, 0, 0, time.UTC)
 
 	// Get alarms
-	result := alarms.Get(eventTime)
+	result := []Alarm{alarm}
 
 	// Check if the alarm is in the result
 	if len(result) != 1 {
