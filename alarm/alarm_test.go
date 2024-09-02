@@ -17,14 +17,12 @@ func TestGetInTick(t *testing.T) {
 	alarm := Alarm{
 		Action:     "desktop",
 		DurIso8601: "-PT15H",
-		Dur:        15 * time.Hour,
+		Dur:        -15 * time.Hour,
 	}
 
-	// Set event time to 1 September 2024, 20:00
+	// Set event time to 1 January 2024, 20:00
 	eventTime := time.Date(2024, time.September, 1, 20, 0, 0, 0, time.UTC)
 
-	// Get alarms
-	result := []Alarm{alarm}
 
 	// Check if the alarm is in the result
 	if len(result) != 1 {
