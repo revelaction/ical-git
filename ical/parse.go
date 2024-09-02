@@ -93,7 +93,7 @@ func (p *Parser) Parse(f fetch.File) error {
 			n.EventPath = f.Path
 			n.Type = a.Action
 			n.DurIso8601 = a.DurIso8601
-			n.Source = "event" // Set source to "event" for event alarms
+			n.Source = a.Source 
 
 			p.notifications = append(p.notifications, n)
 		}
