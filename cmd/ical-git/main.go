@@ -7,6 +7,7 @@ import (
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
+	"strings"
 	"github.com/revelaction/ical-git/notify/schedule"
 	"log"
 	"log/slog"
