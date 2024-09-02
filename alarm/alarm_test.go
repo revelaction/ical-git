@@ -3,7 +3,6 @@ package alarm
 import (
 	"testing"
 	"time"
-
 )
 
 func TestGetInTick(t *testing.T) {
