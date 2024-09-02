@@ -34,12 +34,12 @@ END:VCALENDAR`
 
 	t.Logf("notifications: %#v", event)
 	// Call getEventAlarm with the parsed event
-	result := getEventAlarm(event)
+	result := getEventAlarm(event, []string{"desktop"})
 
 	// Verify the result struct
 	expected := []alarm.Alarm{
 		{
-			Action:     "DISPLAY",
+			Action:     "desktop",
 			DurIso8601: "-PT10M",
 		},
 	}
