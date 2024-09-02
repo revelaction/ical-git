@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 	"alarm"
-	"ics"
+	"github.com/arran4/golang-ical"
 )
 
 func TestGetEventAlarm(t *testing.T) {
