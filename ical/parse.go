@@ -65,7 +65,7 @@ func (p *Parser) Parse(f fetch.File) error {
 			}
         }
 
-        // Event Alarms
+        // Config Alarms
 		for _, a := range p.conf.Alarms {
             // Rename
 			if !a.HasAllowedAction(p.conf.Notifiers) {
