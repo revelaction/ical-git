@@ -67,35 +67,22 @@ func TestGetBeforeTick(t *testing.T) {
 	// event 1 sept 20:00
 	// alarm 21 hours before
 	// => alarm 31 august 23:00, before the current tick period
-	tomlConfig := []byte(`
-	timezone = "UTC"
-	tick = "4h"
-
-	alarms = [
-		{type = "desktop", when = "-PT21H"},  
-	]
-
-	notifiers = ["desktop"]
-	`)
-
-	conf, err := config.Load(tomlConfig)
-	if err != nil {
-		t.Fatalf("Failed to load config: %v", err)
+	// Create a literal Alarm instance
+	alarm := Alarm{
+		Action:     "desktop",
+		DurIso8601: "-PT21H",
+		Dur:        -21 * time.Hour,
 	}
 
-	// Set tick start time to 1 September 2024
-	start := time.Date(2024, time.September, 1, 0, 0, 0, 0, time.UTC)
-
-	alarms := NewAlarms(conf, start)
+	// Set tick start time to 1 September 2024, 00:00
+	tickStart := time.Date(2024, time.September, 1, 0, 0, 0, 0, time.UTC)
+	Tick := 12 * time.Hour
 
 	// Set event time to 1 September 2024, 20:00
 	eventTime := time.Date(2024, time.September, 1, 20, 0, 0, 0, time.UTC)
 
-	// Get alarms
-	result := alarms.Get(eventTime)
-
-	// Check if the alarm is in the result
-	if len(result) != 0 {
-		t.Errorf("Expected 1 alarm, got %d", len(result))
+	// Check if the alarm is in the tick period
+	if alarm.InTickPeriod(eventTime, tickStart, Tick) {
+		t.Errorf("Expected alarm to be before tick period")
 	}
 }
