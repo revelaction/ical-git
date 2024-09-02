@@ -37,16 +37,24 @@ END:VCALENDAR`
 	result := getEventAlarm(event)
 
 	// Verify the result struct
-	expected := alarm.Alarm{
-		Action:     "DISPLAY",
-		DurIso8601: "-PT10M",
+	expected := []alarm.Alarm{
+		{
+			Action:     "DISPLAY",
+			DurIso8601: "-PT10M",
+		},
 	}
 
-	if result.Action != expected.Action {
-		t.Errorf("Expected Action %s, but got %s", expected.Action, result.Action)
+	if len(result) != len(expected) {
+		t.Fatalf("Expected %d alarms, but got %d", len(expected), len(result))
 	}
 
-	if result.DurIso8601 != expected.DurIso8601 {
-		t.Errorf("Expected DurIso8601 %s, but got %s", expected.DurIso8601, result.DurIso8601)
+	for i, exp := range expected {
+		if result[i].Action != exp.Action {
+			t.Errorf("Expected Action %s, but got %s", exp.Action, result[i].Action)
+		}
+
+		if result[i].DurIso8601 != exp.DurIso8601 {
+			t.Errorf("Expected DurIso8601 %s, but got %s", exp.DurIso8601, result[i].DurIso8601)
+		}
 	}
 }
