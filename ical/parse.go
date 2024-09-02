@@ -65,6 +65,7 @@ func (p *Parser) Parse(f fetch.File) error {
 			}
 
             alarms = append(alarms, a)
+            n.Source = "config" // Set source to "config" for config alarms
         }
 
         // Config Alarms
@@ -92,6 +93,7 @@ func (p *Parser) Parse(f fetch.File) error {
 			n.EventPath = f.Path
 			n.Type = a.Action
 			n.DurIso8601 = a.DurIso8601
+			n.Source = "event" // Set source to "event" for event alarms
 
 			p.notifications = append(p.notifications, n)
 		}
