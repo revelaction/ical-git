@@ -37,7 +37,7 @@ func (a *Alarm) InTickPeriod(eventTime, tickStart time.Time, tick time.Duration)
 	return true
 }
 
-func (a *Alarm) ParseIso8601() (time.Duration, error) {
+func ParseIso8601(DurIso8601 string) (time.Duration, error) {
 	d, err := duration.Parse(a.DurIso8601)
 	if err != nil {
 		return 0, fmt.Errorf("error parsing duration: %w", err)
