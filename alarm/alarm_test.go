@@ -9,7 +9,6 @@ import (
 func TestGetInTick(t *testing.T) {
 	// Test that an alarm 15 hours before an event at 20:00 on 1 September 2024
 	// is within the tick period starting at 00:00 on 1 September 2024 and lasting 24 hours.
-	// Create a literal Alarm instance
 	alarm := Alarm{
 		Action:     "desktop",
 		DurIso8601: "-PT15H",
@@ -32,7 +31,6 @@ func TestGetInTick(t *testing.T) {
 func TestGetAfterTick(t *testing.T) {
 	// Test that an alarm 15 hours before an event at 20:00 on 1 September 2024
 	// is after the tick period starting at 00:00 on 1 September 2024 and lasting 4 hours.
-	// Create a literal Alarm instance
 	alarm := Alarm{
 		Action:     "desktop",
 		DurIso8601: "-PT15H",
@@ -55,7 +53,6 @@ func TestGetAfterTick(t *testing.T) {
 func TestGetBeforeTick(t *testing.T) {
 	// Test that an alarm 21 hours before an event at 20:00 on 1 September 2024
 	// is before the tick period starting at 00:00 on 1 September 2024 and lasting 12 hours.
-	// Create a literal Alarm instance
 	alarm := Alarm{
 		Action:     "desktop",
 		DurIso8601: "-PT21H",
