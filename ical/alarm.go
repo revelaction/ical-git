@@ -17,7 +17,7 @@ func getEventAlarm(event *ics.VEvent) []alarm.Alarm {
 		triggerProp := a.GetProperty(ics.ComponentPropertyTrigger)
 		actionProp := a.GetProperty(ics.ComponentPropertyAction)
 
-		parsedDur, err := alarm.ParseIso8601()
+		parsedDur, err := alarm.ParseIso8601(triggerProp.Value)
 		if err != nil {
 			// Handle the error, for now, log it and continue
 			continue
