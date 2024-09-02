@@ -32,6 +32,7 @@ END:VCALENDAR`
 	// Get the first event
 	event := cal.Events()[0]
 
+	t.Logf("notifications: %#v", event)
 	// Call getEventAlarm with the parsed event
 	result := getEventAlarm(event)
 

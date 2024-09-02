@@ -2,7 +2,7 @@ package ical
 
 import (
 	"github.com/revelaction/ical-git/alarm"
-	"ics"
+	"github.com/arran4/golang-ical"
 )
 
 func getEventAlarm(event *ics.VEvent) alarm.Alarm {
@@ -12,14 +12,11 @@ func getEventAlarm(event *ics.VEvent) alarm.Alarm {
 		return alarm.Alarm{}
 	}
 
-	// Use the first alarm for simplicity
-	alarm := alarms[0]
+	a := alarms[0]
 
-	// Get the Trigger and Action properties
-	triggerProp := alarm.GetProperty(ics.ComponentPropertyTrigger)
-	actionProp := alarm.GetProperty(ics.ComponentPropertyAction)
+	triggerProp := a.GetProperty(ics.ComponentPropertyTrigger)
+	actionProp := a.GetProperty(ics.ComponentPropertyAction)
 
-	// Create an alarm.Alarm literal with these properties
 	return alarm.Alarm{
 		Action:     actionProp.Value,
 		DurIso8601: triggerProp.Value,
