@@ -63,11 +63,14 @@ func (p *Parser) Parse(f fetch.File) error {
 			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
 			}
+
+            alarms = append(alarms, a)
         }
 
         // Config Alarms
 		for _, a := range p.conf.Alarms {
-            // Rename
+
+            // TODO Rename
 			if !a.HasAllowedAction(p.conf.Notifiers) {
                 continue
             }
@@ -80,15 +83,7 @@ func (p *Parser) Parse(f fetch.File) error {
         }
 
 		for _, a := range alarms {
-
-            // Rename
-			if !a.HasAllowedAction(p.conf.Notifiers) {
-                continue
-            }
-
-			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
-				continue
-			}
+            slog.Info("📝 notification", "type", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
 
 			// To notification
 			n := buildNotification(event)
