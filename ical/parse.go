@@ -65,7 +65,6 @@ func (p *Parser) Parse(f fetch.File) error {
 			}
 
             alarms = append(alarms, a)
-            n.Source = "config" // Set source to "config" for config alarms
         }
 
         // Config Alarms
