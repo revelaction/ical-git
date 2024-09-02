@@ -2,9 +2,11 @@ package config
 
 import (
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/revelaction/ical-git/alarm"
 	"github.com/sosodev/duration"
 )
 
@@ -13,7 +15,7 @@ type Config struct {
 	DaemonTick time.Duration `toml:"tick"`
 	Icon       string        `toml:"icon"`
 
-	Alarms []Alarm
+	Alarms []alarm.Alarm
 
 	FetcherFilesystem FetcherFilesystem `toml:"fetcher_filesystem"`
 
@@ -36,14 +38,6 @@ func (l *Location) UnmarshalText(text []byte) error {
 	return nil
 }
 
-type Alarm struct {
-	Type       string `toml:"type"`
-	DurIso8601 string `toml:"when"`
-	Dur        time.Duration
-}
-
-type Alarms []Alarm
-
 type Telegram struct {
 	Token  string
 	ChatId int64 `toml:"chat_id"`
@@ -57,26 +51,25 @@ type FetcherFilesystem struct {
 	Directory string
 }
 
-func (c *Config) AlarmsAllowed() []Alarm {
-	als := []Alarm{}
-	for _, al := range c.Alarms {
-		for _, n := range c.Notifiers {
-			if n == al.Type {
-				als = append(als, al)
-			}
-		}
-	}
-
-	return als
-}
-
 func Load(data []byte) (Config, error) {
 	var conf Config
 	if _, err := toml.Decode(string(data), &conf); err != nil {
 		return Config{}, err
 	}
 
+	conf.Alarms = slices.DeleteFunc(conf.Alarms, func(a alarm.Alarm) bool {
+		for _, n := range conf.Notifiers {
+			if n == a.Action {
+				return false
+			}
+		}
+
+		return true
+
+	})
+
 	for i, alarm := range conf.Alarms {
+
 		dur, err := parseDurIso8601(alarm.DurIso8601)
 		if err != nil {
 			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)

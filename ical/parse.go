@@ -47,15 +47,18 @@ func (p *Parser) Parse(f fetch.File) error {
 			continue
 		}
 
-        // expired event
+		// expired event
 		if eventTime.IsZero() {
 			slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "💀️", "expired")
 			continue
 		}
 
-        in := eventTime.Sub(p.start).Truncate(1 * time.Second)
+		in := eventTime.Sub(p.start).Truncate(1 * time.Second)
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
 
+		// if event has Alarms parse them and get them
+
+		// config alarms are in config
 		als := alarms.Get(eventTime)
 
 		for _, alarm := range als {
