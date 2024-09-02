@@ -125,7 +125,7 @@ END:VCALENDAR
 
 	t.Logf("notifications: %#v", notifications)
 	notification := notifications[0]
-	if notification.Summary != "Event with Alarms" {
+	if notification. != "Event with Alarms" {
 		t.Errorf("Expected summary 'Event with Alarms', got '%s'", notification.Summary)
 	}
 }
