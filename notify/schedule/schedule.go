@@ -37,7 +37,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time
 
 		f := s.getNotifyFunc(n)
 		dur := n.Time.Sub(tickStart)
-		slog.Info("🚦 Schedule 🔔", "📁", filepath.Base(n.EventPath), "📌", n.Time, "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type)
+		slog.Info("🚦 Schedule 🔔", "📁", filepath.Base(n.EventPath), "📌", n.Time, "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type, "source", n.Source)
 		//dur = 3 * time.Second // Hack
 		timer := time.AfterFunc(dur, f)
 		s.timers = append(s.timers, timer)
