@@ -7,7 +7,6 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/revelaction/ical-git/alarm"
-	"github.com/sosodev/duration"
 )
 
 type Config struct {
@@ -72,7 +71,7 @@ func Load(data []byte) (Config, error) {
 
 	for i, alarm := range conf.Alarms {
 
-		dur, err := parseDurIso8601(alarm.DurIso8601)
+		dur, err := alarm.ParseIso8601()
 		if err != nil {
 			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)
 		}
@@ -81,10 +80,3 @@ func Load(data []byte) (Config, error) {
 	return conf, nil
 }
 
-func parseDurIso8601(isoDur string) (time.Duration, error) {
-	d, err := duration.Parse(isoDur)
-	if err != nil {
-		return 0, fmt.Errorf("error parsing duration: %w", err)
-	}
-	return d.ToTimeDuration(), nil
-}
