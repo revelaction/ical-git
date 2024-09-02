@@ -58,9 +58,26 @@ func (p *Parser) Parse(f fetch.File) error {
 		in := eventTime.Sub(p.start).Truncate(1 * time.Second)
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
 
-        alarms = append(alarms, getEventAlarm(event)...)
-        alarms = append(alarms, p.conf.Alarms...)
+        // Event Alarms
+		for _, a := range getEventAlarm(event, p.conf.Notifiers) {
+			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
+				continue
+			}
+        }
 
+        // Event Alarms
+		for _, a := range p.conf.Alarms {
+            // Rename
+			if !a.HasAllowedAction(p.conf.Notifiers) {
+                continue
+            }
+
+			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
+				continue
+			}
+
+            alarms = append(alarms, a)
+        }
 
 		for _, a := range alarms {
 
