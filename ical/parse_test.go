@@ -64,6 +64,10 @@ END:VCALENDAR
 	}
 }
 
+// TestParseEvents tests the parsing of an iCal file containing an event with multiple alarms.
+// It sets up a configuration with a specific timezone, tick duration, and notifiers.
+// The test data includes an event titled "Event with Alarms" with alarms triggering 1 day and 1 hour before the event.
+// The test verifies that the parser correctly generates a notification for this event.
 func TestParseEvents(t *testing.T) {
 	// Setup
 	configData := []byte(`
