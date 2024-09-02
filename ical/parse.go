@@ -61,6 +61,11 @@ func (p *Parser) Parse(f fetch.File) error {
 
 		for _, alarm := range p.conf.Alarms {
 
+            // Rename
+			if !alarm.HasAllowedAction(p.conf.Notifiers) {
+                continue
+            }
+
 			if !alarm.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
 			}

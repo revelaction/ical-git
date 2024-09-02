@@ -18,6 +18,17 @@ type Alarm struct {
 	Source string `toml:"-"`
 }
 
+func (a *Alarm) HasAllowedAction(allowed []string) bool {
+    for _, allowed := range allowed {
+        if allowed == a.Action {
+            return true
+        }
+    }
+
+    return false
+
+}
+
 func (a *Alarm) TriggerTime(eventTime time.Time) time.Time {
 	return eventTime.Add(a.Dur)
 }

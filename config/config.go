@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"slices"
+	//"slices"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -58,16 +58,16 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
-	conf.Alarms = slices.DeleteFunc(conf.Alarms, func(a alarm.Alarm) bool {
-		for _, n := range conf.Notifiers {
-			if n == a.Action {
-				return false
-			}
-		}
+	//conf.Alarms = slices.DeleteFunc(conf.Alarms, func(a alarm.Alarm) bool {
+	//	for _, n := range conf.Notifiers {
+	//		if n == a.Action {
+	//			return false
+	//		}
+	//	}
 
-		return true
+	//	return true
 
-	})
+	//})
 
 	for i, a := range conf.Alarms {
 
