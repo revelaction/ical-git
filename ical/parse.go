@@ -7,6 +7,7 @@ import (
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch"
 	"github.com/revelaction/ical-git/notify"
+	"github.com/revelaction/ical-git/alarm"
 	"log/slog"
 	"path/filepath"
 	"time"
@@ -34,7 +35,10 @@ func (p *Parser) Parse(f fetch.File) error {
 		return fmt.Errorf("calendar parse error: %w", err)
 	}
 
+
 	for _, event := range cal.Events() {
+
+        var alarms []alarm.Alarm = []alarm.Alarm{}
 
 		et := newEventTime(event.Serialize())
 		et.parse()
@@ -54,29 +58,28 @@ func (p *Parser) Parse(f fetch.File) error {
 		in := eventTime.Sub(p.start).Truncate(1 * time.Second)
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
 
-		// if event has Alarms parse them and get them
+        alarms = append(alarms, getEventAlarm(event)...)
+        alarms = append(alarms, p.conf.Alarms...)
 
-		// config alarms are in config
-		//als := alarms.Get(eventTime)
 
-		for _, alarm := range p.conf.Alarms {
+		for _, a := range alarms {
 
             // Rename
-			if !alarm.HasAllowedAction(p.conf.Notifiers) {
+			if !a.HasAllowedAction(p.conf.Notifiers) {
                 continue
             }
 
-			if !alarm.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
+			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
 			}
 
 			// To notification
 			n := buildNotification(event)
-			n.Time = alarm.TriggerTime(eventTime)
+			n.Time = a.TriggerTime(eventTime)
 			n.EventTime = eventTime
 			n.EventPath = f.Path
-			n.Type = alarm.Action
-			n.DurIso8601 = alarm.DurIso8601
+			n.Type = a.Action
+			n.DurIso8601 = a.DurIso8601
 
 			p.notifications = append(p.notifications, n)
 		}
