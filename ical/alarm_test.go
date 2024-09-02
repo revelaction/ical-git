@@ -1,6 +1,7 @@
 package ical
 
 import (
+	"bytes"
 	"testing"
 	"alarm"
 	"ics"
