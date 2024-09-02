@@ -1,4 +1,4 @@
-package ical
+package alarm
 
 import (
 	"testing"

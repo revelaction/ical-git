@@ -35,7 +35,7 @@ alarms = [
 	}
 
 	expectedLen := 3
-	actualAlarms := conf.AlarmsAllowed()
+	actualAlarms := conf.Alarms
 
 	if len(actualAlarms) != expectedLen {
 		t.Fatalf("Expected %d alarms, got %d", expectedLen, len(actualAlarms))
@@ -57,7 +57,7 @@ alarms = [
 	}
 
 	expectedLen := 3
-	actualAlarms := conf.AlarmsAllowed()
+	actualAlarms := conf.Alarms
 
 	if len(actualAlarms) != expectedLen {
 		t.Fatalf("Expected %d alarms, got %d", expectedLen, len(actualAlarms))
@@ -80,7 +80,7 @@ alarms = [
 	}
 
 	expectedLen := 0
-	actualAlarms := conf.AlarmsAllowed()
+	actualAlarms := conf.Alarms
 
 	if len(actualAlarms) != expectedLen {
 		t.Fatalf("Expected %d alarms, got %d", expectedLen, len(actualAlarms))
@@ -90,6 +90,7 @@ alarms = [
 
 func TestAlarmDuration(t *testing.T) {
 	var testToml = []byte(`
+notifiers = ["desktop"]
 alarms = [
 	{type = "desktop", when = "-P1D"},  
 ]
@@ -112,6 +113,7 @@ alarms = [
 func TestAlarmDurationParseError(t *testing.T) {
 	var testToml = []byte(`
 alarms = [
+    notifiers = ["desktop"]
 	{type = "desktop", when = "invalid-duration"},  
 ]
 `)
