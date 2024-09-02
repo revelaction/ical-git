@@ -34,8 +34,6 @@ func (p *Parser) Parse(f fetch.File) error {
 		return fmt.Errorf("calendar parse error: %w", err)
 	}
 
-	alarms := NewAlarms(p.conf, p.start)
-
 	for _, event := range cal.Events() {
 
 		et := newEventTime(event.Serialize())
@@ -59,15 +57,20 @@ func (p *Parser) Parse(f fetch.File) error {
 		// if event has Alarms parse them and get them
 
 		// config alarms are in config
-		als := alarms.Get(eventTime)
+		//als := alarms.Get(eventTime)
 
-		for _, alarm := range als {
+		for _, alarm := range p.conf.Alarms {
+
+			if !alarm.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
+				continue
+			}
+
 			// To notification
 			n := buildNotification(event)
-			n.Time = alarm.time
+			n.Time = alarm.TriggerTime(eventTime)
 			n.EventTime = eventTime
 			n.EventPath = f.Path
-			n.Type = alarm.Type
+			n.Type = alarm.Action
 			n.DurIso8601 = alarm.DurIso8601
 
 			p.notifications = append(p.notifications, n)
