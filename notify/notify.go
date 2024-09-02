@@ -39,6 +39,8 @@ type Notification struct {
 	Duration time.Duration
 	// Attendees lists the people attending the event
 	Attendees []string
+	// Source indicates the source of the notification, which can be either "event" or "config"
+	Source string
 }
 
 // EventTimeConf returns the EventTime in the configured location
