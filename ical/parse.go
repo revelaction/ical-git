@@ -47,11 +47,13 @@ func (p *Parser) Parse(f fetch.File) error {
 			continue
 		}
 
-		// For log
-		var in time.Duration
-		if !eventTime.IsZero() {
-			in = eventTime.Sub(p.start).Truncate(1 * time.Second)
+        // expired event
+		if eventTime.IsZero() {
+			slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "💀️", "expired")
+			continue
 		}
+
+        in := eventTime.Sub(p.start).Truncate(1 * time.Second)
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
 
 		als := alarms.Get(eventTime)
