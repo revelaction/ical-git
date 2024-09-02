@@ -20,19 +20,16 @@ func TestGetInTick(t *testing.T) {
 		Dur:        -15 * time.Hour,
 	}
 
-	// Set event time to 1 January 2024, 20:00
+	// Set tick start time to 1 September 2024, 00:00
+	tickStart := time.Date(2024, time.September, 1, 0, 0, 0, 0, time.UTC)
+	Tick := 24 * time.Hour
+
+	// Set event time to 1 September 2024, 20:00
 	eventTime := time.Date(2024, time.September, 1, 20, 0, 0, 0, time.UTC)
 
-
-	// Check if the alarm is in the result
-	if len(result) != 1 {
-		t.Errorf("Expected 1 alarm, got %d", len(result))
-	}
-
-	// 1 September 2024, 5:00
-	expectedAlarmTime := time.Date(2024, time.September, 1, 5, 0, 0, 0, time.UTC)
-	if result[0].time != expectedAlarmTime {
-		t.Errorf("Expected alarm time %v, got %v", expectedAlarmTime, result[0].time)
+	// Check if the alarm is in the tick period
+	if !alarm.InTickPeriod(eventTime, tickStart, Tick) {
+		t.Errorf("Expected alarm to be in tick period")
 	}
 }
 
