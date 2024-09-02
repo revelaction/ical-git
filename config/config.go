@@ -58,17 +58,6 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
-	//conf.Alarms = slices.DeleteFunc(conf.Alarms, func(a alarm.Alarm) bool {
-	//	for _, n := range conf.Notifiers {
-	//		if n == a.Action {
-	//			return false
-	//		}
-	//	}
-
-	//	return true
-
-	//})
-
 	for i, a := range conf.Alarms {
 
 		dur, err := alarm.ParseIso8601(a.DurIso8601)
@@ -76,6 +65,7 @@ func Load(data []byte) (Config, error) {
 			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)
 		}
 		conf.Alarms[i].Dur = dur
+		conf.Alarms[i].Source = "config"
 	}
 	return conf, nil
 }

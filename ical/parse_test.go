@@ -63,10 +63,8 @@ END:VCALENDAR
 	}
 }
 
-// Test that an alarm 1 day before an event on 1 December 2024
-// is within the tick period starting at 00:00 on 1 December 2024 and lasting 24 hours.
-func TestParseEvents(t *testing.T) {
-	// Setup
+func TestParseEventAlarmTriggered(t *testing.T) {
+
 	configData := []byte(`
 timezone = "Europe/Berlin"
 tick = "24h"
@@ -94,7 +92,7 @@ BEGIN:VEVENT
 SUMMARY:Event with Alarms
 DTSTART:20241201T100000Z
 BEGIN:VALARM
-TRIGGER:-P1D
+TRIGGER:-P2D
 ACTION:DISPLAY
 DESCRIPTION:Reminder 1 day before
 END:VALARM
@@ -126,7 +124,82 @@ END:VCALENDAR
 
 	t.Logf("notifications: %#v", notifications)
 	notification := notifications[0]
-	if notification.Summary != "Event with Alarms" {
-		t.Errorf("Expected summary 'Event with Alarms', got '%s'", notification.Summary)
+	if notification.DurIso8601 != "-PT1H" {
+		t.Errorf("Unexpected duration', got '%s'", notification.DurIso8601)
+	}
+
+	if notification.Source != "event" {
+		t.Errorf("Unexpected Source', got '%s'", notification.Source)
+	}
+}
+
+func TestParseConfigAlarmTriggered(t *testing.T) {
+
+	configData := []byte(`
+timezone = "Europe/Berlin"
+tick = "24h"
+
+notifiers = ["desktop"]
+
+alarms = [
+	{type = "desktop", when = "-PT1H"},  
+]
+
+`)
+	
+	conf, err := config.Load(configData)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	start := time.Date(2024, 12, 01, 0, 0, 0, 0, time.UTC)
+	parser := NewParser(conf, start)
+
+	// Test data
+	icalData := []byte(`
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:Event with Alarms
+DTSTART:20241201T100000Z
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:Reminder 1 day before
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT1D
+ACTION:DISPLAY
+DESCRIPTION:Reminder 1 hour before
+END:VALARM
+END:VEVENT
+END:VCALENDAR
+`)
+
+	// Parse the iCal data
+	file := fetch.File{
+		Path:    "",
+		Content: icalData,
+		Error:   nil,
+	}
+	err = parser.Parse(file)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	// Check the notifications
+	notifications := parser.Notifications()
+	if len(notifications) != 1 {
+		t.Fatalf("Expected 1 notification, got %d", len(notifications))
+	}
+
+	t.Logf("notifications: %#v", notifications)
+	notification := notifications[0]
+	if notification.DurIso8601 != "-PT1H" {
+		t.Errorf("Expected duration', got '%s'", notification.DurIso8601)
+	}
+
+	if notification.Source != "config" {
+		t.Errorf("Unexpected Source', got '%s'", notification.Source)
 	}
 }
