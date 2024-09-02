@@ -19,7 +19,7 @@ func getEventAlarm(event *ics.VEvent) []alarm.Alarm {
 
 		parsedDur, err := alarm.ParseIso8601(triggerProp.Value)
 		if err != nil {
-			// Handle the error, for now, log it and continue
+			// TODO Handle the error, for now, log it and continue
 			continue
 		}
 

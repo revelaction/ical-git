@@ -69,9 +69,9 @@ func Load(data []byte) (Config, error) {
 
 	})
 
-	for i, alarm := range conf.Alarms {
+	for i, a := range conf.Alarms {
 
-		dur, err := alarm.ParseIso8601()
+		dur, err := alarm.ParseIso8601(a.DurIso8601)
 		if err != nil {
 			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)
 		}
