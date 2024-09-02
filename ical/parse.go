@@ -60,6 +60,7 @@ func (p *Parser) Parse(f fetch.File) error {
 
         // Event Alarms
 		for _, a := range getEventAlarm(event, p.conf.Notifiers) {
+            slog.Info("        : 🔔", "action", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
 			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
 			}
@@ -83,7 +84,6 @@ func (p *Parser) Parse(f fetch.File) error {
         }
 
 		for _, a := range alarms {
-            slog.Info("📝 notification", "type", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
 
 			// To notification
 			n := buildNotification(event)
