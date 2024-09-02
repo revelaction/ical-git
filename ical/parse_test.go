@@ -63,6 +63,7 @@ END:VCALENDAR
 	}
 }
 
+// start of the tick event is 1 decemberm, the event is at 10 -> we expect one alarm: -PT1H  
 func TestParseEvents(t *testing.T) {
 	// Setup
 	configData := []byte(`
