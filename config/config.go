@@ -30,7 +30,7 @@ type Config struct {
 	Desktop   Desktop  `toml:"notifier_desktop"`
 }
 
-func (c *Config) validateNotifierType(nt string) error {
+func validateNotifierType(nt string) error {
 	for _, vt := range validTypes {
 		if nt == vt {
 			return nil
@@ -88,7 +88,7 @@ func Load(data []byte) (Config, error) {
 	}
 
 	for i, a := range conf.Alarms {
-		if err := conf.validateNotifierType(a.Action); err != nil {
+		if err := validateNotifierType(a.Action); err != nil {
 			return Config{}, fmt.Errorf("invalid alarm action for alarm %d: %w", i, err)
 		}
 
