@@ -42,21 +42,6 @@ func (c *Config) validateNotifierType(nt string) error {
 }
 
 func (c *Config) validateNotifierTypes() error {
-	validTypes := []string{NotifierTypeTelegram, NotifierTypeDesktop}
-
-	for _, nt := range c.NotifierTypes {
-		valid := false
-		for _, vt := range validTypes {
-			if nt == vt {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			return fmt.Errorf("invalid notifier type: %s", nt)
-		}
-	}
-
 	for _, nt := range c.NotifierTypes {
 		if err := c.validateNotifierType(nt); err != nil {
 			return err
