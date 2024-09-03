@@ -42,6 +42,19 @@ alarms = [
 	}
 }
 
+func TestPositiveDurationError(t *testing.T) {
+	confData := []byte(`
+		tick = "1s"
+		notifiers = ["desktop"]
+		[timezone]
+		name = "UTC"
+	`)
+	_, err := Load(confData)
+	if err == nil {
+		t.Errorf("Expected error for positive duration, got nil")
+	}
+}
+
 func TestAlarmDuration(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
