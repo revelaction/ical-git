@@ -66,13 +66,9 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
-	if conf.DaemonTick <= 0 {
-		return Config{}, fmt.Errorf("DaemonTick must be a positive duration")
-	}
-	var conf Config
-	if _, err := toml.Decode(string(data), &conf); err != nil {
-		return Config{}, err
-	}
+    if err := validatePositiveDuration(conf.DaemonTick); err != nil {
+        return Config{}, fmt.Errorf("invalid duration for tick %w", err)
+    }
 
 	if err := conf.validateNotifierTypes(); err != nil {
 		return Config{}, err
@@ -87,7 +83,7 @@ func Load(data []byte) (Config, error) {
 		if err != nil {
 			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)
 		}
-		if err := validateDuration(dur); err != nil {
+		if err := validateNegativeDuration(dur); err != nil {
 			return Config{}, fmt.Errorf("invalid duration for alarm %d: %w", i, err)
 		}
 		conf.Alarms[i].Dur = dur
@@ -96,14 +92,14 @@ func Load(data []byte) (Config, error) {
 	return conf, nil
 }
 
-func validatePositiveDuration(d time.Duration) error {
+func validateNegativeDuration(d time.Duration) error {
 	if d > 0 {
 		return fmt.Errorf("duration must be positive: %s", d)
 	}
 	return nil
 }
 
-func validateNegativeDuration(d time.Duration) error {
+func validatePositiveDuration(d time.Duration) error {
 	if d < 0 {
 		return fmt.Errorf("duration must be negative: %s", d)
 	}
