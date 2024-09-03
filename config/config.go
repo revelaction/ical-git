@@ -82,6 +82,10 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
+	if err := conf.validateNotifierTypes(); err != nil {
+		return Config{}, err
+	}
+
 	for i, a := range conf.Alarms {
 
 		dur, err := alarm.ParseIso8601(a.DurIso8601)
@@ -90,9 +94,6 @@ func Load(data []byte) (Config, error) {
 		}
 		conf.Alarms[i].Dur = dur
 		conf.Alarms[i].Source = "config"
-	}
-	if err := conf.validateNotifierTypes(); err != nil {
-		return Config{}, err
 	}
 	return conf, nil
 }
