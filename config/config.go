@@ -23,6 +23,21 @@ type Config struct {
 	Desktop   Desktop  `toml:"notifier_desktop"`
 }
 
+func (c *Config) validateNotifierTypes() error {
+	validTypes := map[string]bool{
+		"telegram": true,
+		"desktop":  true,
+	}
+
+	for _, nt := range c.NotifierTypes {
+		if !validTypes[nt] {
+			return fmt.Errorf("invalid notifier type: %s", nt)
+		}
+	}
+
+	return nil
+}
+
 type Location struct {
 	*time.Location
 }
