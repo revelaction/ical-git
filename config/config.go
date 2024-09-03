@@ -41,7 +41,7 @@ func validateNotifierType(nt string) error {
 
 func (c *Config) validateNotifierTypes() error {
 	for _, nt := range c.NotifierTypes {
-		if err := c.validateNotifierType(nt); err != nil {
+		if err := validateNotifierType(nt); err != nil {
 			return err
 		}
 	}
