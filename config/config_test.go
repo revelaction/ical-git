@@ -42,8 +42,6 @@ alarms = [
 	}
 }
 
-
-
 func TestAlarmDuration(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
