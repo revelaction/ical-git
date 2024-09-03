@@ -56,14 +56,14 @@ alarms = [
 	}
 }
 
-func TestPositiveTickDuration(t *testing.T) {
+func TestNegativeTickDurationError(t *testing.T) {
 	confData := []byte(`
-tick = "1h"
+tick = "-1h"
 notifiers = ["desktop"]
 	`)
 	_, err := Load(confData)
-	if err != nil {
-		t.Errorf("Expected no error for positive tick duration, got %v", err)
+	if err == nil {
+		t.Errorf("Expected error for negative tick duration, got nil")
 	}
 }
 
