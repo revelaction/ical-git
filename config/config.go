@@ -1,10 +1,5 @@
 package config
 
-const (
-	NotifierTypeTelegram = "telegram"
-	NotifierTypeDesktop  = "desktop"
-)
-
 import (
 	"fmt"
 	//"slices"
@@ -13,6 +8,12 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/revelaction/ical-git/alarm"
 )
+
+const (
+	NotifierTypeTelegram = "telegram"
+	NotifierTypeDesktop  = "desktop"
+)
+
 
 type Config struct {
 	Location   Location      `toml:"timezone"`
