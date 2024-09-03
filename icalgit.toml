@@ -22,8 +22,8 @@ alarms = [
 ]
 
 # A list of notifier types that are enabled
-#notifiers = ["telegram", "desktop"]
-notifiers = ["desktop"]
+notifiers = ["telegram", "desktop"]
+#notifiers = ["desktop"]
 
 # Specifies the directory where the iCal files are stored
 [fetcher_filesystem]

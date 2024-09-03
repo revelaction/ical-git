@@ -51,25 +51,28 @@ func (d *Desktop) renderNotification(n notify.Notification) (string, error) {
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
 
-{{if .Duration}}
-⏳ Duration: <b>{{.Duration}}</b>
-{{end}}
-{{if .Location}}
-📌 Location: <b>{{.Location}}</b>
-{{end}}
-{{if .Description}}
-📝 Description: {{.Description}}
-{{end}}
-{{if .Status}}
+{{- if .Duration}}
+⏳ Duration: <b>{{.Duration}}</b><br>
+{{- end}}
+{{- if .Location}}
+📌 Location: <b>{{.Location}}</b><br>
+{{- end}}
+{{- if .Description}}
+📝 Description: {{.Description}}<br>
+{{- end}}
+{{- if .Status}}
 🚦 Status: <b>{{.Status}}</b>
-{{end}}
-{{if .Attendees}}
+{{- end}}
+{{- if .Attendees}}
 Attendees:
 {{- range .Attendees}}
 🔸{{.}}
 {{- end}}
-{{end}}
+{{- end}}
+
+Set by {{.Source}} 🔔 with duration {{.DurIso8601}}
 `
+
 	// Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
 	t, err := template.New("notification").Parse(tpl)
 	if err != nil {
