@@ -29,7 +29,6 @@ type Config struct {
 }
 
 func (c *Config) validateNotifierType(nt string) error {
-	validTypes := []string{NotifierTypeTelegram, NotifierTypeDesktop}
 	for _, vt := range validTypes {
 		if nt == vt {
 			return nil
@@ -101,3 +100,4 @@ func Load(data []byte) (Config, error) {
 	return conf, nil
 }
 
+var validTypes = []string{NotifierTypeTelegram, NotifierTypeDesktop}
