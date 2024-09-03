@@ -30,23 +30,6 @@ type Config struct {
 	Desktop   Desktop  `toml:"notifier_desktop"`
 }
 
-func validateNotifierType(nt string) error {
-	for _, vt := range validTypes {
-		if nt == vt {
-			return nil
-		}
-	}
-	return fmt.Errorf("invalid notifier type: %s", nt)
-}
-
-func (c *Config) validateNotifierTypes() error {
-	for _, nt := range c.NotifierTypes {
-		if err := validateNotifierType(nt); err != nil {
-			return err
-		}
-	}
-	return nil
-}
 
 type Location struct {
 	*time.Location
@@ -105,6 +88,24 @@ func Load(data []byte) (Config, error) {
 func validateDuration(d time.Duration) error {
 	if d > 0 {
 		return fmt.Errorf("duration must be positive: %s", d)
+	}
+	return nil
+}
+
+func validateNotifierType(nt string) error {
+	for _, vt := range validTypes {
+		if nt == vt {
+			return nil
+		}
+	}
+	return fmt.Errorf("invalid notifier type: %s", nt)
+}
+
+func (c *Config) validateNotifierTypes() error {
+	for _, nt := range c.NotifierTypes {
+		if err := validateNotifierType(nt); err != nil {
+			return err
+		}
 	}
 	return nil
 }
