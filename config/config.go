@@ -88,9 +88,16 @@ func Load(data []byte) (Config, error) {
 	return conf, nil
 }
 
-func validateDuration(d time.Duration) error {
+func validatePositiveDuration(d time.Duration) error {
 	if d > 0 {
 		return fmt.Errorf("duration must be positive: %s", d)
+	}
+	return nil
+}
+
+func validateNegativeDuration(d time.Duration) error {
+	if d < 0 {
+		return fmt.Errorf("duration must be negative: %s", d)
 	}
 	return nil
 }
