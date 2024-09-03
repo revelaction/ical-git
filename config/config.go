@@ -18,7 +18,7 @@ type Config struct {
 
 	FetcherFilesystem FetcherFilesystem `toml:"fetcher_filesystem"`
 
-	NotifierType []string
+	NotifierTypes []string
 	Telegram  Telegram `toml:"notifier_telegram"`
 	Desktop   Desktop  `toml:"notifier_desktop"`
 }

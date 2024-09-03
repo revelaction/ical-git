@@ -59,7 +59,7 @@ func (p *Parser) Parse(f fetch.File) error {
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
 
         // Event Alarms
-		for _, a := range getEventAlarm(event, p.conf.Notifiers) {
+		for _, a := range getEventAlarm(event, p.conf.NotifierTypes) {
             slog.Info("        : 🔔", "action", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
 			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
@@ -72,7 +72,7 @@ func (p *Parser) Parse(f fetch.File) error {
 		for _, a := range p.conf.Alarms {
 
             // TODO Rename
-			if !a.HasAllowedAction(p.conf.Notifiers) {
+			if !a.HasAllowedAction(p.conf.NotifierTypes) {
                 continue
             }
 

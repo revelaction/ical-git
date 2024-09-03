@@ -121,7 +121,7 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 
 	slog.Info("📝 Config:", "tick_time", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
-	slog.Info("📝 Config:", "notifiers", strings.Join(conf.Notifiers, ", "))
+	slog.Info("📝 Config:", "notifiers", strings.Join(conf.NotifierTypes, ", "))
 	for _, alarm := range conf.Alarms {
 		slog.Info("📝 Config: 🔔", "type", alarm.Action, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
 	}
