@@ -91,6 +91,9 @@ func Load(data []byte) (Config, error) {
 		conf.Alarms[i].Dur = dur
 		conf.Alarms[i].Source = "config"
 	}
+	if err := conf.validateNotifierTypes(); err != nil {
+		return Config{}, err
+	}
 	return conf, nil
 }
 
