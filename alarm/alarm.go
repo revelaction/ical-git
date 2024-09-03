@@ -1,9 +1,9 @@
 package alarm
 
 import (
-	"time"
 	"fmt"
 	"github.com/sosodev/duration"
+	"time"
 )
 
 type Alarm struct {
@@ -19,13 +19,13 @@ type Alarm struct {
 }
 
 func (a *Alarm) HasAllowedAction(allowed []string) bool {
-    for _, allowed := range allowed {
-        if allowed == a.Action {
-            return true
-        }
-    }
+	for _, allowed := range allowed {
+		if allowed == a.Action {
+			return true
+		}
+	}
 
-    return false
+	return false
 
 }
 

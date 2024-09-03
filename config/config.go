@@ -26,10 +26,9 @@ type Config struct {
 	FetcherFilesystem FetcherFilesystem `toml:"fetcher_filesystem"`
 
 	NotifierTypes []string `toml:"notifiers"`
-	Telegram  Telegram `toml:"notifier_telegram"`
-	Desktop   Desktop  `toml:"notifier_desktop"`
+	Telegram      Telegram `toml:"notifier_telegram"`
+	Desktop       Desktop  `toml:"notifier_desktop"`
 }
-
 
 type Location struct {
 	*time.Location
@@ -66,9 +65,9 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
-    if err := validatePositiveDuration(conf.DaemonTick); err != nil {
-        return Config{}, fmt.Errorf("invalid duration for tick %w", err)
-    }
+	if err := validatePositiveDuration(conf.DaemonTick); err != nil {
+		return Config{}, fmt.Errorf("invalid duration for tick %w", err)
+	}
 
 	if err := conf.validateNotifierTypes(); err != nil {
 		return Config{}, err

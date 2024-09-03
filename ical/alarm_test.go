@@ -2,9 +2,9 @@ package ical
 
 import (
 	"bytes"
-	"testing"
-	"github.com/revelaction/ical-git/alarm"
 	"github.com/arran4/golang-ical"
+	"github.com/revelaction/ical-git/alarm"
+	"testing"
 )
 
 func TestGetEventAlarm(t *testing.T) {

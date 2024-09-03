@@ -144,7 +144,7 @@ alarms = [
 ]
 
 `)
-	
+
 	conf, err := config.Load(configData)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
@@ -214,7 +214,7 @@ alarms = [
 ]
 
 `)
-	
+
 	conf, err := config.Load(configData)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
@@ -261,7 +261,7 @@ END:VCALENDAR
 		t.Fatalf("Expected 1 notification, got %d", len(notifications))
 	}
 
-    //  event first
+	//  event first
 	notification := notifications[0]
 	if notification.DurIso8601 != "-PT1H" {
 		t.Errorf("Expected duration', got '%s'", notification.DurIso8601)
@@ -271,7 +271,7 @@ END:VCALENDAR
 		t.Errorf("Unexpected Source', got '%s'", notification.Source)
 	}
 
-    // config alarm second
+	// config alarm second
 	notification = notifications[1]
 	if notification.DurIso8601 != "-PT2H" {
 		t.Errorf("Expected duration', got '%s'", notification.DurIso8601)
@@ -295,7 +295,7 @@ alarms = [
 ]
 
 `)
-	
+
 	conf, err := config.Load(configData)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
@@ -375,7 +375,7 @@ alarms = [
 ]
 
 `)
-	
+
 	conf, err := config.Load(configData)
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)

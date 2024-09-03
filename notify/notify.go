@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-
 type Notifier interface {
 	Notify(n Notification) error
 }

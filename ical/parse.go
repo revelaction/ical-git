@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/arran4/golang-ical"
+	"github.com/revelaction/ical-git/alarm"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch"
 	"github.com/revelaction/ical-git/notify"
-	"github.com/revelaction/ical-git/alarm"
 	"log/slog"
 	"path/filepath"
 	"time"
@@ -35,10 +35,9 @@ func (p *Parser) Parse(f fetch.File) error {
 		return fmt.Errorf("calendar parse error: %w", err)
 	}
 
-
 	for _, event := range cal.Events() {
 
-        var alarms []alarm.Alarm = []alarm.Alarm{}
+		var alarms []alarm.Alarm = []alarm.Alarm{}
 
 		et := newEventTime(event.Serialize())
 		et.parse()
@@ -58,30 +57,30 @@ func (p *Parser) Parse(f fetch.File) error {
 		in := eventTime.Sub(p.start).Truncate(1 * time.Second)
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
 
-        // Event Alarms
+		// Event Alarms
 		for _, a := range getEventAlarm(event, p.conf.NotifierTypes) {
-            slog.Info("        : 🔔", "action", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
+			slog.Info("        : 🔔", "action", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
 			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
 			}
 
-            alarms = append(alarms, a)
-        }
+			alarms = append(alarms, a)
+		}
 
-        // Config Alarms
+		// Config Alarms
 		for _, a := range p.conf.Alarms {
 
-            // TODO Rename
+			// TODO Rename
 			if !a.HasAllowedAction(p.conf.NotifierTypes) {
-                continue
-            }
+				continue
+			}
 
 			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
 			}
 
-            alarms = append(alarms, a)
-        }
+			alarms = append(alarms, a)
+		}
 
 		for _, a := range alarms {
 
@@ -92,7 +91,7 @@ func (p *Parser) Parse(f fetch.File) error {
 			n.EventPath = f.Path
 			n.Type = a.Action
 			n.DurIso8601 = a.DurIso8601
-			n.Source = a.Source 
+			n.Source = a.Source
 
 			p.notifications = append(p.notifications, n)
 		}

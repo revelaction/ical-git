@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"strings"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch/filesystem"
 	"github.com/revelaction/ical-git/ical"
@@ -13,6 +12,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -125,7 +125,6 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	for _, alarm := range conf.Alarms {
 		slog.Info("📝 Config: 🔔", "type", alarm.Action, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
 	}
-
 
 	// Create context to cance the tick goroutine on SIGHUP
 	ctx, cancel := context.WithCancel(context.Background())
