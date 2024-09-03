@@ -27,6 +27,16 @@ type Config struct {
 	NotifierTypes []string `toml:"notifiers"`
 	Telegram  Telegram `toml:"notifier_telegram"`
 	Desktop   Desktop  `toml:"notifier_desktop"`
+
+func (c *Config) validateNotifierType(nt string) error {
+	validTypes := []string{NotifierTypeTelegram, NotifierTypeDesktop}
+	for _, vt := range validTypes {
+		if nt == vt {
+			return nil
+		}
+	}
+	return fmt.Errorf("invalid notifier type: %s", nt)
+}
 }
 
 func (c *Config) validateNotifierTypes() error {
@@ -45,7 +55,7 @@ func (c *Config) validateNotifierTypes() error {
 		}
 	}
 
-	return nil
+	return c.validateNotifierType(nt)
 }
 
 type Location struct {
