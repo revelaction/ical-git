@@ -79,6 +79,9 @@ func Load(data []byte) (Config, error) {
 		if err != nil {
 			return Config{}, fmt.Errorf("error parsing duration for alarm %d: %w", i, err)
 		}
+		if err := validateDuration(dur); err != nil {
+			return Config{}, fmt.Errorf("invalid duration for alarm %d: %w", i, err)
+		}
 		conf.Alarms[i].Dur = dur
 		conf.Alarms[i].Source = "config"
 	}
