@@ -14,6 +14,8 @@ const (
 	NotifierTypeDesktop  = "desktop"
 )
 
+var validTypes = []string{NotifierTypeTelegram, NotifierTypeDesktop}
+
 type Config struct {
 	Location   Location      `toml:"timezone"`
 	DaemonTick time.Duration `toml:"tick"`
@@ -100,4 +102,3 @@ func Load(data []byte) (Config, error) {
 	return conf, nil
 }
 
-var validTypes = []string{NotifierTypeTelegram, NotifierTypeDesktop}
