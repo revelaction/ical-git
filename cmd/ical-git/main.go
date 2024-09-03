@@ -61,13 +61,17 @@ func main() {
 		fmt.Println("(unknown)")
 		return
 	}
+
 	if helpFlag {
 		flag.Usage()
 		return
 	}
 
+
 	// logger
 	initializeLogger()
+
+	slog.Info("🏁 app:", "Version", BuildTag)
 
 	// signals
 	signalChan := make(chan os.Signal, 1)
@@ -122,6 +126,7 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("📝 Config:", "tick_time", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
 	slog.Info("📝 Config:", "notifiers", strings.Join(conf.NotifierTypes, ", "))
+	slog.Info("📝 Config:", "ical_directory", conf.FetcherFilesystem.Directory)
 	for _, alarm := range conf.Alarms {
 		slog.Info("📝 Config: 🔔", "type", alarm.Action, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
 	}
