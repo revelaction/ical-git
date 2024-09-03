@@ -87,6 +87,9 @@ func Load(data []byte) (Config, error) {
 	}
 
 	for i, a := range conf.Alarms {
+		if err := conf.validateNotifierType(a.Action); err != nil {
+			return Config{}, fmt.Errorf("invalid alarm action for alarm %d: %w", i, err)
+		}
 
 		dur, err := alarm.ParseIso8601(a.DurIso8601)
 		if err != nil {
