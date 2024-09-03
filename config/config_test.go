@@ -56,6 +56,17 @@ alarms = [
 	}
 }
 
+func TestPositiveTickDuration(t *testing.T) {
+	confData := []byte(`
+tick = "1h"
+notifiers = ["desktop"]
+	`)
+	_, err := Load(confData)
+	if err != nil {
+		t.Errorf("Expected no error for positive tick duration, got %v", err)
+	}
+}
+
 func TestAlarmDuration(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
