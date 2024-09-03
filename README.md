@@ -8,7 +8,7 @@
 
 **ical-git** is a simplistic calendar application daemon written in Go. It
 reads a directory of iCalendar files and generates custom notifications
-defined in the icalendar files and/or config file.
+based on the icalendar alarm definitions and/or alarm defined in the config file.
 
 # Content
 
