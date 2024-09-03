@@ -29,13 +29,17 @@ type Config struct {
 }
 
 func (c *Config) validateNotifierTypes() error {
-	validTypes := map[string]bool{
-		NotifierTypeTelegram: true,
-		NotifierTypeDesktop:  true,
-	}
+	validTypes := []string{NotifierTypeTelegram, NotifierTypeDesktop}
 
 	for _, nt := range c.NotifierTypes {
-		if !validTypes[nt] {
+		valid := false
+		for _, vt := range validTypes {
+			if nt == vt {
+				valid = true
+				break
+			}
+		}
+		if !valid {
 			return fmt.Errorf("invalid notifier type: %s", nt)
 		}
 	}
