@@ -29,6 +29,7 @@ type Config struct {
 	Desktop   Desktop  `toml:"notifier_desktop"`
 
 
+
 func (c *Config) validateNotifierType(nt string) error {
 	validTypes := []string{NotifierTypeTelegram, NotifierTypeDesktop}
 	for _, vt := range validTypes {
