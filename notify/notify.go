@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-	const Tpl = `
+const Tpl = `
 {{- if .Summary}}
 <b>{{.Summary}}</b>
 {{- end}}

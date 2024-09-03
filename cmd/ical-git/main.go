@@ -67,7 +67,6 @@ func main() {
 		return
 	}
 
-
 	// logger
 	initializeLogger()
 

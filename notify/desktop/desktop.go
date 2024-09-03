@@ -34,8 +34,8 @@ func (d *Desktop) Notify(n notify.Notification) error {
 
 func (d *Desktop) renderNotification(n notify.Notification) (string, error) {
 
-    // The Summary is already in the header for desktop notifications
-    n.Summary = ""
+	// The Summary is already in the header for desktop notifications
+	n.Summary = ""
 
 	wrapper := struct {
 		notify.Notification
@@ -49,7 +49,6 @@ func (d *Desktop) renderNotification(n notify.Notification) (string, error) {
 		EventTimeConf:     n.EventTimeConf(d.config.Location.Location),
 		EventTimeZoneConf: d.config.Location.Location.String(),
 	}
-
 
 	// Confirmed: ✅, Postponed: 🔄Cancelled: ❌Pending: ⌛Tentative: 🤔Not Attending: 🚫
 	t, err := template.New("notification").Parse(notify.Tpl)
