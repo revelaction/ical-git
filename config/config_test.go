@@ -44,10 +44,11 @@ alarms = [
 
 func TestPositiveDurationError(t *testing.T) {
 	confData := []byte(`
-		tick = "1s"
-		notifiers = ["desktop"]
-		[timezone]
-		name = "UTC"
+tick = "1h"
+notifiers = ["desktop"]
+alarms = [
+	{type = "desktop", when = "P1D"},  
+]
 	`)
 	_, err := Load(confData)
 	if err == nil {
