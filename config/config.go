@@ -14,7 +14,6 @@ const (
 	NotifierTypeDesktop  = "desktop"
 )
 
-
 type Config struct {
 	Location   Location      `toml:"timezone"`
 	DaemonTick time.Duration `toml:"tick"`
@@ -27,8 +26,7 @@ type Config struct {
 	NotifierTypes []string `toml:"notifiers"`
 	Telegram  Telegram `toml:"notifier_telegram"`
 	Desktop   Desktop  `toml:"notifier_desktop"`
-
-
+}
 
 func (c *Config) validateNotifierType(nt string) error {
 	validTypes := []string{NotifierTypeTelegram, NotifierTypeDesktop}
@@ -38,7 +36,6 @@ func (c *Config) validateNotifierType(nt string) error {
 		}
 	}
 	return fmt.Errorf("invalid notifier type: %s", nt)
-}
 }
 
 func (c *Config) validateNotifierTypes() error {
