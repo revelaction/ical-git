@@ -1,5 +1,10 @@
 package config
 
+const (
+	NotifierTypeTelegram = "telegram"
+	NotifierTypeDesktop  = "desktop"
+)
+
 import (
 	"fmt"
 	//"slices"
@@ -25,8 +30,8 @@ type Config struct {
 
 func (c *Config) validateNotifierTypes() error {
 	validTypes := map[string]bool{
-		"telegram": true,
-		"desktop":  true,
+		NotifierTypeTelegram: true,
+		NotifierTypeDesktop:  true,
 	}
 
 	for _, nt := range c.NotifierTypes {
