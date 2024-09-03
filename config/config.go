@@ -66,6 +66,14 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
+	if conf.DaemonTick <= 0 {
+		return Config{}, fmt.Errorf("DaemonTick must be a positive duration")
+	}
+	var conf Config
+	if _, err := toml.Decode(string(data), &conf); err != nil {
+		return Config{}, err
+	}
+
 	if err := conf.validateNotifierTypes(); err != nil {
 		return Config{}, err
 	}
