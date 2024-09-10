@@ -5,7 +5,7 @@ import (
 	"github.com/revelaction/ical-git/alarm"
 )
 
-func getEventAlarm(event *ics.VEvent, allowed []string) []alarm.Alarm {
+func getEventAlarms(event *ics.VEvent, allowed []string) []alarm.Alarm {
 	// Retrieve the alarms from the event
 	var result = []alarm.Alarm{}
 	alarms := event.Alarms()

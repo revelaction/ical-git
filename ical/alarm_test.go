@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestGetEventAlarm(t *testing.T) {
+func TestGetEventAlarms(t *testing.T) {
 	// Create an iCal literal with a VEVENT containing an alarm
 	icalContent := `BEGIN:VCALENDAR
 VERSION:2.0
@@ -34,7 +34,7 @@ END:VCALENDAR`
 
 	t.Logf("notifications: %#v", event)
 	// Call getEventAlarm with the parsed event
-	result := getEventAlarm(event, []string{"desktop"})
+	result := getEventAlarms(event, []string{"desktop"})
 
 	// Verify the result struct
 	expected := []alarm.Alarm{
