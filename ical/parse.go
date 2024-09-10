@@ -58,7 +58,7 @@ func (p *Parser) Parse(f fetch.File) error {
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
 
 		// Event Alarms
-		for _, a := range getEventAlarm(event, p.conf.NotifierTypes) {
+		for _, a := range getEventAlarms(event, p.conf.NotifierTypes) {
 			slog.Info("        : 🔔", "action", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
 			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
