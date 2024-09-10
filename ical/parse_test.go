@@ -201,10 +201,10 @@ END:VCALENDAR
 	}
 }
 
-func TestParseConfigAlarmAndEventAlarmTriggered(t *testing.T) {
+func TestParseConfigAlarmOrEventAlarmTriggered(t *testing.T) {
 
 	configData := []byte(`
-timezone = "Europe/Berlin"
+timezone = "Europe/Madrid"
 tick = "24h"
 
 notifiers = ["desktop"]
@@ -257,7 +257,7 @@ END:VCALENDAR
 
 	// Check the notifications
 	notifications := parser.Notifications()
-	if len(notifications) != 2 {
+	if len(notifications) != 1 {
 		t.Fatalf("Expected 1 notification, got %d", len(notifications))
 	}
 
@@ -268,16 +268,6 @@ END:VCALENDAR
 	}
 
 	if notification.Source != "event" {
-		t.Errorf("Unexpected Source', got '%s'", notification.Source)
-	}
-
-	// config alarm second
-	notification = notifications[1]
-	if notification.DurIso8601 != "-PT2H" {
-		t.Errorf("Expected duration', got '%s'", notification.DurIso8601)
-	}
-
-	if notification.Source != "config" {
 		t.Errorf("Unexpected Source', got '%s'", notification.Source)
 	}
 }

@@ -6,7 +6,6 @@ import (
 )
 
 func getEventAlarms(event *ics.VEvent, allowed []string) []alarm.Alarm {
-	// Retrieve the alarms from the event
 	var result = []alarm.Alarm{}
 	alarms := event.Alarms()
 	if len(alarms) == 0 {

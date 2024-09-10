@@ -67,19 +67,21 @@ func (p *Parser) Parse(f fetch.File) error {
 			alarms = append(alarms, a)
 		}
 
-		// Config Alarms
-		for _, a := range p.conf.Alarms {
+		// if there are event alarms do not consider config alarms
+		if len(alarms) == 0 {
+			// Config Alarms
+			for _, a := range p.conf.Alarms {
 
-			// TODO Rename
-			if !a.HasAllowedAction(p.conf.NotifierTypes) {
-				continue
+				if !a.HasAllowedAction(p.conf.NotifierTypes) {
+					continue
+				}
+
+				if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
+					continue
+				}
+
+				alarms = append(alarms, a)
 			}
-
-			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
-				continue
-			}
-
-			alarms = append(alarms, a)
 		}
 
 		for _, a := range alarms {
