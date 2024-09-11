@@ -6,6 +6,35 @@ import (
 	"testing"
 )
 
+func TestGetEventAttachmentWithoutAttachment(t *testing.T) {
+	// Create an iCal literal with a VEVENT without attachments
+	icalContent := `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20240902T100000Z
+DTEND:20240902T110000Z
+SUMMARY:Test Event
+END:VEVENT
+END:VCALENDAR`
+
+	reader := bytes.NewReader([]byte(icalContent))
+	cal, err := ics.ParseCalendar(reader)
+	if err != nil {
+		t.Fatalf("Failed to parse calendar: %v", err)
+	}
+
+	event := cal.Events()[0]
+
+	result := GetEventAttachment(event)
+	t.Logf(": %#v", result)
+
+	expected := ""
+
+	if result != expected {
+		t.Fatalf("Expected %s attachment, but got %s", expected, result)
+	}
+}
+
 func TestGetEventAttachment(t *testing.T) {
 	// Create an iCal literal with a VEVENT containing attachments
 	icalContent := `BEGIN:VCALENDAR
