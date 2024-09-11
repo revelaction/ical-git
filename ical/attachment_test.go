@@ -37,7 +37,6 @@ END:VCALENDAR`
 }
 
 func TestGetEventAttachmentWithMultipleAttachments(t *testing.T) {
-	// Create an iCal literal with a VEVENT containing two ATTACH lines
 	icalContent := `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
@@ -60,6 +59,7 @@ END:VCALENDAR`
 	result := GetEventAttachment(event)
 	t.Logf(": %#v", result)
 
+    // only first selected
 	expected := "http://example.com/attachment1.jpg"
 
 	if result != expected {
