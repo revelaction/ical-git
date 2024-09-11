@@ -26,7 +26,7 @@ END:VCALENDAR`
 
 	event := cal.Events()[0]
 
-	result := getEventAttachment(event)
+	result := GetEventAttachment(event)
 	t.Logf(": %#v", result)
 
 	expected := "http://example.com/attachment.jpg"
