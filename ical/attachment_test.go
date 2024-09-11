@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestGetEventAttachments(t *testing.T) {
+func TestGetEventAttachment(t *testing.T) {
 	// Create an iCal literal with a VEVENT containing attachments
 	icalContent := `BEGIN:VCALENDAR
 VERSION:2.0
@@ -14,37 +14,24 @@ BEGIN:VEVENT
 DTSTART:20240902T100000Z
 DTEND:20240902T110000Z
 SUMMARY:Test Event
-ATTACH:http://example.com/attachment1.pdf
-ATTACH:http://example.com/attachment2.pdf
+ATTACH;FMTTYPE=image/jpeg:http://example.com/attachment.jpg
 END:VEVENT
 END:VCALENDAR`
 
-	// Parse the iCal literal
 	reader := bytes.NewReader([]byte(icalContent))
 	cal, err := ics.ParseCalendar(reader)
 	if err != nil {
 		t.Fatalf("Failed to parse calendar: %v", err)
 	}
 
-	// Get the first event
 	event := cal.Events()[0]
 
-	// Call getEventAttachments with the parsed event
-	result := getEventAttachments(event)
+	result := getEventAttachment(event)
+	t.Logf(": %#v", result)
 
-	// Verify the result struct
-	expected := []string{
-		"http://example.com/attachment1.pdf",
-		"http://example.com/attachment2.pdf",
-	}
+	expected := "http://example.com/attachment.jpg"
 
-	if len(result) != len(expected) {
-		t.Fatalf("Expected %d attachments, but got %d", len(expected), len(result))
-	}
-
-	for i, exp := range expected {
-		if result[i] != exp {
-			t.Errorf("Expected attachment %s, but got %s", exp, result[i])
-		}
+	if result != expected {
+		t.Fatalf("Expected %s attachment, but got %s", expected, result)
 	}
 }

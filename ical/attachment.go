@@ -4,16 +4,13 @@ import (
 	"github.com/arran4/golang-ical"
 )
 
-func getEventAttachments(event *ics.VEvent) []string {
-	var result = []string{}
-	attachments := event.GetProperties(ics.ComponentPropertyAttach)
-	if len(attachments) == 0 {
-		return result
+// as of now golang_ical does not support many ATTACH lines
+// we support only one
+func getEventAttachment(event *ics.VEvent) string {
+	attachment := event.GetProperty(ics.ComponentPropertyAttach)
+	if nil == attachment {
+		return ""
 	}
 
-	for _, attachment := range attachments {
-		result = append(result, attachment.Value)
-	}
-
-	return result
+	return attachment.Value
 }
