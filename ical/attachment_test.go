@@ -59,7 +59,7 @@ END:VCALENDAR`
 	result := GetEventAttachment(event)
 	t.Logf(": %#v", result)
 
-    // only first selected
+	// only first selected
 	expected := "http://example.com/attachment1.jpg"
 
 	if result != expected {
