@@ -35,10 +35,22 @@ func (t *Telegram) Notify(n notify.Notification) error {
 	if err != nil {
 		return err
 	}
-	//message = "YOLO"
 
-	msg := tg.NewMessage(t.config.Telegram.ChatId, message)
-	msg.ParseMode = "html"
+    var msg tg.Chattable 
+
+    // If we have a image, the text is the caption.
+    //"https://image.tmdb.org/t/p/original/1nS8AxnoYE2Y1ANMpVKZnm8iLxP.jpg"
+    if n.ImageUrl != ""{
+        photo := tg.NewPhoto(t.config.Telegram.ChatId, tg.FileURL(n.ImageUrl))
+        photo.Caption = message
+	    photo.ParseMode = "html"
+        msg = photo
+    } else {
+        text := tg.NewMessage(t.config.Telegram.ChatId, message)
+	    text.ParseMode = "html"
+        msg = text
+    }
+
 	_, err = t.bot.Send(msg)
 	if err != nil {
 		return err

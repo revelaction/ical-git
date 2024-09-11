@@ -60,6 +60,8 @@ type Notification struct {
 	Summary string
 	// Description provides more details about the event
 	Description string
+	// ImageUrl is the Url of a image to add to the notification. (only telegram)
+	ImageUrl string
 	// Location is the place where the event takes place
 	Location string
 	// Status indicates the status of the event

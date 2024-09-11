@@ -11,6 +11,8 @@ import (
 	"log/slog"
 	"path/filepath"
 	"time"
+    "slices"
+    "strings"
 )
 
 type Parser struct {
@@ -137,6 +139,14 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 		n.Description = descriptionProp.Value
 	}
 
+    // we use the ATTACH property only it it seems a image file
+	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
+	if nil != imageUrlProp {
+        if seemsImageFile(imageUrlProp.Value) {
+            n.ImageUrl = imageUrlProp.Value
+        }
+	}
+
 	locationProp := event.GetProperty(ics.ComponentPropertyLocation)
 	if nil != locationProp {
 		n.Location = locationProp.Value
@@ -155,4 +165,12 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 	}
 
 	return n
+}
+
+func seemsImageFile(path string) bool {
+    imageExtensions := []string{".jpg", ".jpeg", ".png"}
+
+    ext := strings.ToLower(filepath.Ext(path))
+
+    return slices.Contains(imageExtensions, ext)
 }
