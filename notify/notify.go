@@ -7,6 +7,7 @@ import (
 const Tpl = `
 {{- if .Summary}}
 <b>{{.Summary}}</b>
+<b> </b>
 {{- end}}
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
@@ -30,7 +31,7 @@ Attendees:
 {{- end}}
 {{- end}}
 
-Set by {{.Source}} 🔔 with duration {{.DurIso8601}}
+{{.Source}} 🔔 {{.DurIso8601}}
 `
 
 type Notifier interface {

@@ -23,6 +23,8 @@ type Config struct {
 
 	Alarms []alarm.Alarm
 
+	Images map[string]string `toml:"images"`
+
 	FetcherFilesystem FetcherFilesystem `toml:"fetcher_filesystem"`
 
 	NotifierTypes []string `toml:"notifiers"`

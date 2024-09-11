@@ -40,3 +40,10 @@ chat_id = 588488
 [notifier_desktop]
 # The path to the icon file used for desktop notifications
 icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
+
+# images 
+[images]
+"birthday.jpg" = "https://example.com/example.jpg"
+
+
+

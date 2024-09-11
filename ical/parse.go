@@ -10,9 +10,9 @@ import (
 	"github.com/revelaction/ical-git/notify"
 	"log/slog"
 	"path/filepath"
+	"slices"
+	"strings"
 	"time"
-    "slices"
-    "strings"
 )
 
 type Parser struct {
@@ -139,12 +139,12 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 		n.Description = descriptionProp.Value
 	}
 
-    // we use the ATTACH property only it it seems a image file
+	// we use the ATTACH property only it it seems a image file
 	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
 	if nil != imageUrlProp {
-        if seemsImageFile(imageUrlProp.Value) {
-            n.ImageUrl = imageUrlProp.Value
-        }
+		if seemsImageFile(imageUrlProp.Value) {
+			n.ImageUrl = imageUrlProp.Value
+		}
 	}
 
 	locationProp := event.GetProperty(ics.ComponentPropertyLocation)
@@ -168,9 +168,9 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 }
 
 func seemsImageFile(path string) bool {
-    imageExtensions := []string{".jpg", ".jpeg", ".png"}
+	imageExtensions := []string{".jpg", ".jpeg", ".png"}
 
-    ext := strings.ToLower(filepath.Ext(path))
+	ext := strings.ToLower(filepath.Ext(path))
 
-    return slices.Contains(imageExtensions, ext)
+	return slices.Contains(imageExtensions, ext)
 }
