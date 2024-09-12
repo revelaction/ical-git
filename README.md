@@ -317,6 +317,14 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
     - `-PT30M`: 30 minutes before the event
     - `-P1DT12H`: 1 day and 12 hours before the event
 
+## Images
+
+- **images**: A map of relative image names to their url paths.   
+  - Example:
+    ```toml
+    images = { "icon1" = "/path/to/icon1.png", "icon2" = "/path/to/icon2.png" }
+    ```
+
 ## Notifiers
 
 - **notifiers**: A list of notifier types that are enabled.
