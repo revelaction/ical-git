@@ -236,7 +236,7 @@ alarms = [
 	}
 }
 
-func TestLocationSydney(t *testing.T) {
+func TestSpecificLocation(t *testing.T) {
 	var testToml = []byte(`
 timezone = "Australia/Sydney"
 notifiers = ["desktop"]
