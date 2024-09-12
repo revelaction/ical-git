@@ -75,6 +75,11 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
+	// initialize if alarms not present
+	if conf.Alarms == nil {
+		conf.Alarms = make([]alarm.Alarm, 0)
+	}
+
 	for i, a := range conf.Alarms {
 		if err := validateNotifierType(a.Action); err != nil {
 			return Config{}, fmt.Errorf("invalid alarm action for alarm %d: %w", i, err)
@@ -97,10 +102,6 @@ func Load(data []byte) (Config, error) {
 		conf.Images = make(map[string]string)
 	}
 
-	// initialize if alarms not present
-	if conf.Alarms == nil {
-		conf.Alarms = make([]alarm.Alarm, 0)
-	}
 
 	return conf, nil
 }
