@@ -319,10 +319,10 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
 
 ## Images
 
-- **images**: A map of relative image names to their url paths.   
+- **images**: A map of image names to their URL paths. If the key is present in the ATTACH line of the calendar, the URL value here is used. Local filesystem paths are not supported.
   - Example:
     ```toml
-    images = { "icon1" = "/path/to/icon1.png", "icon2" = "/path/to/icon2.png" }
+    images = { "icon1" = "https://example.com/icon1.png", "icon2" = "https://example.com/icon2.png" }
     ```
 
 ## Notifiers
