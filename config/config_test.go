@@ -145,3 +145,32 @@ alarms = [
 		t.Fatalf("Expected images property to be empty, but got %d entries", len(conf.Images))
 	}
 }
+
+func TestExistentImagesWithOneValue(t *testing.T) {
+	var testToml = []byte(`
+notifiers = ["desktop"]
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+
+[images]
+"birthday.jpg" = "https://example.com/example.jpg"
+`)
+	conf, err := Load(testToml)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	if conf.Images == nil {
+		t.Fatalf("Expected images property to be initialized, but it was nil")
+	}
+
+	if len(conf.Images) != 1 {
+		t.Fatalf("Expected images property to have 1 entry, but got %d entries", len(conf.Images))
+	}
+
+	expectedValue := "https://example.com/example.jpg"
+	if actualValue, exists := conf.Images["birthday.jpg"]; !exists || actualValue != expectedValue {
+		t.Fatalf("Expected value for key 'birthday.jpg' to be '%s', but got '%s'", expectedValue, actualValue)
+	}
+}
