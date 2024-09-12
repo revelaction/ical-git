@@ -39,6 +39,11 @@ func (p *Parser) Parse(f fetch.File) error {
 
 	for _, event := range cal.Events() {
 
+        if event == nil  {
+		    slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", time.Time{}, "🚨", "unparseable event (nil event)")
+            continue
+        }
+
 		var alarms []alarm.Alarm = []alarm.Alarm{}
 
 		et := newEventTime(event.Serialize())
