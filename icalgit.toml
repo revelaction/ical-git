@@ -44,7 +44,7 @@ icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
 # images 
 # If the key is present in the ATTACH line of the calendar, the value of the array is used.
 # Example:
-# ATTACH;FMTTYPE=image/jpeg:https://example.com/example.jpg
+# ATTACH;FMTTYPE=image/jpeg:birthday.jpg
 # The resulting URL selected would be "https://example.com/example.jpg"
 [images]
 "birthday.jpg" = "https://example.com/example.jpg"
