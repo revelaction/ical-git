@@ -170,7 +170,10 @@ alarms = [
 	}
 
 	expectedValue := "https://example.com/example.jpg"
-	if actualValue, exists := conf.Images["birthday.jpg"]; !exists || actualValue != expectedValue {
+	if actualValue, exists := conf.Images["birthday.jpg"]; !exists {
+		t.Fatalf("Expected key 'birthday.jpg' to exist, but it does not")
+	}
+	if actualValue != expectedValue {
 		t.Fatalf("Expected value for key 'birthday.jpg' to be '%s', but got '%s'", expectedValue, actualValue)
 	}
 }
