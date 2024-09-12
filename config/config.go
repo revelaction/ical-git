@@ -90,6 +90,9 @@ func Load(data []byte) (Config, error) {
 		conf.Alarms[i].Dur = dur
 		conf.Alarms[i].Source = "config"
 	}
+	if conf.Images == nil {
+		conf.Images = make(map[string]string)
+	}
 	return conf, nil
 }
 
