@@ -124,3 +124,10 @@ func (c *Config) validateNotifierTypes() error {
 	}
 	return nil
 }
+
+func (c *Config) validateImagesNotNil() error {
+	if c.Images == nil {
+		return fmt.Errorf("images property must not be nil")
+	}
+	return nil
+}
