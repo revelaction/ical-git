@@ -42,6 +42,7 @@ chat_id = 588488
 icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
 
 # images 
+# If the key is present in the ATTACH line of the calendar, the value of the array is used.
 [images]
 "birthday.jpg" = "https://example.com/example.jpg"
 
