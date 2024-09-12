@@ -214,3 +214,24 @@ alarms = [
 		t.Fatalf("Expected value for key 'birthday.jpg' to be '%s', but got '%s'", expectedValue, conf.Images["birthday.jpg"])
 	}
 }
+
+func TestEmptyLocationProperty(t *testing.T) {
+	var testToml = []byte(`
+notifiers = ["desktop"]
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+`)
+	conf, err := Load(testToml)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	if conf.Location.Location == nil {
+		t.Fatalf("Expected location property to be initialized, but it was nil")
+	}
+
+	if conf.Location.Location.String() != "UTC" {
+		t.Fatalf("Expected location property to be UTC, but got %s", conf.Location.Location.String())
+	}
+}
