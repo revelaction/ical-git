@@ -145,4 +145,3 @@ alarms = [
 		t.Fatalf("Expected images property to be empty, but got %d entries", len(conf.Images))
 	}
 }
-

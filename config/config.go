@@ -125,9 +125,9 @@ func (c *Config) validateNotifierTypes() error {
 	return nil
 }
 
-func (c *Config) validateImagesNotNil() error {
+func (c *Config) hasFileImagesProperty() bool {
 	if c.Images == nil {
-		return fmt.Errorf("images property must not be nil")
+        return false
 	}
-	return nil
+	return true
 }
