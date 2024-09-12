@@ -90,6 +90,9 @@ func Load(data []byte) (Config, error) {
 		conf.Alarms[i].Dur = dur
 		conf.Alarms[i].Source = "config"
 	}
+
+
+    // initialize if images not present
 	if conf.Images == nil {
 		conf.Images = make(map[string]string)
 	}
@@ -128,9 +131,3 @@ func (c *Config) validateNotifierTypes() error {
 	return nil
 }
 
-func (c *Config) hasFileImagesProperty() bool {
-	if c.Images == nil {
-        return false
-	}
-	return true
-}
