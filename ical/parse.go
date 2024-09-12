@@ -69,7 +69,7 @@ func (p *Parser) Parse(f fetch.File) error {
 			alarms = append(alarms, a)
 		}
 
-		// if there are event alarms do not consider config alarms
+		// Only if there are no event alarms, consider config alarms
 		if len(alarms) == 0 {
 			// Config Alarms
 			for _, a := range p.conf.Alarms {
@@ -89,7 +89,7 @@ func (p *Parser) Parse(f fetch.File) error {
 		for _, a := range alarms {
 
 			// To notification
-			n := buildNotification(event)
+			n := p.buildNotification(event)
 			n.Time = a.TriggerTime(eventTime)
 			n.EventTime = eventTime
 			n.EventPath = f.Path
@@ -123,7 +123,7 @@ func buildEventDuration(event *ics.VEvent) time.Duration {
 	return end.Sub(start)
 }
 
-func buildNotification(event *ics.VEvent) notify.Notification {
+func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 
 	n := notify.Notification{}
 
@@ -139,11 +139,16 @@ func buildNotification(event *ics.VEvent) notify.Notification {
 		n.Description = descriptionProp.Value
 	}
 
-	// we use the ATTACH property only it it seems a image file
+	// we use the ATTACH property only as image file
+	// if the image matches the conf, we get the url defined in conf first.
 	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
 	if nil != imageUrlProp {
-		if seemsImageFile(imageUrlProp.Value) {
-			n.ImageUrl = imageUrlProp.Value
+		if url, ok := p.conf.Images[imageUrlProp.Value]; ok {
+			n.ImageUrl = url
+		} else {
+			if seemsImageFile(imageUrlProp.Value) {
+				n.ImageUrl = imageUrlProp.Value
+			}
 		}
 	}
 
