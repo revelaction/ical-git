@@ -96,6 +96,12 @@ func Load(data []byte) (Config, error) {
 	if conf.Images == nil {
 		conf.Images = make(map[string]string)
 	}
+
+	// initialize if alarms not present
+	if conf.Alarms == nil {
+		conf.Alarms = make([]alarm.Alarm, 0)
+	}
+
 	return conf, nil
 }
 
