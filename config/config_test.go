@@ -122,3 +122,26 @@ alarms = [
 		t.Fatalf("Expected images property to be empty, but got %d entries", len(conf.Images))
 	}
 }
+
+func TestExistentImagesWithoutValues(t *testing.T) {
+	var testToml = []byte(`
+notifiers = ["desktop"]
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+
+[images]
+`)
+	conf, err := Load(testToml)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	if conf.Images == nil {
+		t.Fatalf("Expected images property to be initialized, but it was nil")
+	}
+
+	if len(conf.Images) != 0 {
+		t.Fatalf("Expected images property to be empty, but got %d entries", len(conf.Images))
+	}
+}
