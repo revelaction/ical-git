@@ -20,6 +20,24 @@ alarms = [
 	}
 }
 
+func TestEmptyAlarmsProperty(t *testing.T) {
+	var testToml = []byte(`
+notifiers = ["desktop"]
+`)
+	conf, err := Load(testToml)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	if conf.Alarms == nil {
+		t.Fatalf("Expected alarms property to be initialized, but it was nil")
+	}
+
+	if len(conf.Alarms) != 0 {
+		t.Fatalf("Expected alarms property to be empty, but got %d entries", len(conf.Alarms))
+	}
+}
+
 func TestNumAlarmsDesktop(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
