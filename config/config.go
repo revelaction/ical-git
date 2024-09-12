@@ -67,6 +67,11 @@ func Load(data []byte) (Config, error) {
 		return Config{}, err
 	}
 
+	// initialize location to UTC if not specified
+	if conf.Location.Location == nil {
+		conf.Location.Location = time.UTC
+	}
+
 	if err := validatePositiveDuration(conf.DaemonTick); err != nil {
 		return Config{}, fmt.Errorf("invalid duration for tick %w", err)
 	}
