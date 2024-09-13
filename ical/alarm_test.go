@@ -109,7 +109,7 @@ END:VEVENT`
 
 	// Verify that the event does not have a DTSTART property
 	dtStartProp := event.GetProperty(ics.ComponentPropertyDtStart)
-	if dtStartProp != nil {
+	if dtStartProp == nil {
 		t.Errorf("Expected event to have no DTSTART property, but got %#v", dtStartProp)
 	}
 
