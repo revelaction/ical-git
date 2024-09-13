@@ -29,6 +29,11 @@ notifiers = ["telegram", "desktop"]
 [fetcher_filesystem]
 directory = "testdata"
 
+# Specifies the git repository data
+[fetcher_git]
+url = "git@mygit-repo.com:me/myrepo.git"
+private_key_path = "/home/path/to/key"
+
 # Configuration for the Telegram notifier
 [notifier_telegram]
 # The API token for the Telegram bot

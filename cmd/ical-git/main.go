@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"github.com/revelaction/ical-git/config"
+	"github.com/revelaction/ical-git/fetch"
 	"github.com/revelaction/ical-git/fetch/filesystem"
+	"github.com/revelaction/ical-git/fetch/git"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/schedule"
 	"log"
@@ -177,7 +179,15 @@ func run(conf config.Config, sc *schedule.Scheduler) {
 	tickStart := time.Now()
 	slog.Info("⏰ Tick start time", "start", tickStart.Format(time.RFC3339))
 
-	f := filesystem.New(conf.FetcherFilesystem.Directory)
+	var f fetch.Fetcher
+	if conf.IsFetcherGit() {
+		slog.Info("🔶", "fetcher", "git")
+		f = git.New(conf.FetcherGit.Url, conf.FetcherGit.PrivateKeyPath)
+	} else {
+		slog.Info("🔷", "fetcher", "filesystem")
+		f = filesystem.New(conf.FetcherFilesystem.Directory)
+	}
+
 	ch := f.GetCh()
 
 	p := ical.NewParser(conf, tickStart)

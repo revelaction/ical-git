@@ -25,6 +25,8 @@ type Config struct {
 
 	Images map[string]string `toml:"images"`
 
+	FetcherGit FetcherGit `toml:"fetcher_git"`
+
 	FetcherFilesystem FetcherFilesystem `toml:"fetcher_filesystem"`
 
 	NotifierTypes []string `toml:"notifiers"`
@@ -57,6 +59,11 @@ type Desktop struct {
 
 type FetcherFilesystem struct {
 	Directory string
+}
+
+type FetcherGit struct {
+	Url            string
+	PrivateKeyPath string `toml:"private_key_path"`
 }
 
 // Load loads the configuration. Only alarms compatible with the notifiers are
@@ -101,12 +108,10 @@ func Load(data []byte) (Config, error) {
 		conf.Alarms[i].Source = "config"
 	}
 
-
-    // initialize if images not present
+	// initialize if images not present
 	if conf.Images == nil {
 		conf.Images = make(map[string]string)
 	}
-
 
 	return conf, nil
 }
@@ -143,3 +148,6 @@ func (c *Config) validateNotifierTypes() error {
 	return nil
 }
 
+func (c *Config) IsFetcherGit() bool {
+	return c.FetcherGit.PrivateKeyPath != ""
+}
