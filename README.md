@@ -13,6 +13,7 @@ based on the icalendar alarm definitions or default alarms defined in the config
 
 # Content
 
+- [Usage](#usage)
 - [Features](#features)
 - [Installation](#installation)
   - [Binary](#binary)
@@ -33,7 +34,6 @@ based on the icalendar alarm definitions or default alarms defined in the config
 - [Creating iCalendar Files](#creating-icalendar-files)
 - [Managing iCal Files](#managing-ical-files)
 - [Command line options](#command-line-options)
-- [Usage](#usage)
 
 # Usage
 
