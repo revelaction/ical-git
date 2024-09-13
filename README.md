@@ -124,7 +124,7 @@ TimeoutSec=10
 
 Place your iCal files in a directory of your choice, preferably under revision
 control. Ensure that these files are located in the working directory of the
-service. For instructions on creating iCalendar files, refer to the [Creating iCalendar Files](#creating-icalendar-files) section.
+service. For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
 
 ```console
 mkdir /home/icalgit/icalgit/my-ical-files
