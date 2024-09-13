@@ -80,7 +80,7 @@ func (g *Git) GetCh() <-chan fetch.File {
 
 			contents, err := f.Contents()
 			if err != nil {
-				// TODO
+			    g.ch <- fetch.File{Error: fmt.Errorf("failed to get contents: %w", err)}
 				return nil
 			}
 
@@ -88,7 +88,6 @@ func (g *Git) GetCh() <-chan fetch.File {
 			return nil
 		})
 
-		// TODO
 		if err != nil {
 			fmt.Printf("error walking through repository: %v\n", err)
 		}
