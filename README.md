@@ -139,7 +139,6 @@ update the TOML configuration file as follows:
 directory = "/home/icalgit/path/to/my-cal-files"
 ```
 
-
 # Command line options
 
 
