@@ -23,7 +23,6 @@ based on the icalendar alarm definitions or default alarms defined in the config
   - [ical files](#ical-files)
   - [ical configuration file](#ical-configuration-file)
 - [Configuration File](#configuration-file)
-- [Creating iCalendar Files](#creating-icalendar-files)
 - [Managing iCal Files](#managing-ical-files)
 - [Command line options](#command-line-options)
 
