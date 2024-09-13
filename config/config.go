@@ -151,3 +151,10 @@ func (c *Config) validateNotifierTypes() error {
 func (c *Config) IsFetcherGit() bool {
 	return c.FetcherGit.PrivateKeyPath != ""
 }
+
+func (c *Config) Fetcher() string {
+	if c.IsFetcherGit() {
+		return "git"
+	}
+	return "filesystem"
+}
