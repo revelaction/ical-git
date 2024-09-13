@@ -89,6 +89,8 @@ For detailed instructions on setting up and managing the systemd service file, p
 
 ## ical configuration file
 
+For detailed instructions on configuring the `icalgit.toml` file, refer to the [Configuration File](configuration.md) section.
+
 Copy the TOML configuration file to the working directory specified in `WorkingDirectory`.
 
 ```console
