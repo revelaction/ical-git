@@ -268,9 +268,9 @@ func TestFetcherGitNoConf(t *testing.T) {
 		icon = "desktop_icon.png"
 	`
 
-	var conf Config
-	if _, err := toml.Decode(testData, &conf); err != nil {
-		t.Fatalf("Failed to decode test data: %v", err)
+	conf, err := Load([]byte(testData))
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
 	}
 
 	// Ensure FetcherGit properties are empty
