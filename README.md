@@ -8,8 +8,9 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 **ical-git** is a minimalistic calendar application daemon written in Go. It
-reads a directory of iCalendar files (normally the files are directly fetched from your private git repository) and generates custom notifications
-based on the icalendar alarm definitions or default alarms defined in the config file.
+reads [a directory of iCalendar files](https://github.com/revelaction/ical-git/tree/main/testdata) (normally the files are directly fetched
+from your private git repository) and generates custom notifications based on the icalendar alarm definitions or default alarms
+defined in the config file.
 
 # Content
 
