@@ -122,21 +122,18 @@ TimeoutSec=10
 
 ## ical files
 
-Place your iCal files in a directory of your choice, preferably under revision
-control. Ensure that these files are located in the working directory of the
-service. For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
+The preferred method for managing iCal files is to use a private Git repository. Provide the SSH key and repository address in the TOML file under `fetcher_git`. Ensure that these files are located in the working directory of the service. For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
 
 ```console
 mkdir /home/icalgit/icalgit/my-ical-files
 ```
 
-If you prefer to store them in a different directory, specify the path in the
-TOML configuration file. To specify a different directory for your iCal files,
-update the TOML configuration file as follows:
+To specify the Git repository for your iCal files, update the TOML configuration file as follows:
 
 ```toml
-[fetcher_filesystem]
-directory = "/home/icalgit/path/to/my-cal-files"
+[fetcher_git]
+ssh_key = "/path/to/ssh/key"
+repo_address = "git@github.com:yourusername/your-repo.git"
 ```
 
 # Managing iCal Files
