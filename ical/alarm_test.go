@@ -104,9 +104,12 @@ END:VEVENT`
 		t.Fatalf("Failed to parse calendar: %v", err)
 	}
 
-	// Verify that the calendar is nil
-	if cal != nil {
-		t.Errorf("Expected calendar to be nil, but got %#v", cal)
+	// Get the first event
+	event := cal.Events()[0]
+
+	// Verify that the event does not have a DTSTART property
+	if event.GetProperty(ics.ComponentPropertyDtStart) != nil {
+		t.Errorf("Expected event to have no DTSTART property, but got %#v", event.GetProperty(ics.ComponentPropertyDtStart))
 	}
 }
 
