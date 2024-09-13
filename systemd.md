@@ -1,5 +1,14 @@
 # Content
 
+- Modify the service file
+- Copy the Service File to the Systemd Directory
+- Reload Systemd Daemon
+- Enable the Service
+- Start the Service
+- Check the Service Status
+- Reload Configuration on SIGHUP
+- See logs
+
 # systemd Service File
 
 ## Modify the service file
