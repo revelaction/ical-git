@@ -341,6 +341,7 @@ func TestFetcherGitTagWithFields(t *testing.T) {
 
 func TestFetcherGitAndFilesystemTagsWithFields(t *testing.T) {
 }
+}
 
 func TestFetcherGitEmptyAndFilesystemPopulated(t *testing.T) {
 	// Test data with empty fetcher_git and populated fetcher_filesystem
