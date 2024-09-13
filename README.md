@@ -141,7 +141,7 @@ directory = "/home/icalgit/path/to/my-cal-files"
 
 # Managing iCal Files
 
-For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
+For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md) section.
 
 # Command line options
 
