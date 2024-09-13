@@ -80,7 +80,7 @@ func (g *Git) GetCh() <-chan fetch.File {
 
 			contents, err := f.Contents()
 			if err != nil {
-			    g.ch <- fetch.File{Error: fmt.Errorf("failed to get contents: %w", err)}
+				g.ch <- fetch.File{Error: fmt.Errorf("failed to get contents: %w", err)}
 				return nil
 			}
 

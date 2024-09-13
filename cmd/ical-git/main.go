@@ -10,7 +10,6 @@ import (
 	"github.com/revelaction/ical-git/fetch/git"
 	"github.com/revelaction/ical-git/ical"
 	"github.com/revelaction/ical-git/notify/schedule"
-	"log"
 	"log/slog"
 	"os"
 	"os/signal"
