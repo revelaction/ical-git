@@ -338,3 +338,53 @@ func TestFetcherGitTagWithFields(t *testing.T) {
 		t.Errorf("Expected FetcherGit.PrivateKeyPath to be %s, got %s", expectedPrivateKeyPath, conf.FetcherGit.PrivateKeyPath)
 	}
 }
+
+func TestFetcherGitAndFilesystemTagsWithFields(t *testing.T) {
+	// Test data with fetcher_git and fetcher_filesystem tags and populated fields
+	testData := `
+		tick = "1m"
+		notifiers = ["desktop"]
+
+		[notifier_desktop]
+		icon = "desktop_icon.png"
+
+		[fetcher_git]
+		url = "https://github.com/example/repo.git"
+		private_key_path = "/path/to/private/key"
+
+		[fetcher_filesystem]
+		directory = "/path/to/directory"
+	`
+
+	conf, err := Load([]byte(testData))
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	// Ensure FetcherGit properties are populated correctly
+	expectedUrl := "https://github.com/example/repo.git"
+	if conf.FetcherGit.Url != expectedUrl {
+		t.Errorf("Expected FetcherGit.Url to be %s, got %s", expectedUrl, conf.FetcherGit.Url)
+	}
+
+	expectedPrivateKeyPath := "/path/to/private/key"
+	if conf.FetcherGit.PrivateKeyPath != expectedPrivateKeyPath {
+		t.Errorf("Expected FetcherGit.PrivateKeyPath to be %s, got %s", expectedPrivateKeyPath, conf.FetcherGit.PrivateKeyPath)
+	}
+
+	// Ensure FetcherFilesystem properties are populated correctly
+	expectedDirectory := "/path/to/directory"
+	if conf.FetcherFilesystem.Directory != expectedDirectory {
+		t.Errorf("Expected FetcherFilesystem.Directory to be %s, got %s", expectedDirectory, conf.FetcherFilesystem.Directory)
+	}
+
+	// Ensure IsFetcherGit returns true
+	if !conf.IsFetcherGit() {
+		t.Errorf("Expected IsFetcherGit to return true, got false")
+	}
+
+	// Ensure Fetcher returns "git"
+	if conf.Fetcher() != "git" {
+		t.Errorf("Expected Fetcher to return 'git', got %s", conf.Fetcher())
+	}
+}
