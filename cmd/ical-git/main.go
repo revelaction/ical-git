@@ -117,11 +117,13 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("🔧 Init: loading config", "path", path)
 	data, err := os.ReadFile(path)
 	if err != nil {
-		log.Fatalf("Failed to read config file: %v", err)
+		slog.Error("Failed to read config file", "error", err)
+		os.Exit(1)
 	}
 	conf, err := config.Load(data)
 	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
+		slog.Error("Failed to load config", "error", err)
+		os.Exit(1)
 	}
 
 	slog.Info("📝 Config:", "tick_time", conf.DaemonTick)
