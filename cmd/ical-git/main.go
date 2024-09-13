@@ -130,10 +130,6 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	if conf.IsFetcherGit() {
 		slog.Info("📝 Config:", "Git Repo URL", conf.FetcherGit.Url)
 		slog.Info("📝 Config:", "Private SSH Key Path", conf.FetcherGit.PrivateKeyPath)
-	}
-	if conf.IsFetcherGit() {
-		slog.Info("📝 Config:", "Git Repo URL", conf.FetcherGit.Url)
-		slog.Info("📝 Config:", "Private SSH Key Path", conf.FetcherGit.PrivateKeyPath)
 	} else {
 		slog.Info("📝 Config:", "ical_directory", conf.FetcherFilesystem.Directory)
 	}
