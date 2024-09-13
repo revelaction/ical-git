@@ -114,8 +114,6 @@ For detailed description of the structure of the configuration `icalgit.toml` fi
 
 The preferred method for managing iCal files is to use a private Git repository. Provide the SSH key and repository address in the TOML file under `fetcher_git`. 
 
-To specify the Git repository for your iCal files, update the TOML configuration file as follows:
-
 ```toml
 [fetcher_git]
 private_key_path = "/path/to/ssh/key"
