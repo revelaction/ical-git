@@ -107,15 +107,16 @@ END:VEVENT`
 	// Get the first event
 	event := cal.Events()[0]
 
-	// Verify that the event does not have a DTSTART property
+	// Verify that the event has a DTSTART property
 	dtStartProp := event.GetProperty(ics.ComponentPropertyDtStart)
 	if dtStartProp == nil {
-		t.Errorf("Expected event to have no DTSTART property, but got %#v", dtStartProp)
+		t.Errorf("Expected event to have a DTSTART property, but got nil")
 	}
 
-	// If the DTSTART property exists, verify its value
-	if dtStartProp != nil && dtStartProp.Value != "20240902T100000Z" {
-		t.Errorf("Expected DTSTART value to be '20240902T100000Z', but got %s", dtStartProp.Value)
+	// Verify that the value of the DTSTART property matches the expected value
+	expectedValue := "20240902T100000Z"
+	if dtStartProp != nil && dtStartProp.Value != expectedValue {
+		t.Errorf("Expected DTSTART value to be '%s', but got '%s'", expectedValue, dtStartProp.Value)
 	}
 }
 
