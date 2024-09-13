@@ -13,16 +13,6 @@ based on the icalendar alarm definitions or default alarms defined in the config
 
 # Content
 
-## Usage
-
-### Basic Usage
-
-The basic usage involves having a private repository containing iCalendar (`.ics`) files. You need to provide the SSH key and repository address in the configuration TOML file. Once configured, you can run the daemon to start processing the calendar events.
-
-1. **Private Repository**: Ensure you have a private repository containing your iCalendar files.
-2. **Configuration**: Update the configuration TOML file with the SSH key and repository address.
-3. **Run the Daemon**: Start the daemon to begin processing the calendar events.
-
 - [Features](#features)
 - [Installation](#installation)
   - [Binary](#binary)
@@ -43,6 +33,10 @@ The basic usage involves having a private repository containing iCalendar (`.ics
 - [Creating iCalendar Files](#creating-icalendar-files)
 - [Managing iCal Files](#managing-ical-files)
 - [Command line options](#command-line-options)
+
+# Usage
+
+The basic usage involves having a private repository containing iCalendar (`.ics`) files. You need to provide the SSH key and repository address in the configuration TOML file. Once configured, you can run the daemon to start processing the calendar events.
 
 # Features
 
