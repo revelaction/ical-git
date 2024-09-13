@@ -122,19 +122,17 @@ TimeoutSec=10
 
 ## ical files
 
-The preferred method for managing iCal files is to use a private Git repository. Provide the SSH key and repository address in the TOML file under `fetcher_git`. Ensure that these files are located in the working directory of the service. For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
-
-```console
-mkdir /home/icalgit/icalgit/my-ical-files
-```
+The preferred method for managing iCal files is to use a private Git repository. Provide the SSH key and repository address in the TOML file under `fetcher_git`. Ensure that these files are located in the working directory of the service. 
 
 To specify the Git repository for your iCal files, update the TOML configuration file as follows:
 
 ```toml
 [fetcher_git]
-ssh_key = "/path/to/ssh/key"
-repo_address = "git@github.com:yourusername/your-repo.git"
+private_key_path = "/path/to/ssh/key"
+url = "git@github.com:yourusername/your-repo.git"
 ```
+
+For detailed instructions on managing and creating iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
 
 # Managing iCal Files
 
