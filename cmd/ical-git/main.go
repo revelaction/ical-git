@@ -182,10 +182,8 @@ func run(conf config.Config, sc *schedule.Scheduler) {
 
 	var f fetch.Fetcher
 	if conf.IsFetcherGit() {
-		slog.Info("🔶", "fetcher", "git")
 		f = git.New(conf.FetcherGit.Url, conf.FetcherGit.PrivateKeyPath)
 	} else {
-		slog.Info("🔷", "fetcher", "filesystem")
 		f = filesystem.New(conf.FetcherFilesystem.Directory)
 	}
 
