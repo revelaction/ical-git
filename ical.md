@@ -19,6 +19,8 @@ Alternatively, you can copy and modify existing iCalendar files from the `testda
 
 # Managing iCal Files
 
+For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
+
 It is highly advisable to place your iCal files under revision control to ensure that changes are tracked and can be reverted if necessary. 
 Additionally, setting up a cron job to periodically pull the latest content of these files can help keep your calendar up-to-date.
 
