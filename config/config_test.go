@@ -261,11 +261,9 @@ alarms = [
 func TestFetcherGitNoConf(t *testing.T) {
 	// Test data with no FetcherGit properties
 	testData := `
-		[timezone]
-		name = "UTC"
 		tick = "1m"
-		icon = "icon.png"
 		notifiers = ["desktop"]
+
 		[notifier_desktop]
 		icon = "desktop_icon.png"
 	`
