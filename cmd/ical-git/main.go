@@ -126,6 +126,7 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 
 	slog.Info("📝 Config:", "tick_time", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
+	slog.Info("📝 Config:", "Fetcher", conf.Fetcher())
 	slog.Info("📝 Config:", "notifiers", strings.Join(conf.NotifierTypes, ", "))
 	slog.Info("📝 Config:", "ical_directory", conf.FetcherFilesystem.Directory)
 	for _, alarm := range conf.Alarms {
