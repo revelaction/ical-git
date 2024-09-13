@@ -127,6 +127,10 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("📝 Config:", "tick_time", conf.DaemonTick)
 	slog.Info("📝 Config:", "Loc", conf.Location)
 	slog.Info("📝 Config:", "Fetcher", conf.Fetcher())
+	if conf.IsFetcherGit() {
+		slog.Info("📝 Config:", "Git Repo URL", conf.FetcherGit.Url)
+		slog.Info("📝 Config:", "Private SSH Key Path", conf.FetcherGit.PrivateKeyPath)
+	}
 	slog.Info("📝 Config:", "notifiers", strings.Join(conf.NotifierTypes, ", "))
 	slog.Info("📝 Config:", "ical_directory", conf.FetcherFilesystem.Directory)
 	for _, alarm := range conf.Alarms {
