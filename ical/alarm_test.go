@@ -80,9 +80,9 @@ END:VCALENDAR`
 		t.Fatalf("Failed to parse calendar: %v", err)
 	}
 
-	// Verify that the calendar is nil
-	if cal != nil {
-		t.Errorf("Expected calendar to be nil, but got %#v", cal)
+	// Verify that an error is returned
+	if err == nil {
+		t.Errorf("Expected an error, but got nil")
 	}
 }
 
