@@ -82,11 +82,11 @@ To build `ical-git` manually from the source code, follow these steps:
     chmod +x /home/icalgit/bin/ical-git
     ```
 
-## systemd Service File
+# systemd Service File
 
 For detailed instructions on setting up and managing the systemd service file, please refer to the [systemd.md](systemd.md) file.
 
-## ical configuration file
+# ical configuration file
 
 Copy the TOML configuration file to the working directory specified in `WorkingDirectory`.
 
@@ -119,7 +119,7 @@ Restart=on-failure
 TimeoutSec=10
 ```
 
-## ical files
+# ical files
 
 Place your iCal files in a directory of your choice, preferably under revision
 control. Ensure that these files are located in the working directory of the
