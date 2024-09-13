@@ -49,7 +49,6 @@ The basic usage involves having a private repository containing iCalendar (`.ics
 
 # Installation
 
-
 ## Binary
 ### Get the binary
 
