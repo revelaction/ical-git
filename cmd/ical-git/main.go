@@ -132,7 +132,9 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 		slog.Info("📝 Config:", "Private SSH Key Path", conf.FetcherGit.PrivateKeyPath)
 	}
 	slog.Info("📝 Config:", "notifiers", strings.Join(conf.NotifierTypes, ", "))
-	slog.Info("📝 Config:", "ical_directory", conf.FetcherFilesystem.Directory)
+	if conf.FetcherFilesystem.Directory != "" {
+		slog.Info("📝 Config:", "ical_directory", conf.FetcherFilesystem.Directory)
+	}
 	for _, alarm := range conf.Alarms {
 		slog.Info("📝 Config: 🔔", "type", alarm.Action, "durIso", alarm.DurIso8601, "dur", alarm.Dur)
 	}
