@@ -20,8 +20,8 @@ based on the icalendar alarm definitions or default alarms defined in the config
     - [Get the binary](#get-the-binary)
     - [Build Manually](#build-manually)
   - [systemd Service File](#systemd-service-file)
-  - [ical files](#ical-files)
-  - [ical configuration file](#ical-configuration-file)
+  - [Ical files](#ical-files)
+  - [Configuration file](#configuration-file)
 - [Managing iCal Files](#managing-ical-files)
 - [Command line options](#command-line-options)
 
@@ -85,9 +85,8 @@ To build `ical-git` manually from the source code, follow these steps:
 
 For detailed instructions on setting up and managing the systemd service file, please refer to the [systemd.md](systemd.md) file.
 
-## ical configuration file
+## Configuration file
 
-For detailed description of the structure of the configuration `icalgit.toml` file, refer to the [Configuration File](configuration.md) section.
 
 Copy the TOML configuration file to the working directory specified in `WorkingDirectory`.
 
@@ -108,6 +107,8 @@ ExecStart=/home/icalgit/bin/ical-git --config /path/to/my-file.toml
 Restart=on-failure
 TimeoutSec=10
 ```
+
+For detailed description of the structure of the configuration `icalgit.toml` file, refer to the [Configuration File](configuration.md) section.
 
 ## ical files
 
