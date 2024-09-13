@@ -340,6 +340,36 @@ func TestFetcherGitTagWithFields(t *testing.T) {
 }
 
 func TestFetcherGitAndFilesystemTagsWithFields(t *testing.T) {
+}
+
+func TestFetcherGitEmptyAndFilesystemPopulated(t *testing.T) {
+	// Test data with empty fetcher_git and populated fetcher_filesystem
+	testData := `
+		tick = "1m"
+		notifiers = ["desktop"]
+
+		[notifier_desktop]
+		icon = "desktop_icon.png"
+
+		[fetcher_filesystem]
+		directory = "/path/to/directory"
+	`
+
+	conf, err := Load([]byte(testData))
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	// Ensure IsFetcherGit returns false
+	if conf.IsFetcherGit() {
+		t.Errorf("Expected IsFetcherGit to return false, got true")
+	}
+
+	// Ensure Fetcher returns "filesystem"
+	if conf.Fetcher() != "filesystem" {
+		t.Errorf("Expected Fetcher to return 'filesystem', got %s", conf.Fetcher())
+	}
+}
 	// Test data with fetcher_git and fetcher_filesystem tags and populated fields
 	testData := `
 		tick = "1m"
