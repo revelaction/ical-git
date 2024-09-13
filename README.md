@@ -141,6 +141,8 @@ update the TOML configuration file as follows:
 directory = "/home/icalgit/path/to/my-cal-files"
 ```
 
+# Managing iCal Files
+
 # Command line options
 
 
