@@ -59,6 +59,33 @@ END:VCALENDAR`
 	}
 }
 
+func TestGetEventWithoutEndVCALENDAR(t *testing.T) {
+	// Create an iCal literal with a VEVENT tag but without the END:VCALENDAR tag
+	icalContent := `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20240902T100000Z
+DTEND:20240902T110000Z
+SUMMARY:Test Event
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+END:VALARM
+END:VEVENT`
+
+	// Parse the iCal literal
+	reader := bytes.NewReader([]byte(icalContent))
+	cal, err := ics.ParseCalendar(reader)
+	if err != nil {
+		t.Fatalf("Failed to parse calendar: %v", err)
+	}
+
+	// Verify that the calendar is nil
+	if cal != nil {
+		t.Errorf("Expected calendar to be nil, but got %#v", cal)
+	}
+}
+
 func TestParseInvalidICalContent(t *testing.T) {
 	// Create a string that does not resemble a proper iCal file
 	invalidICalContent := `INVALID CONTENT`
