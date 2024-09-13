@@ -87,26 +87,15 @@ For detailed instructions on setting up and managing the systemd service file, p
 
 ## ical configuration file
 
-For detailed instructions on configuring the `icalgit.toml` file, refer to the [Configuration File](configuration.md) section.
+For detailed description of the structure of the configuration `icalgit.toml` file, refer to the [Configuration File](configuration.md) section.
 
 Copy the TOML configuration file to the working directory specified in `WorkingDirectory`.
 
 ```console
 cp icalgit.toml /home/icalgit/icalgit
+
 ```
-
-Update the `directory` path in the TOML file to point to your iCal files directory.
-
-```toml
-...
-
-[fetcher_filesystem]
-directory = "/home/ical/path/to/my-ical-files"
-
-...
-```
-
-If you prefer to store the TOML file in a different location, specify the path in the `ExecStart` line of the systemd service file.
+If you prefer to store the TOML file in a different location, specify the path in the `ExecStart` line of the systemd service file:
 
 ``` 
 [Service]
@@ -122,7 +111,7 @@ TimeoutSec=10
 
 ## ical files
 
-The preferred method for managing iCal files is to use a private Git repository. Provide the SSH key and repository address in the TOML file under `fetcher_git`. Ensure that these files are located in the working directory of the service. 
+The preferred method for managing iCal files is to use a private Git repository. Provide the SSH key and repository address in the TOML file under `fetcher_git`. 
 
 To specify the Git repository for your iCal files, update the TOML configuration file as follows:
 
