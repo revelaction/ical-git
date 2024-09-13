@@ -27,6 +27,28 @@ func TestGetInTick(t *testing.T) {
 	}
 }
 
+func TestGetEventWithoutVEVENT(t *testing.T) {
+	// Create an iCal literal without a VEVENT tag
+	icalContent := `BEGIN:VCALENDAR
+VERSION:2.0
+END:VCALENDAR`
+
+	// Parse the iCal literal
+	reader := bytes.NewReader([]byte(icalContent))
+	cal, err := ics.ParseCalendar(reader)
+	if err != nil {
+		t.Fatalf("Failed to parse calendar: %v", err)
+	}
+
+	// Get the first event
+	event := cal.Events()[0]
+
+	// Verify that the event is nil
+	if event != nil {
+		t.Errorf("Expected event to be nil, but got %#v", event)
+	}
+}
+
 func TestGetAfterTick(t *testing.T) {
 	// Test that an alarm 15 hours before an event at 20:00 on 1 September 2024
 	// is after the tick period starting at 00:00 on 1 September 2024 and lasting 4 hours.
