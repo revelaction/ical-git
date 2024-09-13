@@ -25,6 +25,7 @@ based on the icalendar alarm definitions or default alarms defined in the config
 - [Creating iCalendar Files](#creating-icalendar-files)
 - [Managing iCal Files](#managing-ical-files)
 - [Command line options](#command-line-options)
+- [systemd Service File](#systemd-service-file)
 
 # Usage
 
