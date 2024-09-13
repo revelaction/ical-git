@@ -75,10 +75,7 @@ END:VCALENDAR`
 
 	// Parse the iCal literal
 	reader := bytes.NewReader([]byte(icalContent))
-	cal, err := ics.ParseCalendar(reader)
-	if err != nil {
-		t.Fatalf("Failed to parse calendar: %v", err)
-	}
+	_, err := ics.ParseCalendar(reader)
 
 	// Verify that an error is returned
 	if err == nil {
