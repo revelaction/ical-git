@@ -281,3 +281,29 @@ func TestFetcherGitNoConf(t *testing.T) {
 		t.Errorf("Expected FetcherGit.PrivateKeyPath to be empty, got %s", conf.FetcherGit.PrivateKeyPath)
 	}
 }
+
+func TestFetcherGitTagNoFields(t *testing.T) {
+	// Test data with fetcher_git tag but no fields
+	testData := `
+		tick = "1m"
+		notifiers = ["desktop"]
+
+		[notifier_desktop]
+		icon = "desktop_icon.png"
+
+		[fetcher_git]
+	`
+
+	conf, err := Load([]byte(testData))
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	// Ensure FetcherGit properties are empty
+	if conf.FetcherGit.Url != "" {
+		t.Errorf("Expected FetcherGit.Url to be empty, got %s", conf.FetcherGit.Url)
+	}
+	if conf.FetcherGit.PrivateKeyPath != "" {
+		t.Errorf("Expected FetcherGit.PrivateKeyPath to be empty, got %s", conf.FetcherGit.PrivateKeyPath)
+	}
+}
