@@ -19,7 +19,7 @@ based on the icalendar alarm definitions or default alarms defined in the config
   - [Binary](#binary)
     - [Get the binary](#get-the-binary)
     - [Build Manually](#build-manually)
-    - [systemd Service File](#systemd-service-file)
+  - [systemd Service File](#systemd-service-file)
   - [ical files](#ical-files)
   - [ical configuration file](#ical-configuration-file)
 - [Configuration File](#configuration-file)
