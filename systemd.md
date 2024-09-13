@@ -1,13 +1,13 @@
 # Content
 
-- Modify the service file
-- Copy the Service File to the Systemd Directory
-- Reload Systemd Daemon
-- Enable the Service
-- Start the Service
-- Check the Service Status
-- Reload Configuration on SIGHUP
-- See logs
+- [Modify the service file](#modify-the-service-file)
+- [Copy the Service File to the Systemd Directory](#copy-the-service-file-to-the-systemd-directory)
+- [Reload Systemd Daemon](#reload-systemd-daemon)
+- [Enable the Service](#enable-the-service)
+- [Start the Service](#start-the-service)
+- [Check the Service Status](#check-the-service-status)
+- [Reload Configuration on SIGHUP](#reload-configuration-on-sighup)
+- [See logs](#see-logs)
 
 
 # Modify the service file
