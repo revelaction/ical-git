@@ -36,7 +36,7 @@ func (g *Git) GetCh() <-chan fetch.File {
 		// Create SSH auth method
 		auth, err := ssh.NewPublicKeysFromFile("git", g.privateKeyPath, "")
 		if err != nil {
-			g.ch <- fetch.File{Error: fmt.Errorf("Failed to create SSH auth method: %w", err)}
+			g.ch <- fetch.File{Error: fmt.Errorf("failed to create SSH auth method: %w", err)}
 			return
 		}
 
@@ -52,27 +52,27 @@ func (g *Git) GetCh() <-chan fetch.File {
 			Depth:         1,
 		})
 		if err != nil {
-			g.ch <- fetch.File{Error: fmt.Errorf("Failed to clone repository: %w", err)}
+			g.ch <- fetch.File{Error: fmt.Errorf("failed to clone repository: %w", err)}
 			return
 		}
 
 		// Get the latest commit on master
 		ref, err := repo.Head()
 		if err != nil {
-			g.ch <- fetch.File{Error: fmt.Errorf("Failed to get HEAD: %w", err)}
+			g.ch <- fetch.File{Error: fmt.Errorf("failed to get HEAD: %w", err)}
 			return
 		}
 
 		commit, err := repo.CommitObject(ref.Hash())
 		if err != nil {
-			g.ch <- fetch.File{Error: fmt.Errorf("Failed to get commit: %w", err)}
+			g.ch <- fetch.File{Error: fmt.Errorf("failed to get commit: %w", err)}
 			return
 		}
 
 		// Get the tree for the commit
 		tree, err := commit.Tree()
 		if err != nil {
-			g.ch <- fetch.File{Error: fmt.Errorf("Failed to get tree: %w", err)}
+			g.ch <- fetch.File{Error: fmt.Errorf("failed to get tree: %w", err)}
 			return
 		}
 
@@ -90,7 +90,7 @@ func (g *Git) GetCh() <-chan fetch.File {
 
 		// TODO
 		if err != nil {
-			fmt.Printf("Error walking through repository: %v\n", err)
+			fmt.Printf("error walking through repository: %v\n", err)
 		}
 	}()
 
