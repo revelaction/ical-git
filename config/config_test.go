@@ -257,3 +257,29 @@ alarms = [
 		t.Fatalf("Expected location property to be Australia/Sydney, but got %s", conf.Location.Location.String())
 	}
 }
+
+func TestFetcherGitNoConf(t *testing.T) {
+	// Test data with no FetcherGit properties
+	testData := `
+		[timezone]
+		name = "UTC"
+		tick = "1m"
+		icon = "icon.png"
+		notifiers = ["desktop"]
+		[notifier_desktop]
+		icon = "desktop_icon.png"
+	`
+
+	var conf Config
+	if _, err := toml.Decode(testData, &conf); err != nil {
+		t.Fatalf("Failed to decode test data: %v", err)
+	}
+
+	// Ensure FetcherGit properties are empty
+	if conf.FetcherGit.Url != "" {
+		t.Errorf("Expected FetcherGit.Url to be empty, got %s", conf.FetcherGit.Url)
+	}
+	if conf.FetcherGit.PrivateKeyPath != "" {
+		t.Errorf("Expected FetcherGit.PrivateKeyPath to be empty, got %s", conf.FetcherGit.PrivateKeyPath)
+	}
+}
