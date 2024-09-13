@@ -20,7 +20,7 @@ type Scheduler struct {
 	timers []*time.Timer
 }
 
-func NewScheduler(c config.Config) *Scheduler {
+func New(c config.Config) *Scheduler {
 	return &Scheduler{
 		conf: c,
 	}

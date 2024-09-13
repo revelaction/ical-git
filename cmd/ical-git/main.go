@@ -146,7 +146,7 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	slog.Info("🔧 Init: creating new scheduler")
-	sc := schedule.NewScheduler(conf)
+	sc := schedule.New(conf)
 
 	slog.Info("🔧 Init: creating goroutine for time ticks")
 	go tick(ctx, conf, sc)
