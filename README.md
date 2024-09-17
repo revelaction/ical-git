@@ -5,6 +5,7 @@
 [![Test](https://github.com/revelaction/ical-git/actions/workflows/build.yml/badge.svg)](https://github.com/revelaction/ical-git/actions/workflows/build.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/revelaction/ical-git)](https://goreportcard.com/report/github.com/revelaction/ical-git)
 [![GitHub Release](https://img.shields.io/github/v/release/revelaction/ical-git?style=flat)]() 
+[![Go Reference](https://pkg.go.dev/badge/github.com/revelaction/ical-git)](https://pkg.go.dev/github.com/revelaction/ical-git)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 **ical-git** is a minimalistic calendar application daemon written in Go. It
