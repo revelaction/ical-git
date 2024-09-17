@@ -19,7 +19,7 @@ import (
 )
 
 const usage = `Usage:
-    ical=git [-c CONF_FILE] 
+    ical-git [-c CONF_FILE] 
 
 Options:
     -c, --config                load the configuration file at CONF_FILE instead of default
