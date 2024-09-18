@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"bytes"
+	"fmt"
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
@@ -15,17 +16,16 @@ type Telegram struct {
 	config config.Config
 }
 
-func New(conf config.Config) *Telegram {
+func New(conf config.Config) (*Telegram, error) {
 	bot, err := tg.NewBotAPI(conf.Telegram.Token)
 	if err != nil {
-		// TODO
-		return nil
+		return nil, fmt.Errorf("Could not create telegram Bot; %w", err)
 	}
 
 	return &Telegram{
 		bot:    bot,
 		config: conf,
-	}
+	}, nil
 }
 
 func (t *Telegram) Notify(n notify.Notification) error {
