@@ -174,6 +174,7 @@ func tick(ctx context.Context, cancel context.CancelFunc, conf config.Config, sc
 	if err != nil {
 		cancel()
 		slog.Error("Tick Error, canceling", "error", err)
+		return
 	}
 
 	for {
@@ -189,6 +190,7 @@ func tick(ctx context.Context, cancel context.CancelFunc, conf config.Config, sc
 			if err != nil {
 				cancel()
 				slog.Error("Tick Error, canceling", "error", err)
+				return
 			}
 		}
 	}
@@ -218,14 +220,10 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 		}
 		err := p.Parse(f)
 		if err != nil {
-			// TODO
-			fmt.Printf("error: %v+", err)
+			slog.Info("Parse error. Skipping", "error", err)
 		}
 	}
 
-	// TODO put last in the scheduler
-	// the parse save the las stand of files
-	// if channel error, break  with nil notificatios. let scheduler retriieve the last, scheduler says using last saved notifications
 	sc.Schedule(p.Notifications(), tickStart)
 	slog.Info("🏁 ending run")
 	return nil
