@@ -62,7 +62,7 @@ func (s *Scheduler) getNotifyFunc(n notify.Notification) (func(), error) {
 	case "telegram":
 
 		if nil == s.telegram {
-			return nil, errors.New("No notifier. Unable to create Notification")
+			return nil, errors.New("no notifier. Unable to create Notification")
 		}
 
 		f = func() {

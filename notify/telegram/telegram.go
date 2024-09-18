@@ -19,7 +19,7 @@ type Telegram struct {
 func New(conf config.Config) (*Telegram, error) {
 	bot, err := tg.NewBotAPI(conf.Telegram.Token)
 	if err != nil {
-		return nil, fmt.Errorf("Could not create telegram Bot; %w", err)
+		return nil, fmt.Errorf("could not create telegram Bot; %w", err)
 	}
 
 	return &Telegram{
