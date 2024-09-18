@@ -40,7 +40,7 @@ func (p *Parser) Parse(f fetch.File) error {
 	for _, event := range cal.Events() {
 
 		if event == nil {
-			slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", time.Time{}, "🚨", "unparseable event (nil event)")
+			slog.Error("📅 Event", "📁", filepath.Base(f.Path), "📌", time.Time{}, "🚨", "unparseable event (nil event)")
 			continue
 		}
 
@@ -51,7 +51,7 @@ func (p *Parser) Parse(f fetch.File) error {
 
 		eventTime, err := et.nextTime(p.start)
 		if err != nil {
-			slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🚨", err)
+			slog.Error("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🚨", err)
 			continue
 		}
 

@@ -198,7 +198,7 @@ func run(conf config.Config, sc *schedule.Scheduler) {
 	p := ical.NewParser(conf, tickStart)
 	for f := range ch {
 		if f.Error != nil {
-			slog.Info("fetch Error", "error", f.Error)
+			slog.Error("fetch Error", "error", f.Error)
 			os.Exit(1) // TODO
 		}
 		err := p.Parse(f)
