@@ -82,25 +82,32 @@ func main() {
 		//cancel() TODO
 	}()
 
+	ctx, cancel, scheduler := initialize(configPath)
+
 	go func() {
 
-		cancel, scheduler := initialize(configPath)
-
 		for {
-			s := <-signalChan
-			switch s {
-			case syscall.SIGHUP:
-				slog.Info("🔧 SIGHUP called")
-				slog.Info("🔧 canceling previous ctx")
-				cancel()
-				slog.Info("🔧 stop previous timers")
-				scheduler.StopTimers()
-				cancel, scheduler = initialize(configPath)
+			select {
+			case s := <-signalChan:
+				switch s {
+				case syscall.SIGHUP:
+					slog.Info("🔧 SIGHUP called")
+					slog.Info("🔧 canceling previous ctx")
+					cancel()
+					slog.Info("🔧 stop previous timers")
+					scheduler.StopTimers()
+					ctx, cancel, scheduler = initialize(configPath)
 
-			case os.Interrupt:
-				slog.Info("Interrupt called")
-				cancel()
-				os.Exit(1)
+				case os.Interrupt:
+					slog.Info("Interrupt called")
+					cancel()
+					os.Exit(1)
+				}
+			case <-ctx.Done():
+				slog.Error("🔧🚨 Tick Error. Sleeping")
+				time.Sleep(time.Minute)
+				scheduler.StopTimers()
+				ctx, cancel, scheduler = initialize(configPath)
 			}
 		}
 	}()
@@ -112,7 +119,7 @@ func main() {
 // retrieve periodically the ical files and set alarms delivery timers
 // (goroutines).
 // initialize is run at the start or after a SIGHUB signal
-func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
+func initialize(path string) (context.Context, context.CancelFunc, *schedule.Scheduler) {
 	slog.Info("🔧 Init: loading config", "path", path)
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -150,20 +157,24 @@ func initialize(path string) (context.CancelFunc, *schedule.Scheduler) {
 	sc := schedule.New(conf)
 
 	slog.Info("🔧 Init: creating goroutine for time ticks")
-	go tick(ctx, conf, sc)
-	return cancel, sc
+	go tick(ctx, cancel, conf, sc)
+	return ctx, cancel, sc
 }
 
 // tick is a goroutine to periodically retrieve the ical files an set alarms.
 // tick does not stop the alarm timers at the start.
 // At the start of the tick, all alarms for the tick period are scheduled.
 // At the start of the next tick the is no alarms timers, so there is no need to close them.
-func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler) {
+func tick(ctx context.Context, cancel context.CancelFunc, conf config.Config, sc *schedule.Scheduler) {
 
 	ticker := time.NewTicker(conf.DaemonTick)
 	defer ticker.Stop()
 
-	run(conf, sc)
+	err := run(conf, sc)
+	if err != nil {
+		cancel()
+		slog.Error("Tick Error, canceling", "error", err)
+	}
 
 	for {
 
@@ -173,13 +184,17 @@ func tick(ctx context.Context, conf config.Config, sc *schedule.Scheduler) {
 			return
 		case <-ticker.C:
 			slog.Info("🔧 starting new tick work")
-			run(conf, sc)
+			err = run(conf, sc)
 			slog.Info("🔧 ending tick work")
+			if err != nil {
+				cancel()
+				slog.Error("Tick Error, canceling", "error", err)
+			}
 		}
 	}
 }
 
-func run(conf config.Config, sc *schedule.Scheduler) {
+func run(conf config.Config, sc *schedule.Scheduler) error {
 
 	slog.Info("🚀 starting run")
 
@@ -199,16 +214,21 @@ func run(conf config.Config, sc *schedule.Scheduler) {
 	for f := range ch {
 		if f.Error != nil {
 			slog.Error("fetch Error", "error", f.Error)
-			os.Exit(1) // TODO
+			return fmt.Errorf("fetch error: %w", f.Error)
 		}
 		err := p.Parse(f)
 		if err != nil {
+			// TODO
 			fmt.Printf("error: %v+", err)
 		}
 	}
 
+	// TODO put last in the scheduler
+	// the parse save the las stand of files
+	// if channel error, break  with nil notificatios. let scheduler retriieve the last, scheduler says using last saved notifications
 	sc.Schedule(p.Notifications(), tickStart)
 	slog.Info("🏁 ending run")
+	return nil
 }
 
 func initializeLogger() {
