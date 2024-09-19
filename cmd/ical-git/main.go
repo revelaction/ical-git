@@ -104,8 +104,7 @@ func main() {
 					os.Exit(1)
 				}
 			case <-ctx.Done():
-				slog.Error("🔧🚨 Tick Error. Sleeping")
-				time.Sleep(time.Minute)
+				slog.Error("🔧🚨 Tick Error. Context cancelled")
 				scheduler.StopTimers()
 				ctx, cancel, scheduler = initialize(configPath)
 			}
