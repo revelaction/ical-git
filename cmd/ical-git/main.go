@@ -96,15 +96,16 @@ func main() {
 					cancel()
 					slog.Info("🔧 stop previous timers")
 					scheduler.StopTimers()
+					slog.Info("🔧 Reinizializing")
 					ctx, cancel, scheduler = initialize(configPath)
 
 				case os.Interrupt:
-					slog.Info("Interrupt called")
+					slog.Info("🔧 Interrupt called. Cancelling goroutines. Exiting")
 					cancel()
 					os.Exit(1)
 				}
 			case <-ctx.Done():
-				slog.Error("🔧🚨 Tick Error. Context cancelled")
+				slog.Error("🚨 Tick Error. Context was cancelled. Reinizializing")
 				scheduler.StopTimers()
 				ctx, cancel, scheduler = initialize(configPath)
 			}
@@ -200,14 +201,14 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 	slog.Info("🚀 starting run")
 
 	tickStart := time.Now()
-	slog.Info("⏰ Tick start time", "start", tickStart.Format(time.RFC3339))
+	slog.Info("⏰ Tick start time", "start", tickStart.Format("2006-01-02 15:04:05 MST"))
 
 	var f fetch.Fetcher
 	if conf.IsFetcherGit() {
-        slog.Info("🧲 Fetch: git")
+		slog.Info("🧲 Fetch: git")
 		f = git.New(conf.FetcherGit.Url, conf.FetcherGit.PrivateKeyPath)
 	} else {
-        slog.Info("🧲 Fetch: filesystem")
+		slog.Info("🧲 Fetch: filesystem")
 		f = filesystem.New(conf.FetcherFilesystem.Directory)
 	}
 
@@ -216,12 +217,12 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 	p := ical.NewParser(conf, tickStart)
 	for f := range ch {
 		if f.Error != nil {
-            slog.Error("🧲 Fetch:", "🚨 Error:", f.Error)
+			slog.Error("🧲 Fetch:", "🚨 Error:", f.Error)
 			return fmt.Errorf("error: %w", f.Error)
 		}
 		err := p.Parse(f)
 		if err != nil {
-            slog.Info("👀 Parse: error. Skipping", "error", err)
+			slog.Info("👀 Parse: error. Skipping", "error", err)
 		}
 	}
 

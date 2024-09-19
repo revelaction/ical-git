@@ -51,18 +51,18 @@ func (p *Parser) Parse(f fetch.File) error {
 
 		eventTime, err := et.nextTime(p.start)
 		if err != nil {
-			slog.Error("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🚨", err)
+			slog.Error("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime.Format("2006-01-02 15:04:05 MST"), "🚨", err)
 			continue
 		}
 
 		// expired event
 		if eventTime.IsZero() {
-			slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "💀️", "expired")
+			slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime.Format("2006-01-02 15:04:05 MST"), "💀️", "expired")
 			continue
 		}
 
 		in := eventTime.Sub(p.start).Truncate(1 * time.Second)
-		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime, "🔖", in)
+		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime.Format("2006-01-02 15:04:05 MST"), "🔖", in)
 
 		// Event Alarms
 		for _, a := range getEventAlarms(event, p.conf.NotifierTypes) {
