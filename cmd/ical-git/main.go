@@ -205,7 +205,10 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 	slog.Info("🚀 starting run")
 
 	tickStart := time.Now()
-	slog.Info("⏰ Tick start time", "start", tickStart.Format("2006-01-02 15:04:05 MST"))
+    tickStartInConfigLoc := tickStart.In(conf.Location.Location)
+
+    layout := "2006-01-02 15:04:05 MST"
+	slog.Info("⏰ Tick start time", "start_local_location", tickStart.Format(layout), "start_config_location", tickStartInConfigLoc.Format(layout))
 
 	var f fetch.Fetcher
 	if conf.IsFetcherGit() {

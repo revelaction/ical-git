@@ -52,7 +52,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time
 		s.timers = append(s.timers, timer)
 	}
 
-    slog.Info("🚦 Schedule:", "num timers", len(s.timers))
+    slog.Info("🚦 Schedule:", "num_timers", len(s.timers))
 
 	return nil
 }
@@ -95,6 +95,8 @@ func (s *Scheduler) StopTimers() {
 	for _, tmr := range s.timers {
 		tmr.Stop()
 	}
+
+    s.timers = []*time.Timer{}
 }
 
 func (s *Scheduler) initializeNotifiers() {
