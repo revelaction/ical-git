@@ -205,8 +205,10 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 
 	var f fetch.Fetcher
 	if conf.IsFetcherGit() {
+        slog.Info("🧲 Fetch: git")
 		f = git.New(conf.FetcherGit.Url, conf.FetcherGit.PrivateKeyPath)
 	} else {
+        slog.Info("🧲 Fetch: filesystem")
 		f = filesystem.New(conf.FetcherFilesystem.Directory)
 	}
 
@@ -215,12 +217,12 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 	p := ical.NewParser(conf, tickStart)
 	for f := range ch {
 		if f.Error != nil {
-			slog.Error("fetch Error", "error", f.Error)
-			return fmt.Errorf("fetch error: %w", f.Error)
+            slog.Error("🧲 Fetch:", "🚨 Error:", f.Error)
+			return fmt.Errorf("error: %w", f.Error)
 		}
 		err := p.Parse(f)
 		if err != nil {
-			slog.Info("Parse error. Skipping", "error", err)
+            slog.Info("👀 Parse: error. Skipping", "error", err)
 		}
 	}
 
