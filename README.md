@@ -7,6 +7,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/revelaction/ical-git)](https://pkg.go.dev/github.com/revelaction/ical-git)
 [![GitHub Release](https://img.shields.io/badge/built_with-Go-00ADD8.svg?style=flat)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+![GitHub repo size](https://img.shields.io/github/repo-size/revelaction/ical-git)
 
 **ical-git** is a minimalistic calendar application daemon written in Go. It
 reads [a directory of iCalendar files](https://github.com/revelaction/ical-git/tree/master/testdata) (normally the files are directly fetched
