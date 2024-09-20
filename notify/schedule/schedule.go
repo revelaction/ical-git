@@ -72,6 +72,7 @@ func (s *Scheduler) getNotifyFunc(n notify.Notification) (func(), error) {
 			if err != nil {
                 slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
 				fmt.Printf("Could not deliver telegram notfication: %s", err)
+                return
 			}
             slog.Info("🚚 Notification:", "Send?", "✅", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
 		}
@@ -81,6 +82,7 @@ func (s *Scheduler) getNotifyFunc(n notify.Notification) (func(), error) {
 			err := s.desktop.Notify(n)
 			if err != nil {
                 slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
+                return
 			}
             slog.Info("🚚 Notification:", "Send?", "✅", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
 		}
