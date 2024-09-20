@@ -13,13 +13,13 @@ const Tpl = `
 📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
 
 {{- if .Duration}}
-⏳ Duration: <b>{{.Duration}}</b><br>
+⏳ Duration: <b>{{.Duration}}</b>
 {{- end}}
 {{- if .Location}}
-📌 Location: <b>{{.Location}}</b><br>
+📌 Location: <b>{{.Location}}</b>
 {{- end}}
 {{- if .Description}}
-📝 Description: {{.Description}}<br>
+📝 Description: {{.Description}}
 {{- end}}
 {{- if .Status}}
 🚦 Status: <b>{{.Status}}</b>

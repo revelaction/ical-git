@@ -34,6 +34,7 @@ func (p *Parser) Parse(f fetch.File) error {
 	reader := bytes.NewReader(f.Content)
 	cal, err := ics.ParseCalendar(reader)
 	if err != nil {
+		slog.Error("📅 Event", "📁", filepath.Base(f.Path), "📌", time.Time{}, "🚨", err)
 		return fmt.Errorf("calendar parse error: %w", err)
 	}
 
