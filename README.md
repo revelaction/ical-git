@@ -141,7 +141,7 @@ For instructions on managing iCal files, see the [Managing iCal Files](ical.md) 
 
 
 ```console
-    ical=git [-c CONF_FILE] 
+    ical-git [-c CONF_FILE] 
 
 Options:
     -c, --config                load the configuration file at CONF_FILE instead of default
