@@ -30,6 +30,8 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
     - `-PT30M`: 30 minutes before the event
     - `-P1DT12H`: 1 day and 12 hours before the event
 
+**Note**: The alarms are only considered if the event has no defined `VALARMS`.
+
 ## Images
 
 - **images**: A map of image names to their URL paths. If the key is present in the ATTACH line of the calendar, the URL value here is used. Local filesystem paths are not supported.
