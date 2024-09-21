@@ -43,16 +43,16 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
 - **notifiers**: A list of notifier types that are enabled.
   - Example: `notifiers = ["desktop"]`
 
-### Fetchers
+## Fetchers
 
 Both `Fetcher Filesystem` and `Fetcher Git` are possible. If both are present, `Fetcher Git` has precedence.
 
-#### Fetcher Filesystem
+### Fetcher Filesystem
 
 - **directory**: Specifies the directory where the iCal files are stored.
   - Example: `directory = "testdata"`
 
-#### Fetcher Git
+### Fetcher Git
 
 - **url**: Specifies the URL of the git repository containing the iCal files.
   - Example: `url = "git@mygit-repo.com:me/myrepo.git"`
