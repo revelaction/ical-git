@@ -40,11 +40,6 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
     images = { "icon1" = "https://example.com/icon1.png", "icon2" = "https://example.com/icon2.png" }
     ```
 
-## Notifiers
-
-- **notifiers**: A list of notifier types that are enabled.
-  - Example: `notifiers = ["desktop"]`
-
 ## Fetchers
 
 Both `Fetcher Filesystem` and `Fetcher Git` are possible. If both are present, `Fetcher Git` has precedence.
