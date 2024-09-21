@@ -61,14 +61,18 @@ Both `Fetcher Filesystem` and `Fetcher Git` are possible. If both are present, `
 
 **Note**: Only SSH keys without a passphrase are supported.
 
-## Notifier Telegram
+## Notifiers
+
+Both `Notifier Desktop` and `Notifier Telegram` can be used simultaneously.
+
+### Notifier Telegram
 
 - **token**: The API token for the Telegram bot.
   - Example: `token = "yuu3b3k"`
 - **chat_id**: The chat ID to which the notifications will be sent.
   - Example: `chat_id = 588488`
 
-## Notifier Desktop
+### Notifier Desktop
 
 - **icon**: The path to the icon file used for desktop notifications.
   - Example: `icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"`
