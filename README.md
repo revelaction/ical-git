@@ -32,7 +32,7 @@ defined in the config file.
 
 # Usage
 
-The basic usage involves having a private repository containing iCalendar (`.ics`) files. You need to provide the SSH key and repository address in the configuration TOML file. Once configured, you can run the daemon to start processing the calendar events.
+The basic usage involves having a private repository containing iCalendar (`.ics`) files. You need to provide the SSH key and repository address in the configuration TOML file. Alternatively, you can provide a path in the current filesystem. For more details, refer to the [Configuration File](configuration.md). Once configured, you can run the daemon to start processing the calendar events.
 
 # Features
 
