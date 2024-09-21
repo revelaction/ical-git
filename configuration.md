@@ -2,7 +2,7 @@
 
 [icalgit.toml](icalgit.toml)
 
-The `icalgit.toml` file is used to configure the behavior of the ical-git daemon. Below are the descriptions of the fields and their purposes.
+The [`icalgit.toml`](icalgit.toml) file is used to configure the behavior of the ical-git daemon. Below are the descriptions of the fields and their purposes.
 
 ## General Settings
 
