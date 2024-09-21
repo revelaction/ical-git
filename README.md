@@ -41,7 +41,7 @@ processing the calendar events.
 
 # Features
 
-- **Conceptually Simple Design**: Offers a conceptually simple design that allows for a relatively simple private self-hosted calendar solution.
+- **Focusing on Private Hosted Solution**: Designed to provide a simple and effective private self-hosted calendar solution.
 - **Low resources computers**: Supports installation on Raspberry Pi Zero and other cheap microcomputers.
 - **Notifications**: Offers support for Telegram bots and local Linux desktop notifications.
 - **Direct Git Fetching**: Can fetch iCal files directly from a git repository without saving them locally.
