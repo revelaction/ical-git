@@ -66,7 +66,9 @@ func (p *Parser) Parse(f fetch.File) error {
 		slog.Info("📅 Event", "📁", filepath.Base(f.Path), "📌", eventTime.Format("2006-01-02 15:04:05 MST"), "🔖", in)
 
 		// Event Alarms
-		for _, a := range getEventAlarms(event, p.conf.NotifierTypes) {
+		eventAlarms := getEventAlarms(event, p.conf.NotifierTypes)
+
+		for _, a := range eventAlarms {
 			slog.Info("        : 🔔", "action", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
 			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
 				continue
@@ -75,8 +77,10 @@ func (p *Parser) Parse(f fetch.File) error {
 			alarms = append(alarms, a)
 		}
 
-		// Only if there are no event alarms, consider config alarms
-		if len(alarms) == 0 {
+		// Only if there are no DEFINED event alarms (it does not matter if
+		// they are not trigered in this tick period), only then consider
+		// config alarms
+		if len(eventAlarms) == 0 {
 			// Config Alarms
 			for _, a := range p.conf.Alarms {
 

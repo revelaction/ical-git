@@ -172,8 +172,8 @@ func tick(ctx context.Context, cancel context.CancelFunc, conf config.Config, sc
 
 	err := run(conf, sc)
 	if err != nil {
-        // sleep before canceling here, to allow interrupt signals to still work
-        time.Sleep(time.Minute)
+		// sleep before canceling here, to allow interrupt signals to still work
+		time.Sleep(time.Minute)
 		cancel()
 		slog.Error("Tick Error, canceling", "error", err)
 		return
@@ -190,8 +190,8 @@ func tick(ctx context.Context, cancel context.CancelFunc, conf config.Config, sc
 			err = run(conf, sc)
 			slog.Info("🔧 ending tick work")
 			if err != nil {
-                // sleep before canceling here, to allow interrupt signals to still work
-                time.Sleep(time.Minute)
+				// sleep before canceling here, to allow interrupt signals to still work
+				time.Sleep(time.Minute)
 				cancel()
 				slog.Error("Tick Error, canceling", "error", err)
 				return
@@ -205,17 +205,17 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 	slog.Info("🚀 starting run")
 
 	tickStart := time.Now()
-    tickStartInConfigLoc := tickStart.In(conf.Location.Location)
+	tickStartInConfigLoc := tickStart.In(conf.Location.Location)
 
-    layout := "2006-01-02 15:04:05 MST"
+	layout := "2006-01-02 15:04:05 MST"
 	slog.Info("⏰ Tick start time", "start_local_location", tickStart.Format(layout), "start_config_location", tickStartInConfigLoc.Format(layout))
 
 	var f fetch.Fetcher
 	if conf.IsFetcherGit() {
-        slog.Info("🧲 Fetch: git")
+		slog.Info("🧲 Fetch: git")
 		f = git.New(conf.FetcherGit.Url, conf.FetcherGit.PrivateKeyPath)
 	} else {
-        slog.Info("🧲 Fetch: filesystem")
+		slog.Info("🧲 Fetch: filesystem")
 		f = filesystem.New(conf.FetcherFilesystem.Directory)
 	}
 
@@ -224,12 +224,12 @@ func run(conf config.Config, sc *schedule.Scheduler) error {
 	p := ical.NewParser(conf, tickStart)
 	for f := range ch {
 		if f.Error != nil {
-            slog.Error("🧲 Fetch:", "🚨 Error:", f.Error)
+			slog.Error("🧲 Fetch:", "🚨 Error:", f.Error)
 			return fmt.Errorf("error: %w", f.Error)
 		}
 		err := p.Parse(f)
 		if err != nil {
-            slog.Info("👀 Parse: error. Skipping", "error", err)
+			slog.Info("👀 Parse: error. Skipping", "error", err)
 		}
 	}
 
