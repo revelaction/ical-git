@@ -45,7 +45,6 @@ processing the calendar events.
 - **Low resources computers**: Supports installation on Raspberry Pi Zero and other cheap microcomputers.
 - **Notifications**: Offers support for Telegram bots and local Linux desktop notifications to keep users informed.
 - **Direct Git Fetching**: Can fetch iCal files directly from a git repository without saving them locally, ensuring up-to-date event data.
-- **Customizable Configuration**: Allows users to define custom notifications through a TOML configuration file.
 - **Systemd Integration**: Facilitates seamless integration with systemd for service management and logging.
 
 # Installation
