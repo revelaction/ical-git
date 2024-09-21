@@ -48,6 +48,13 @@ The `icalgit.toml` file is used to configure the behavior of the ical-git daemon
 - **directory**: Specifies the directory where the iCal files are stored.
   - Example: `directory = "testdata"`
 
+## Fetcher Git
+
+- **url**: Specifies the URL of the git repository containing the iCal files.
+  - Example: `url = "git@mygit-repo.com:me/myrepo.git"`
+- **private_key_path**: Specifies the path to the private SSH key used to access the git repository.
+  - Example: `private_key_path = "/home/path/to/key"`
+
 ## Notifier Telegram
 
 - **token**: The API token for the Telegram bot.
