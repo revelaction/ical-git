@@ -94,7 +94,7 @@ To build `ical-git` manually from the source code, follow these steps:
 
 ## systemd Service File
 
-For detailed instructions on setting up and managing the systemd service file, please refer to the [systemd.md](systemd.md) file.
+For instructions on setting up and managing the systemd service file, see the [systemd.md](systemd.md) file.
 
 ## Configuration file
 
@@ -119,7 +119,7 @@ Restart=on-failure
 TimeoutSec=10
 ```
 
-For detailed description of the structure of the configuration `icalgit.toml` file, refer to the [Configuration File](configuration.md) section.
+For a description of the configuration `icalgit.toml` file, see the [Configuration File](configuration.md) section.
 
 ## ical files
 
@@ -131,11 +131,11 @@ private_key_path = "/path/to/ssh/key"
 url = "git@github.com:yourusername/your-repo.git"
 ```
 
-For detailed instructions on managing and creating iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
+For instructions on managing and creating iCal files, see the [Managing iCal Files](ical.md#managing-ical-files) section.
 
 # Managing iCal Files
 
-For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md) section.
+For instructions on managing iCal files, see the [Managing iCal Files](ical.md) section.
 
 # Command line options
 
