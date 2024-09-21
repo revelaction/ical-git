@@ -33,7 +33,7 @@ defined in the config file.
 # Usage
 
 The basic usage involves having a private repository containing iCalendar
-(`.ics`) files, such as the [](testdata/event-recurrent.ics) example. You need to provide the SSH key and repository address in the
+[`.ics` files](testdata/event-recurrent.ics). You need to provide the SSH key and repository address in the
 configuration TOML file. Alternatively, you can provide a path in the current
 filesystem. For more details, refer to the [Configuration
 File](configuration.md). Once configured, you can run the daemon to start
