@@ -59,6 +59,8 @@ Both `Fetcher Filesystem` and `Fetcher Git` are possible. If both are present, `
 - **private_key_path**: Specifies the path to the private SSH key used to access the git repository.
   - Example: `private_key_path = "/home/path/to/key"`
 
+**Note**: Only SSH keys without a passphrase are supported.
+
 ## Notifier Telegram
 
 - **token**: The API token for the Telegram bot.
