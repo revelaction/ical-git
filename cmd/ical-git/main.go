@@ -187,6 +187,8 @@ func tick(ctx context.Context, cancel context.CancelFunc, conf config.Config, sc
 			return
 		case <-ticker.C:
 			slog.Info("🔧 starting new tick work")
+			slog.Info("🔧 Reset scheduler")
+			sc.StopTimers()
 			err = run(conf, sc)
 			slog.Info("🔧 ending tick work")
 			if err != nil {
