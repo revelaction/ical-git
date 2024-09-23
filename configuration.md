@@ -4,7 +4,7 @@ The [`icalgit.toml`](icalgit.toml) file is used to configure the behavior of the
 
 ## General Settings
 
-- **timezone**: Specifies the timezone for the notifications. Both icalendar timezone and config timezone will be shown in the notification message
+- **timezone**: Specifies the timezone for the notifications. Both the .ics timezone and config timezone will be shown in the notification message
   - Example: `timezone = "Europe/Rome"`
 - **tick**: Defines the interval at which the daemon checks for new events.
   - Example: `tick = "24h"`
