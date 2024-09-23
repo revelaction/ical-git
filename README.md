@@ -39,7 +39,7 @@ filesystem. For more details, refer to the [configuration
 file](configuration.md). Once configured, you can run the daemon to start
 processing the calendar events.
 
-<p align="center"><img alt="log" src="log.png"/></p>
+![daemon log output ](log.png)
 
 # Features
 
