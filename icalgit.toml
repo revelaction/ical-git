@@ -22,14 +22,14 @@ alarms = [
 ]
 
 # A list of notifier types that are enabled
-notifiers = ["telegram", "desktop"]
-#notifiers = ["desktop"]
+#notifiers = ["telegram", "desktop"]
+notifiers = ["desktop"]
 
 # Specifies the git repository data
 # If private_key_path not empty, this fetcher is selected
 [fetcher_git]
-url = "git@mygit-repo.com:me/myrepo.git"
-private_key_path = "/home/path/to/key"
+#url = "git@mygit-repo.com:me/myrepo.git"
+#private_key_path = "/home/path/to/key"
 
 # Specifies the directory where the iCal files are stored
 [fetcher_filesystem]
