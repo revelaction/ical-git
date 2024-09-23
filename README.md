@@ -38,7 +38,9 @@ configuration TOML file. Alternatively, you can provide a path in the current
 filesystem. For more details, refer to the [configuration
 file](configuration.md). Once configured, you can run the daemon to start
 processing the calendar events.
+
 <p align="center"><img alt="log" src="log.png"/></p>
+
 # Features
 
 - **Focusing on Private Hosted Solution**: Designed to provide a simple and effective private self-hosted calendar solution.
