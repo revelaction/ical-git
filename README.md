@@ -8,6 +8,7 @@
 [![GitHub Release](https://img.shields.io/badge/built_with-Go-00ADD8.svg?style=flat)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![GitHub repo size](https://img.shields.io/github/repo-size/revelaction/ical-git)
+![sloc](https://sloc.xyz/github/revelaction/ical-git)
 ![GitHub stars](https://img.shields.io/github/stars/revelaction/ical-git?style=social)
 ![GitHub last commit](https://img.shields.io/github/last-commit/revelaction/ical-git?color=red)
 
