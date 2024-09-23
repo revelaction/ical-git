@@ -31,6 +31,7 @@ defined in the config file.
 - [Command line options](#command-line-options)
 
 # Usage
+<p align="center"><img alt="pixelchanged" src="logo.png"/></p>
 
 The basic usage involves having a private repository containing iCalendar
 [`.ics` files](testdata/event-recurrent.ics). You need to provide the SSH key and repository address in the
