@@ -148,7 +148,7 @@ For instructions on managing iCal files, see the [Managing iCal Files](ical.md) 
 Options:
     -c, --config                load the configuration file at CONF_FILE instead of default
     -v, --version               Print the version 
-    -h, --help                  Show this
+    -h, --help                  Show this help
 
 CONF_FILE is the toml configuration file 
 
