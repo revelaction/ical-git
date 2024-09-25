@@ -138,6 +138,17 @@ For instructions on managing and creating iCal files, see the [Managing iCal Fil
 
 For instructions on managing iCal files, see the [Managing iCal Files](ical.md) section.
 
+### Local Filesystem
+
+Alternatively, you can specify a path to a local filesystem directory containing your iCal files. This method is useful for testing or when you prefer to manage your iCal files locally.
+
+Example configuration in `icalgit.toml`:
+
+```toml
+[fetcher_filesystem]
+directory = "/path/to/local/ical/files"
+```
+
 # Command line options
 
 
