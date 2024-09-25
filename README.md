@@ -132,22 +132,19 @@ private_key_path = "/path/to/ssh/key"
 url = "git@github.com:yourusername/your-repo.git"
 ```
 
-For instructions on managing and creating iCal files, see the [Managing iCal Files](ical.md#managing-ical-files) section.
-
-# Managing iCal Files
-
-For instructions on managing iCal files, see the [Managing iCal Files](ical.md) section.
-
-### Local Filesystem
-
-Alternatively, you can specify a path to a local filesystem directory containing your iCal files. This method is useful for testing or when you prefer to manage your iCal files locally.
-
-Example configuration in `icalgit.toml`:
+Alternatively, you can specify a path to a local filesystem directory
+containing your iCal files. This method is useful for testing or when you
+prefer to manage your iCal files locally.
 
 ```toml
 [fetcher_filesystem]
 directory = "/path/to/local/ical/files"
 ```
+
+# Managing iCal Files
+
+For instructions on managing iCal files, see the [Managing iCal Files](ical.md) section.
+
 
 # Command line options
 
