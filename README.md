@@ -134,7 +134,9 @@ url = "git@github.com:yourusername/your-repo.git"
 
 Alternatively, you can specify a path to a local filesystem directory
 containing your iCal files. This method is useful for testing or when you
-prefer to manage your iCal files locally.
+prefer to manage your iCal files locally. Note that using a local filesystem
+directory means that only one instance of the daemon can work with the files at
+a time.
 
 ```toml
 [fetcher_filesystem]
