@@ -27,7 +27,7 @@ type Config struct {
 
 	Alarms []alarm.Alarm
 
-	Images []Image `toml:"images"`
+	Images []Image 
 
 	FetcherGit FetcherGit `toml:"fetcher_git"`
 
@@ -74,8 +74,8 @@ type Image struct {
 	Name  string `toml:"name"`
 	Value string `toml:"value"`
 
-	Type string `json:"-"`
-	Data []byte `json:"-"`
+	Type string `toml:"-"`
+	Data []byte `toml:"-"`
 }
 
 func (c *Config) Image(name string) (Image, bool) {
