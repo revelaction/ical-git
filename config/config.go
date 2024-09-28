@@ -1,13 +1,13 @@
 package config
 
 import (
-	"fmt"
-	"time"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"mime"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/revelaction/ical-git/alarm"
@@ -135,25 +135,25 @@ func Load(data []byte) (Config, error) {
 	}
 
 	for i, im := range conf.Images {
-        // check if uri is base64
-        data, err := decodeBase64URI(im.Uri)
+		// check if uri is base64
+		data, err := decodeBase64URI(im.Uri)
 		if err != nil {
-            // try external URL 
-            errUrl := validateUrl(im.Uri)
-		    if errUrl != nil {
-			    return Config{}, fmt.Errorf("Image not base64 or external Url %d: %w, %w", i, err, errUrl)
-            }
+			// try external URL
+			errUrl := validateUrl(im.Uri)
+			if errUrl != nil {
+				return Config{}, fmt.Errorf("Image not base64 or external Url %d: %w, %w", i, err, errUrl)
+			}
 
-            conf.Images[i].Data = nil
-            // TODO const
-            conf.Images[i].Type = "url"
+			conf.Images[i].Data = nil
+			// TODO const
+			conf.Images[i].Type = "url"
 
 		} else {
-            conf.Images[i].Data = data
-            conf.Images[i].Type = "base64"
-        }
+			conf.Images[i].Data = data
+			conf.Images[i].Type = "base64"
+		}
 
-    }
+	}
 
 	return conf, nil
 }
@@ -255,4 +255,3 @@ func validateUrl(urlStr string) error {
 
 	return nil
 }
-

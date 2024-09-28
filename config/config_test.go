@@ -139,14 +139,12 @@ alarms = [
 	}
 }
 
-func TestExistentImagesWithoutValues(t *testing.T) {
+func TestNonExistentImages(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
 alarms = [
 	{type = "desktop", when = "-P1D"},  
 ]
-
-[images]
 `)
 	conf, err := Load(testToml)
 	if err != nil {
@@ -183,15 +181,16 @@ alarms = [
 	}
 }
 
-func TestExistentImagesWithOneValue(t *testing.T) {
+func TestImagesWithOneValue(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
 alarms = [
 	{type = "desktop", when = "-P1D"},  
 ]
 
-[images]
-"birthday.jpg" = "https://example.com/example.jpg"
+images = [
+{name = "birthday.jpg",  uri = "https://example.com/example.jpg"},
+]
 `)
 	conf, err := Load(testToml)
 	if err != nil {
@@ -207,12 +206,17 @@ alarms = [
 	}
 
 	expectedValue := "https://example.com/example.jpg"
-	if _, exists := conf.Images["birthday.jpg"]; !exists {
+
+	var im Image
+	var ok bool
+	if im, ok = conf.Image("birthday.jpg"); !ok {
 		t.Fatalf("Expected key 'birthday.jpg' to exist, but it does not")
 	}
-	if conf.Images["birthday.jpg"] != expectedValue {
-		t.Fatalf("Expected value for key 'birthday.jpg' to be '%s', but got '%s'", expectedValue, conf.Images["birthday.jpg"])
+
+	if im.Uri != expectedValue {
+		t.Fatalf("Expected value for name 'birthday.jpg' to be '%s', but got '%s'", expectedValue, im.Uri)
 	}
+
 }
 
 func TestEmptyLocationProperty(t *testing.T) {

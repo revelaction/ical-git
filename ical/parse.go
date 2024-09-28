@@ -156,7 +156,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 		if image, ok := p.conf.Image(imageUrlProp.Value); ok {
 			n.ImageUrl = image.Uri
 		} else {
-            // TODO
+			// TODO
 			if seemsImageFile(imageUrlProp.Value) {
 				n.ImageUrl = imageUrlProp.Value
 			}
