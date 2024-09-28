@@ -219,6 +219,23 @@ images = [
 
 }
 
+func TestInvalidBase64UriPayload(t *testing.T) {
+	var testToml = []byte(`
+notifiers = ["desktop"]
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+
+images = [
+{name = "invalid.jpg",  uri = "data:image/jpeg;base64,invalid-base64-payload"},
+]
+`)
+	_, err := Load(testToml)
+	if err == nil {
+		t.Fatalf("Expected an error due to invalid base64 URI payload, but got none")
+	}
+}
+
 func TestInvalidUriScheme(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
