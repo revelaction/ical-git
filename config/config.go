@@ -99,8 +99,9 @@ func (c *Config) Image(name string) (Image, bool) {
 	if len(matchingImages) == 0 {
 		return Image{}, false
 	}
-	rand.Seed(time.Now().UnixNano())
-	randomIndex := rand.Intn(len(matchingImages))
+	source := rand.NewSource(time.Now().UnixNano())
+	rng := rand.New(source)
+	randomIndex := rng.Intn(len(matchingImages))
 	return matchingImages[randomIndex], true
 }
 
