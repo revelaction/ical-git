@@ -23,7 +23,7 @@ type Config struct {
 
 	Alarms []alarm.Alarm
 
-	Images map[string]Image `toml:"images"`
+	Images []Image `toml:"images"`
 
 	FetcherGit FetcherGit `toml:"fetcher_git"`
 
@@ -64,6 +64,12 @@ type FetcherFilesystem struct {
 type FetcherGit struct {
 	Url            string
 	PrivateKeyPath string `toml:"private_key_path"`
+}
+
+type Image struct {
+	Name string
+    Uri string
+	Data []byte 
 }
 
 // Load loads the configuration. Only alarms compatible with the notifiers are
@@ -110,7 +116,7 @@ func Load(data []byte) (Config, error) {
 
 	// initialize if images not present
 	if conf.Images == nil {
-		conf.Images = make(map[string]Image)
+		conf.Images = make([]Image, 0)
 	}
 
 	return conf, nil
@@ -158,17 +164,4 @@ func (c *Config) Fetcher() string {
 	}
 	return "filesystem"
 }
-type Image struct {
-	Name string
-	Data string
-}
 
-func (i *Image) UnmarshalText(text []byte) error {
-	parts := strings.Split(string(text), ",")
-	if len(parts) != 2 {
-		return fmt.Errorf("invalid image format: %s", text)
-	}
-	i.Name = parts[0]
-	i.Data = parts[1]
-	return nil
-}

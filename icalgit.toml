@@ -54,8 +54,9 @@ icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
 # ATTACH;FMTTYPE=image/jpeg:birthday.jpg
 # The resulting URL selected would be "https://example.com/example.jpg"
 [images]
-"birthday.jpg" = "birthday.jpg,https://example.com/example.jpg"
-"example.jpg" = "example.jpg,data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"
-
+images = [
+	{name = "birthday.jpg, "uri" = "https://example.com/example.jpg"},  
+	{name = "example.jpg, "uri" = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"},  
+]
 
 
