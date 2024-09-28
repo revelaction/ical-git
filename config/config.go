@@ -23,7 +23,7 @@ type Config struct {
 
 	Alarms []alarm.Alarm
 
-	Images map[string]string `toml:"images"`
+	Images map[string]Image `toml:"images"`
 
 	FetcherGit FetcherGit `toml:"fetcher_git"`
 
@@ -110,7 +110,7 @@ func Load(data []byte) (Config, error) {
 
 	// initialize if images not present
 	if conf.Images == nil {
-		conf.Images = make(map[string]string)
+		conf.Images = make(map[string]Image)
 	}
 
 	return conf, nil
@@ -157,4 +157,18 @@ func (c *Config) Fetcher() string {
 		return "git"
 	}
 	return "filesystem"
+}
+type Image struct {
+	Name string
+	Data string
+}
+
+func (i *Image) UnmarshalText(text []byte) error {
+	parts := strings.Split(string(text), ",")
+	if len(parts) != 2 {
+		return fmt.Errorf("invalid image format: %s", text)
+	}
+	i.Name = parts[0]
+	i.Data = parts[1]
+	return nil
 }
