@@ -74,13 +74,13 @@ type Image struct {
 	Data []byte `json:"-"`
 }
 
-func (i Images) Get(name string) Image {
-	for _, img := range i {
+func (c *Config) GetImage(name string) *Image {
+	for _, img := range c.Images {
 		if img.Name == name {
-			return img
+			return &img
 		}
 	}
-	return Image{}
+	return nil
 }
 
 // Load loads the configuration. Only alarms compatible with the notifiers are
