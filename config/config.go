@@ -14,6 +14,8 @@ import (
 const (
 	NotifierTypeTelegram = "telegram"
 	NotifierTypeDesktop  = "desktop"
+	ImageTypeUrl         = "url"
+	ImageTypeBase64      = "base64"
 )
 
 var validTypes = []string{NotifierTypeTelegram, NotifierTypeDesktop}
@@ -145,11 +147,11 @@ func Load(data []byte) (Config, error) {
 
 			conf.Images[i].Data = nil
 			// TODO const
-			conf.Images[i].Type = "url"
+			conf.Images[i].Type = ImageTypeUrl
 
 		} else {
 			conf.Images[i].Data = data
-			conf.Images[i].Type = "base64"
+			conf.Images[i].Type = ImageTypeBase64
 		}
 
 	}
