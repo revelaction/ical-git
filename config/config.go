@@ -67,9 +67,9 @@ type FetcherGit struct {
 }
 
 type Image struct {
-	Name string
-    Uri string
-	Data []byte 
+	Name string `toml:"name"`
+    Uri string `toml:"uri"`
+    Data []byte `json:"-"` 
 }
 
 // Load loads the configuration. Only alarms compatible with the notifiers are
