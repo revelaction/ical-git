@@ -215,33 +215,23 @@ func DecodeBase64URI(s string) ([]byte, error) {
 }
 
 func DecodeURL(urlString string) (string, error) {
-	// Parse the URL
 	u, err := url.Parse(urlString)
 	if err != nil {
 		return "", fmt.Errorf("invalid URL format: %v", err)
 	}
 
-	// Check if the scheme is http or https
 	if u.Scheme != "http" && u.Scheme != "https" {
 		return "", fmt.Errorf("invalid scheme: %s. Only http and https are allowed", u.Scheme)
 	}
 
-	// Check if there's a host
 	if u.Host == "" {
 		return "", fmt.Errorf("missing host in URL")
 	}
 
-	// Check if the host is not localhost
 	if strings.ToLower(u.Hostname()) == "localhost" {
 		return "", fmt.Errorf("localhost is not allowed as an external URL")
 	}
 
-	// Check if the host is not an IP address
-	if ip := net.ParseIP(u.Hostname()); ip != nil {
-		return "", fmt.Errorf("IP addresses are not allowed as external URLs")
-	}
-
-	// If we've made it this far, the URL is valid
 	return u.String(), nil
 }
 
