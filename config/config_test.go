@@ -231,6 +231,8 @@ images = [
 ]
 `)
 	_, err := Load(testToml)
+
+	t.Logf("Error message is: %s", err)
 	if err == nil {
 		t.Fatalf("Expected an error due to invalid URI scheme, but got none")
 	}
