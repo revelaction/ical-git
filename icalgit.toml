@@ -28,8 +28,8 @@ alarms = [
 # The resulting URL selected would be "https://example.com/example.jpg"
 # base64 strings are supported
 images = [
-	{name = "birthday.jpg", value = "https://example.com/example.jpg"},  
-	{name = "example.jpg", value = "/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"},
+	{name = "image1.jpg", value = "https://example.com/image1.jpg"},  
+	{name = "image2.jpg", value = "/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"},
 ]
 
 # A list of notifier types that are enabled
