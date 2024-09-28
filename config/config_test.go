@@ -189,7 +189,7 @@ alarms = [
 ]
 
 images = [
-{name = "birthday.jpg",  uri = "https://example.com/example.jpg"},
+{name = "birthday.jpg",  value = "https://example.com/example.jpg"},
 ]
 `)
 	conf, err := Load(testToml)
@@ -213,13 +213,13 @@ images = [
 		t.Fatalf("Expected key 'birthday.jpg' to exist, but it does not")
 	}
 
-	if im.Uri != expectedValue {
-		t.Fatalf("Expected value for name 'birthday.jpg' to be '%s', but got '%s'", expectedValue, im.Uri)
+	if im.Value != expectedValue {
+		t.Fatalf("Expected value for name 'birthday.jpg' to be '%s', but got '%s'", expectedValue, im.Value)
 	}
 
 }
 
-func TestGoodBase64UriPayload(t *testing.T) {
+func TestImageGoodBase64(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
 alarms = [
@@ -227,7 +227,7 @@ alarms = [
 ]
 
 images = [
-{name = "good.jpg",  uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="},
+{name = "good.jpg",  value = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="},
 ]
 `)
 	conf, err := Load(testToml)
@@ -256,7 +256,7 @@ images = [
 	}
 }
 
-func TestInvalidBase64UriPayload(t *testing.T) {
+func TestInvalidBase64(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
 alarms = [
@@ -264,7 +264,7 @@ alarms = [
 ]
 
 images = [
-{name = "invalid.jpg",  uri = "data:image/jpeg;base64,invalid-base64-payload"},
+{name = "invalid.jpg",  value = "invalid-base64-payload"},
 ]
 `)
 	_, err := Load(testToml)
@@ -274,7 +274,7 @@ images = [
 	}
 }
 
-func TestInvalidUriScheme(t *testing.T) {
+func TestInvalidUrlScheme(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
 alarms = [
@@ -282,14 +282,14 @@ alarms = [
 ]
 
 images = [
-{name = "invalid.jpg",  uri = "ftp://ftp.example.com"},
+{name = "invalid.jpg",  value = "ftp://ftp.example.com"},
 ]
 `)
 	_, err := Load(testToml)
 
 	t.Logf("Error is: %s", err)
 	if err == nil {
-		t.Fatalf("Expected an error due to invalid URI scheme, but got none")
+		t.Fatalf("Expected an error due to invalid URL scheme, but got none")
 	}
 }
 

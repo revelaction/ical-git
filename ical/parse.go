@@ -151,10 +151,11 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 
 	// we use the ATTACH property only as image file
 	// if the image matches the conf, we get the url defined in conf first.
+	// TODO
 	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
 	if nil != imageUrlProp {
 		if image, ok := p.conf.Image(imageUrlProp.Value); ok {
-			n.ImageUrl = image.Uri
+			n.ImageUrl = image.Value
 		} else {
 			// TODO
 			if seemsImageFile(imageUrlProp.Value) {

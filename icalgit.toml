@@ -49,13 +49,14 @@ chat_id = 588488
 icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
 
 # images 
+# TODO
 # If the key is present in the ATTACH line of the calendar, the URL value here is used.
 # Example:
 # ATTACH;FMTTYPE=image/jpeg:birthday.jpg
 # The resulting URL selected would be "https://example.com/example.jpg"
 images = [
-	{name = "birthday.jpg", uri = "https://example.com/example.jpg"},  
-	{name = "example.jpg", uri = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"},
+	{name = "birthday.jpg", value = "https://example.com/example.jpg"},  
+	{name = "example.jpg", value = "/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"},
 ]
 
 

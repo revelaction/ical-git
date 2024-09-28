@@ -69,8 +69,8 @@ type FetcherGit struct {
 }
 
 type Image struct {
-	Name string `toml:"name"`
-	Uri  string `toml:"uri"`
+	Name  string `toml:"name"`
+	Value string `toml:"value"`
 
 	Type string `json:"-"`
 	Data []byte `json:"-"`
@@ -134,12 +134,12 @@ func Load(data []byte) (Config, error) {
 
 	for i, im := range conf.Images {
 		// check if uri is base64
-		data, err := decodeBase64URI(im.Uri)
+		data, err := decodeBase64URI(im.Value)
 		if err != nil {
 			// try external URL
-			errUrl := validateUrl(im.Uri)
+			errUrl := validateUrl(im.Value)
 			if errUrl != nil {
-                return Config{}, fmt.Errorf("Image %d error: bad base64 format[%w], bad Url format [%w]", i, err, errUrl)
+				return Config{}, fmt.Errorf("Image %d error: bad base64 format[%w], bad Url format [%w]", i, err, errUrl)
 			}
 
 			conf.Images[i].Data = nil
