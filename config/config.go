@@ -69,6 +69,8 @@ type FetcherGit struct {
 type Image struct {
 	Name string `toml:"name"`
     Uri string `toml:"uri"`
+
+    Type string `json:"-"` 
     Data []byte `json:"-"` 
 }
 
