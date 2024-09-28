@@ -153,9 +153,10 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	// if the image matches the conf, we get the url defined in conf first.
 	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
 	if nil != imageUrlProp {
-		if url, ok := p.conf.Images[imageUrlProp.Value]; ok {
-			n.ImageUrl = url
+		if image, ok := p.conf.Image(imageUrlProp.Value); ok {
+			n.ImageUrl = image.Uri
 		} else {
+            // TODO
 			if seemsImageFile(imageUrlProp.Value) {
 				n.ImageUrl = imageUrlProp.Value
 			}
