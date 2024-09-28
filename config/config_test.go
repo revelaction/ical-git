@@ -181,7 +181,7 @@ alarms = [
 	}
 }
 
-func TestImagesWithOneValue(t *testing.T) {
+func TestImageGoodUrl(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
 alarms = [
@@ -206,6 +206,7 @@ images = [
 	}
 
 	expectedValue := "https://example.com/example.jpg"
+	expectedType := "url"
 
 	var im Image
 	var ok bool
@@ -215,6 +216,10 @@ images = [
 
 	if im.Value != expectedValue {
 		t.Fatalf("Expected value for name 'birthday.jpg' to be '%s', but got '%s'", expectedValue, im.Value)
+	}
+
+	if im.Type != expectedType{
+		t.Fatalf("Expected type for name 'birthday.jpg' to be '%s', but got '%s'", expectedValue, im.Type)
 	}
 
 }
