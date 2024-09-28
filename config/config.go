@@ -78,6 +78,14 @@ type Image struct {
 	Data []byte `toml:"-"`
 }
 
+func (i *Image) TruncatedValue() string {
+	const maxLength = 30
+	if len(i.Value) > maxLength {
+		return i.Value[:maxLength] + "..."
+	}
+	return i.Value
+}
+
 func (c *Config) Image(name string) (Image, bool) {
 	for _, img := range c.Images {
 		if img.Name == name {
