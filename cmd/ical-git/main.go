@@ -147,7 +147,7 @@ func initialize(path string) (context.Context, context.CancelFunc, *schedule.Sch
 	}
 
 	for _, image := range conf.Images {
-        slog.Info("📝 Config: 📸", "name", image.Name, "type", image.Type, "value", string(image.Value[:20]))
+        slog.Info("📝 Config: 📸", "name", image.Name, "type", image.Type, "value", image.TruncatedValue())
 	}
 
 	// Create context to cance the tick goroutine on SIGHUP

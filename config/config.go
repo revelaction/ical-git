@@ -79,7 +79,7 @@ type Image struct {
 }
 
 func (i *Image) TruncatedValue() string {
-	const maxLength = 30
+	const maxLength = 60
 	if len(i.Value) > maxLength {
 		return i.Value[:maxLength] + "..."
 	}
