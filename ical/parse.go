@@ -155,7 +155,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
 	if nil != imageUrlProp {
 		if image, ok := p.conf.Image(imageUrlProp.Value); ok {
-            //get the type and fill url or data
+            // TODO get the type and fill url or data
 			n.ImageUrl = image.Value
 		} else {
 			// only external Url
