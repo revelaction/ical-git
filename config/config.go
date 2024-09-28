@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/base64"
 	"fmt"
+	"math/rand"
 	"net/url"
 	"strings"
 	"time"
@@ -87,12 +88,18 @@ func (i *Image) TruncatedValue() string {
 }
 
 func (c *Config) Image(name string) (Image, bool) {
+	var matchingImages []Image
 	for _, img := range c.Images {
 		if img.Name == name {
-			return img, true
+			matchingImages = append(matchingImages, img)
 		}
 	}
-	return Image{}, false
+	if len(matchingImages) == 0 {
+		return Image{}, false
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(matchingImages))
+	return matchingImages[randomIndex], true
 }
 
 // Load loads the configuration. Only alarms compatible with the notifiers are
