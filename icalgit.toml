@@ -55,6 +55,7 @@ icon = "/usr/share/icons/hicolor/48x48/apps/filezilla.png"
 # The resulting URL selected would be "https://example.com/example.jpg"
 [images]
 "birthday.jpg" = "https://example.com/example.jpg"
+"example.jpg" = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"
 
 
 
