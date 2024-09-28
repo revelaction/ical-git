@@ -175,3 +175,38 @@ func (c *Config) Fetcher() string {
 	}
 	return "filesystem"
 }
+
+func DecodeBase64URI(s string) ([]byte, error) {
+	u, err := url.Parse(s)
+	if err != nil || u.Scheme != "data" {
+		return nil, errors.New("invalid Data URI format")
+	}
+
+	// Split the opaque part into mediatype and data
+	parts := strings.SplitN(u.Opaque, ",", 2)
+	if len(parts) != 2 {
+		return nil, errors.New("invalid Data URI format: missing comma separator")
+	}
+
+	mediatype, encodedData := parts[0], parts[1]
+
+	// Parse the media type
+	mt, params, err := mime.ParseMediaType(mediatype)
+	if err != nil || !strings.HasPrefix(mt, "image/") {
+		return nil, err
+	}
+
+	// Check if it's base64 encoded
+	if params["encoding"] != "base64" {
+		return nil, errors.New("Data URI is not base64 encoded")
+	}
+	// Decode the base64 payload
+	var decoder = base64.StdEncoding
+	decodedData, err := decoder.DecodeString(encodedData)
+	if err != nil {
+		return nil, fmt.Errorf("invalid base64 data: %v", err)
+	}
+
+	return decodedData, nil
+}
+
