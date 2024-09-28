@@ -134,6 +134,27 @@ func Load(data []byte) (Config, error) {
 		conf.Images = make([]Image, 0)
 	}
 
+	for i, im := range conf.Images {
+        // check if uri is base64
+        data, err := decodeBase64URI(im.Uri)
+		if err != nil {
+            // try external URL 
+            errUrl := validateUrl(im.Uri)
+		    if errUrl != nil {
+			    return Config{}, fmt.Errorf("Image not base64 or external Url %d: %w, %w", i, err, errUrl)
+            }
+
+            conf.Images[i].Data = nil
+            // TODO const
+            conf.Images[i].Type = "url"
+
+		} else {
+            conf.Images[i].Data = data
+            conf.Images[i].Type = "base64"
+        }
+
+    }
+
 	return conf, nil
 }
 
@@ -180,7 +201,7 @@ func (c *Config) Fetcher() string {
 	return "filesystem"
 }
 
-func DecodeBase64URI(s string) ([]byte, error) {
+func decodeBase64URI(s string) ([]byte, error) {
 	u, err := url.Parse(s)
 	if err != nil || u.Scheme != "data" {
 		return nil, errors.New("invalid Data URI format")
@@ -214,24 +235,24 @@ func DecodeBase64URI(s string) ([]byte, error) {
 	return decodedData, nil
 }
 
-func DecodeURL(urlString string) (string, error) {
-	u, err := url.Parse(urlString)
+func validateUrl(urlStr string) error {
+	u, err := url.Parse(urlStr)
 	if err != nil {
-		return "", fmt.Errorf("invalid URL format: %v", err)
+		return fmt.Errorf("invalid URL format: %v", err)
 	}
 
 	if u.Scheme != "http" && u.Scheme != "https" {
-		return "", fmt.Errorf("invalid scheme: %s. Only http and https are allowed", u.Scheme)
+		return fmt.Errorf("invalid scheme: %s. Only http and https are allowed", u.Scheme)
 	}
 
 	if u.Host == "" {
-		return "", fmt.Errorf("missing host in URL")
+		return fmt.Errorf("missing host in URL")
 	}
 
 	if strings.ToLower(u.Hostname()) == "localhost" {
-		return "", fmt.Errorf("localhost is not allowed as an external URL")
+		return fmt.Errorf("localhost is not allowed as an external URL")
 	}
 
-	return u.String(), nil
+	return nil
 }
 
