@@ -40,7 +40,7 @@ The [`icalgit.toml`](icalgit.toml) file is used to configure the behavior of the
     ```toml
     images = [
         {name = "image1.jpg", value = "https://example.com/image1.jpg"},
-        {name = "image1.jpg", value = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."},
+        {name = "image1.jpg", value = "iVBORw0KGgoAAAANSUhEUgAA..."},
         {name = "image2.jpg", value = "https://example.com/image2.jpg"}
     ]
     ```
