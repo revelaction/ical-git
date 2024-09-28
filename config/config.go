@@ -74,6 +74,15 @@ type Image struct {
     Data []byte `json:"-"` 
 }
 
+func (i Images) Get(name string) Image {
+	for _, img := range i {
+		if img.Name == name {
+			return img
+		}
+	}
+	return Image{}
+}
+
 // Load loads the configuration. Only alarms compatible with the notifiers are
 // present in conf.Alarms
 func Load(data []byte) (Config, error) {
