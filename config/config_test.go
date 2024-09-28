@@ -219,6 +219,43 @@ images = [
 
 }
 
+func TestGoodBase64UriPayload(t *testing.T) {
+	var testToml = []byte(`
+notifiers = ["desktop"]
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+
+images = [
+{name = "good.jpg",  uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="},
+]
+`)
+	conf, err := Load(testToml)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	if conf.Images == nil {
+		t.Fatalf("Expected images property to be initialized, but it was nil")
+	}
+
+	if len(conf.Images) != 1 {
+		t.Fatalf("Expected images property to have 1 entry, but got %d entries", len(conf.Images))
+	}
+
+	expectedType := "base64"
+
+	var im Image
+	var ok bool
+	if im, ok = conf.Image("good.jpg"); !ok {
+		t.Fatalf("Expected key 'good.jpg' to exist, but it does not")
+	}
+
+	if im.Type != expectedType {
+		t.Fatalf("Expected type for name 'good.jpg' to be '%s', but got '%s'", expectedType, im.Type)
+	}
+}
+
 func TestInvalidBase64UriPayload(t *testing.T) {
 	var testToml = []byte(`
 notifiers = ["desktop"]
