@@ -7,6 +7,7 @@ import (
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
 	"html/template"
+	"log/slog"
 	"time"
 )
 
@@ -55,10 +56,12 @@ func (t *Telegram) Notify(n notify.Notification) error {
 		msg = text
 	}
 
-	_, err = t.bot.Send(msg)
+	m, err := t.bot.Send(msg)
 	if err != nil {
 		return err
 	}
+
+	slog.Info("Image File Id", "id", m.Photo[len(m.Photo)-1].FileID)
 
 	return nil
 }

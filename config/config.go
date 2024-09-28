@@ -27,7 +27,7 @@ type Config struct {
 
 	Alarms []alarm.Alarm
 
-	Images []Image 
+	Images []Image
 
 	FetcherGit FetcherGit `toml:"fetcher_git"`
 
@@ -142,7 +142,7 @@ func Load(data []byte) (Config, error) {
 		conf.Images = make([]Image, 0)
 	}
 
-    // We support base64 and external URL
+	// We support base64 and external URL
 	for i, im := range conf.Images {
 		// check if Value is base64
 		data, err := decodeBase64URI(im.Value)

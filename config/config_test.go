@@ -218,7 +218,7 @@ images = [
 		t.Fatalf("Expected value for name 'birthday.jpg' to be '%s', but got '%s'", expectedValue, im.Value)
 	}
 
-	if im.Type != expectedType{
+	if im.Type != expectedType {
 		t.Fatalf("Expected type for name 'birthday.jpg' to be '%s', but got '%s'", expectedValue, im.Type)
 	}
 
