@@ -34,10 +34,10 @@ The [`icalgit.toml`](icalgit.toml) file is used to configure the behavior of the
 
 ## Images
 
-- **images**: A map of image names to their URL paths. If the key is present in the ATTACH line of the calendar, the URL value here is used. Local filesystem paths are not supported.
+- **images**: A map of image names to their values. The value can be a URL or a base64 encoded string. If the key is present in the ATTACH line of the calendar, the corresponding value here is used. Local filesystem paths are not supported.
   - Example:
     ```toml
-    images = { "icon1" = "https://example.com/icon1.png", "icon2" = "https://example.com/icon2.png" }
+    images = { "icon1" = "https://example.com/icon1.png", "icon2" = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." }
     ```
 
 ## Fetchers
