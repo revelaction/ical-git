@@ -88,7 +88,6 @@ func (i *Image) TruncatedValue() string {
 }
 
 // Image selects a random image from the list of images with the same `Name` property.
-// It returns the selected image and a boolean indicating whether an image was found.
 func (c *Config) Image(name string) (Image, bool) {
 	var matchingImages []Image
 	for _, img := range c.Images {
