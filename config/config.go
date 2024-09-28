@@ -132,8 +132,9 @@ func Load(data []byte) (Config, error) {
 		conf.Images = make([]Image, 0)
 	}
 
+    // We support base64 and external URL
 	for i, im := range conf.Images {
-		// check if uri is base64
+		// check if Value is base64
 		data, err := decodeBase64URI(im.Value)
 		if err != nil {
 			// try external URL
