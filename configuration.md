@@ -35,11 +35,13 @@ The [`icalgit.toml`](icalgit.toml) file is used to configure the behavior of the
 ## Images
 
 - **images**: A list of image configurations. Each image has a `name` and a `value`. The `value` can be a URL or a base64 encoded string. The `name` is just a label present in the `ATTACH` line of the calendar. If the `name` is present in the `ATTACH` line, the corresponding `value` here is used. Local filesystem paths are not supported.
+  - **Note**: Multiple images with the same `name` are possible. One random image from the list of images with the same `name` will be used.
   - Example:
     ```toml
     images = [
         {name = "image1.jpg", value = "https://example.com/image1.jpg"},
-        {name = "image2.jpg", value = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."}
+        {name = "image1.jpg", value = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."},
+        {name = "image2.jpg", value = "https://example.com/image2.jpg"}
     ]
     ```
 
