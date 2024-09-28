@@ -61,6 +61,8 @@ type Notification struct {
 	Summary string
 	// Description provides more details about the event
 	Description string
+	// ImageName is the (file) Name of a image to add to the notification. (only telegram)
+	ImageName string
 	// ImageUrl is the Url of a image to add to the notification. (only telegram)
 	ImageUrl string
 	// ImageData is the image binary data to add to the notification. (only telegram)

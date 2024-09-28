@@ -39,7 +39,7 @@ func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time
 	for _, n := range notifications {
 
 		dur := n.Time.Sub(tickStart)
-		slog.Info("🚦 Schedule: 🔔", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type, "source", n.Source)
+		slog.Info("🚦 Schedule: 🔔", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "🔖", dur.Truncate(1*time.Second), "durIso", n.DurIso8601, "type", n.Type, "source", n.Source, "📸", n.ImageName)
 		//dur = 3 * time.Second // Hack
 
 		f, err := s.getNotifyFunc(n)
@@ -70,21 +70,21 @@ func (s *Scheduler) getNotifyFunc(n notify.Notification) (func(), error) {
 		f = func() {
 			err := s.telegram.Notify(n)
 			if err != nil {
-				slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
+				slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source, "📸", n.ImageName)
 				fmt.Printf("Could not deliver telegram notfication: %s", err)
 				return
 			}
-			slog.Info("🚚 Notification:", "Send?", "✅", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
+			slog.Info("🚚 Notification:", "Send?", "✅", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source, "📸", n.ImageName)
 		}
 
 	case "desktop":
 		f = func() {
 			err := s.desktop.Notify(n)
 			if err != nil {
-				slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
+				slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source, "📸", n.ImageName)
 				return
 			}
-			slog.Info("🚚 Notification:", "Send?", "✅", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source)
+			slog.Info("🚚 Notification:", "Send?", "✅", "📁", filepath.Base(n.EventPath), "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source, "📸", n.ImageName)
 		}
 
 	}
