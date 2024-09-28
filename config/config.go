@@ -18,7 +18,7 @@ const (
 	ImageTypeBase64      = "base64"
 )
 
-var validTypes = []string{NotifierTypeTelegram, NotifierTypeDesktop}
+var validNotifierTypes = []string{NotifierTypeTelegram, NotifierTypeDesktop}
 
 type Config struct {
 	Location   Location      `toml:"timezone"`
@@ -174,7 +174,7 @@ func validatePositiveDuration(d time.Duration) error {
 }
 
 func validateNotifierType(nt string) error {
-	for _, vt := range validTypes {
+	for _, vt := range validNotifierTypes {
 		if nt == vt {
 			return nil
 		}
