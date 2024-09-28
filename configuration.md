@@ -30,7 +30,7 @@ The [`icalgit.toml`](icalgit.toml) file is used to configure the behavior of the
     - `-PT30M`: 30 minutes before the event
     - `-P1DT12H`: 1 day and 12 hours before the event
 
-**Note**: If the event has no defined `VALARMS`, the alarms present in the calendar `VEVENT` are used instead.
+**Note**: If the event has defined `VALARMS`, the alarms present in the calendar `VEVENT` are used instead.
 
 ## Images
 
