@@ -68,10 +68,10 @@ type FetcherGit struct {
 
 type Image struct {
 	Name string `toml:"name"`
-    Uri string `toml:"uri"`
+	Uri  string `toml:"uri"`
 
-    Type string `json:"-"` 
-    Data []byte `json:"-"` 
+	Type string `json:"-"`
+	Data []byte `json:"-"`
 }
 
 func (i Images) Get(name string) Image {
@@ -175,4 +175,3 @@ func (c *Config) Fetcher() string {
 	}
 	return "filesystem"
 }
-
