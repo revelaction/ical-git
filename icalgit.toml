@@ -22,11 +22,11 @@ alarms = [
 ]
 
 # images 
-# TODO
 # If the key is present in the ATTACH line of the calendar, the URL value here is used.
 # Example:
 # ATTACH;FMTTYPE=image/jpeg:birthday.jpg
 # The resulting URL selected would be "https://example.com/example.jpg"
+# base64 strings are supported
 images = [
 	{name = "birthday.jpg", value = "https://example.com/example.jpg"},  
 	{name = "example.jpg", value = "/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHB"},

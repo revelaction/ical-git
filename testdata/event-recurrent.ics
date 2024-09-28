@@ -8,5 +8,8 @@ DTEND;TZID=Europe/Berlin:20231226T160000
 RRULE:FREQ=MONTHLY;BYMONTHDAY=-6
 SUMMARY:Monthly Rent Payment (6th last day of the month)
 DESCRIPTION:Remember to pay the rent.
+ - list are supported\n
+ - list are supported\n
+ - list are supported\n
 END:VEVENT
 END:VCALENDAR
