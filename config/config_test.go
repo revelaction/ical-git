@@ -231,6 +231,7 @@ images = [
 ]
 `)
 	_, err := Load(testToml)
+	t.Logf("Error is: %s", err)
 	if err == nil {
 		t.Fatalf("Expected an error due to invalid base64 URI payload, but got none")
 	}
@@ -249,7 +250,7 @@ images = [
 `)
 	_, err := Load(testToml)
 
-	t.Logf("Error message is: %s", err)
+	t.Logf("Error is: %s", err)
 	if err == nil {
 		t.Fatalf("Expected an error due to invalid URI scheme, but got none")
 	}
