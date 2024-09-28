@@ -5,11 +5,11 @@ BEGIN:VEVENT
 UID:123456789
 DTSTART;TZID=Europe/Berlin:20231226T150000
 DTEND;TZID=Europe/Berlin:20231226T160000
-RRULE:FREQ=MONTHLY;BYMONTHDAY=-6
-SUMMARY:Monthly Rent Payment (6th last day of the month)
+RRULE:FREQ=MONTHLY;BYMONTHDAY=-3
+SUMMARY:Next Month List of things
 DESCRIPTION:This event has a formatted list
- - list are supported\n
- - list are supported\n
- - list are supported\n
+ - list item 1\n
+ - list item 2\n
+ - list item 3\n
 END:VEVENT
 END:VCALENDAR
