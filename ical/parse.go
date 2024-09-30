@@ -187,6 +187,20 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 		}
 	}
 
+	// Collect all Comment properties
+	var comments []string
+	for _, p := range event.Properties {
+		if p.IANAToken == string(ics.ComponentPropertyComment) {
+			comments = append(comments, p.Value)
+		}
+	}
+
+	// Randomly select one Comment
+	if len(comments) > 0 {
+		rand.Seed(time.Now().UnixNano())
+		n.Comment = comments[rand.Intn(len(comments))]
+	}
+
 	return n
 }
 
