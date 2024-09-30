@@ -199,6 +199,10 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 			comments = append(comments, p.Value)
 		}
 		if p.IANAToken == string(ics.ComponentPropertyCategories) {
+			if p.Value == NoDatesCategory {
+				n.ShowDates = false
+				continue
+			}
 			categories = append(categories, p.Value)
 		}
 	}
@@ -210,13 +214,8 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 
 	// Assign collected categories to the Notification property
 	n.Categories = categories
+	n.ShowDates = true
 
-	// Check if the event belongs to the "no-dates" category
-	if slices.Contains(categories, NoDatesCategory) {
-		n.ShowDates = false
-	} else {
-		n.ShowDates = true
-	}
 
 	return n
 }
