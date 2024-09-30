@@ -218,7 +218,6 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	// Assign collected categories to the Notification property
 	n.Categories = categories
 
-
 	return n
 }
 
