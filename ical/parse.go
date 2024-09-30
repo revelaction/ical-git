@@ -16,6 +16,8 @@ import (
 	"time"
 )
 
+const NoDatesCategory = "no-dates"
+
 type Parser struct {
 	notifications []notify.Notification
 	conf          config.Config
@@ -208,6 +210,13 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 
 	// Assign collected categories to the Notification property
 	n.Categories = categories
+
+	// Check if the event belongs to the "no-dates" category
+	if slices.Contains(categories, NoDatesCategory) {
+		n.ShowDates = false
+	} else {
+		n.ShowDates = true
+	}
 
 	return n
 }
