@@ -61,7 +61,9 @@ func (t *Telegram) Notify(n notify.Notification) error {
 		return err
 	}
 
-	slog.Info("Image File Id", "id", m.Photo[len(m.Photo)-1].FileID)
+	if len(m.Photo) > 0 {
+		slog.Info("Image File Id", "id", m.Photo[len(m.Photo)-1].FileID)
+	}
 	//slog.Info("Image File Id", "id", m)
 
 	return nil
