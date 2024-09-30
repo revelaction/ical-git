@@ -56,13 +56,19 @@ func (t *Telegram) Notify(n notify.Notification) error {
 		msg = text
 	}
 
-	m, err = t.bot.Send(msg)
+	m, err := t.bot.Send(msg)
 	if err != nil {
 		return err
 	}
 
-	if len(m.Photo) > 0 {
-		slog.Info("Image File Id", "id", m.Photo[len(m.Photo)-1].FileID)
+	if photoMsg, ok := m.(*tg.Message); ok {
+		if len(photoMsg.Photo) > 0 {
+			slog.Info("Image File Id", "id", photoMsg.Photo[len(photoMsg.Photo)-1].FileID)
+		} else {
+			slog.Info("No Photo Id")
+		}
+	} else {
+		slog.Info("No Photo Id")
 	}
 	//slog.Info("Image File Id", "id", m)
 
