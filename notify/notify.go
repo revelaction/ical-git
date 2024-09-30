@@ -93,6 +93,8 @@ type Notification struct {
 	Comment string
 	// Categories lists the categories associated with the event
 	Categories []string
+	// ShowDates indicates whether to display the event dates in the notification
+	ShowDates bool
 }
 
 // EventTimeConf returns the EventTime in the configured location
