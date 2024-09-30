@@ -56,7 +56,7 @@ func (t *Telegram) Notify(n notify.Notification) error {
 		msg = text
 	}
 
-	_, err = t.bot.Send(msg)
+	m, err = t.bot.Send(msg)
 	if err != nil {
 		return err
 	}
