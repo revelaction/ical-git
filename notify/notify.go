@@ -24,6 +24,12 @@ const Tpl = `
 {{- if .Comment}}
 {{.Comment}}
 {{- end}}
+{{- if .Categories}}
+Categories:
+{{- range .Categories}}
+🔸{{.}}
+{{- end}}
+{{- end}}
 {{- if .Status}}
 🚦 Status: <b>{{.Status}}</b>
 {{- end}}
@@ -85,6 +91,8 @@ type Notification struct {
 	// a ics file for recurrent motivational reminder can have many comment lines and every instance of
 	// the message will have a different related comment.
 	Comment string
+	// Categories lists the categories associated with the event
+	Categories []string
 }
 
 // EventTimeConf returns the EventTime in the configured location
