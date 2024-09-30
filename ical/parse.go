@@ -199,7 +199,6 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	// Randomly select one Comment
 	if len(comments) > 0 {
 		rand.Seed(time.Now().UnixNano())
-		n.Comment = comments[rand.Intn(len(comments))]
 	}
 
 	return n
