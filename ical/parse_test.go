@@ -62,6 +62,7 @@ END:VCALENDAR
 		t.Errorf("Expected summary 'Simple Event', got '%s'", notification.Summary)
 	}
 }
+}
 
 func TestParseEventAlarmTriggered(t *testing.T) {
 
