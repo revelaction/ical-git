@@ -80,7 +80,7 @@ type Notification struct {
 	Attendees []string
 	// Source indicates the source of the notification, which can be either "event" or "config"
 	Source string
-	// Comment provides additional comments about the notification.
+	// Comment provides additional text about the notification.
 	// The ical standard allows many COMMENT lines. We use this feature to provide "one of many" messages:
 	// a ics file for recurrent motivational reminder can have many comment lines and every instance of
 	// the message will have a different related comment.
