@@ -19,10 +19,10 @@ const Tpl = `
 📌 Location: <b>{{.Location}}</b>
 {{- end}}
 {{- if .Description}}
-📝 Description: {{.Description}}
+{{.Description}}
 {{- end}}
 {{- if .Comment}}
-📝 Comment: {{.Comment}}
+{{.Comment}}
 {{- end}}
 {{- if .Status}}
 🚦 Status: <b>{{.Status}}</b>
