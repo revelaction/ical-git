@@ -9,6 +9,7 @@ import (
 	"github.com/revelaction/ical-git/fetch"
 	"github.com/revelaction/ical-git/notify"
 	"log/slog"
+	"math/rand"
 	"path/filepath"
 	"slices"
 	"strings"
