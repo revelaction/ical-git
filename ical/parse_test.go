@@ -1,6 +1,7 @@
 package ical
 
 import (
+	"slices"
 	"testing"
 	"time"
 
