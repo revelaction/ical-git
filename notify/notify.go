@@ -21,6 +21,9 @@ const Tpl = `
 {{- if .Description}}
 📝 Description: {{.Description}}
 {{- end}}
+{{- if .Comment}}
+📝 Comment: {{.Comment}}
+{{- end}}
 {{- if .Status}}
 🚦 Status: <b>{{.Status}}</b>
 {{- end}}
@@ -77,6 +80,8 @@ type Notification struct {
 	Attendees []string
 	// Source indicates the source of the notification, which can be either "event" or "config"
 	Source string
+	// Comment provides additional comments about the notification
+	Comment string
 }
 
 // EventTimeConf returns the EventTime in the configured location
