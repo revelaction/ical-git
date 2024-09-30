@@ -194,6 +194,9 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	var comments []string
 	// Collect all Categories properties
 	var categories []string
+
+	n.ShowDates = true
+
 	for _, p := range event.Properties {
 		if p.IANAToken == string(ics.ComponentPropertyComment) {
 			comments = append(comments, p.Value)
@@ -214,7 +217,6 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 
 	// Assign collected categories to the Notification property
 	n.Categories = categories
-	n.ShowDates = true
 
 
 	return n
