@@ -341,3 +341,65 @@ END:VCALENDAR
 		t.Errorf("Unexpected Source', got '%s'", notification.Source)
 	}
 }
+
+func TestParseCommentNotification(t *testing.T) {
+	configData := []byte(`
+timezone = "Europe/Berlin"
+tick = "24h"
+
+notifiers = ["desktop"]
+
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+`)
+
+	conf, err := config.Load(configData)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	start := time.Date(2023, 12, 25, 0, 0, 0, 0, time.UTC)
+	parser := NewParser(conf, start)
+
+	// Test data
+	icalData := []byte(`
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Company//Your Product//EN
+BEGIN:VEVENT
+UID:123456789
+DTSTART;TZID=Europe/Berlin:20231226T150000
+DTEND;TZID=Europe/Berlin:20231226T160000
+RRULE:FREQ=DAILY
+SUMMARY:Monthly Rent Payment 
+DESCRIPTION:Remember to pay the rent.
+COMMENT:Stay organized and never miss a payment!
+COMMENT:Keep your finances in check with timely reminders.
+COMMENT:Effortless rent management starts here.
+END:VEVENT
+END:VCALENDAR
+`)
+
+	// Parse the iCal data
+	file := fetch.File{
+		Path:    "",
+		Content: icalData,
+		Error:   nil,
+	}
+	err = parser.Parse(file)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	// Check the notifications
+	notifications := parser.Notifications()
+	if len(notifications) != 1 {
+		t.Fatalf("Expected 1 notification, got %d", len(notifications))
+	}
+
+	notification := notifications[0]
+	if notification.Comment == "" {
+		t.Errorf("Expected a non-empty Comment, got '%s'", notification.Comment)
+	}
+}
