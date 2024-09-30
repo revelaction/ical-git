@@ -342,7 +342,7 @@ END:VCALENDAR
 	}
 }
 
-func TestParseCommentNotification(t *testing.T) {
+func TestParseComment(t *testing.T) {
 	configData := []byte(`
 timezone = "Europe/Berlin"
 tick = "24h"
@@ -404,7 +404,7 @@ END:VCALENDAR
 	}
 }
 
-func TestParseCategoriesNotification(t *testing.T) {
+func TestParseCategories(t *testing.T) {
 	configData := []byte(`
 timezone = "Europe/Berlin"
 tick = "24h"
