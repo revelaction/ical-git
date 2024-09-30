@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Company//Your Product//EN
+BEGIN:VEVENT
+UID:123456789
+DTSTART;TZID=Europe/Berlin:20231226T150000
+DTEND;TZID=Europe/Berlin:20231226T160000
+RRULE:FREQ=MONTHLY;BYMONTHDAY=-6
+SUMMARY:Monthly Rent Payment (6th last day of the month)
+DESCRIPTION:Remember to pay the rent.
+COMMENT:Stay organized and never miss a payment!
+COMMENT:Keep your finances in check with timely reminders.
+COMMENT:Effortless rent management starts here.
+END:VEVENT
+END:VCALENDAR
