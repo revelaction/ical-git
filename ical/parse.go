@@ -165,11 +165,13 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 				n.ImageName = image.Name
 			}
 		} else {
-			// only external Url
-			// check https TODO
-			if seemsImageFile(imageUrlProp.Value) {
-				n.ImageUrl = imageUrlProp.Value
-				n.ImageName = imageUrlProp.Value
+			// TODO move validation from config
+			err := config.ValidateUrl(imageUrlProp.Value)
+			if err == nil {
+				if seemsImageFile(imageUrlProp.Value) {
+					n.ImageUrl = imageUrlProp.Value
+					n.ImageName = imageUrlProp.Value
+				}
 			}
 		}
 	}

@@ -157,7 +157,7 @@ func Load(data []byte) (Config, error) {
 		data, err := decodeBase64URI(im.Value)
 		if err != nil {
 			// try external URL
-			errUrl := validateUrl(im.Value)
+			errUrl := ValidateUrl(im.Value)
 			if errUrl != nil {
 				return Config{}, fmt.Errorf("Image %d error: bad base64 format[%w], bad Url format [%w]", i, err, errUrl)
 			}
@@ -229,7 +229,7 @@ func decodeBase64URI(s string) ([]byte, error) {
 	return decodedData, nil
 }
 
-func validateUrl(urlStr string) error {
+func ValidateUrl(urlStr string) error {
 	u, err := url.Parse(urlStr)
 	if err != nil {
 		return fmt.Errorf("invalid URL format: %v", err)
