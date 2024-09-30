@@ -166,6 +166,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 			}
 		} else {
 			// only external Url
+			// check https TODO
 			if seemsImageFile(imageUrlProp.Value) {
 				n.ImageUrl = imageUrlProp.Value
 				n.ImageName = imageUrlProp.Value
