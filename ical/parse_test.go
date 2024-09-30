@@ -63,6 +63,7 @@ END:VCALENDAR
 	}
 }
 }
+}
 
 func TestParseEventAlarmTriggered(t *testing.T) {
 
