@@ -469,7 +469,7 @@ END:VCALENDAR
 	}
 }
 
-func TestParseCategoriesWithNoDates(t *testing.T) {
+func TestParseCategoriesWithNoDate(t *testing.T) {
 	configData := []byte(`
 timezone = "Europe/Berlin"
 tick = "24h"
@@ -500,10 +500,72 @@ DTSTART;TZID=Europe/Berlin:20231226T150000
 DTEND;TZID=Europe/Berlin:20231226T160000
 RRULE:FREQ=DAILY
 SUMMARY:Event with Categories
-DESCRIPTION:Event with categories A, B, no-dates
+DESCRIPTION:Event with categories A, B, show-no-date
 CATEGORIES:A
 CATEGORIES:B
-CATEGORIES:no-dates
+CATEGORIES:show-no-date
+END:VEVENT
+END:VCALENDAR
+`)
+
+	// Parse the iCal data
+	file := fetch.File{
+		Path:    "",
+		Content: icalData,
+		Error:   nil,
+	}
+	err = parser.Parse(file)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	// Check the notifications
+	notifications := parser.Notifications()
+	if len(notifications) != 1 {
+		t.Fatalf("Expected 1 notification, got %d", len(notifications))
+	}
+
+	notification := notifications[0]
+	expectedCategories := []string{"A", "B"}
+	if !slices.Equal(notification.Categories, expectedCategories) {
+		t.Errorf("Expected categories %v, got %v", expectedCategories, notification.Categories)
+	}
+}
+func TestParseCategoriesWithNoAlarm(t *testing.T) {
+	configData := []byte(`
+timezone = "Europe/Berlin"
+tick = "24h"
+
+notifiers = ["desktop"]
+
+alarms = [
+	{type = "desktop", when = "-P1D"},  
+]
+`)
+
+	conf, err := config.Load(configData)
+	if err != nil {
+		t.Fatalf("Failed to load config: %v", err)
+	}
+
+	start := time.Date(2023, 12, 25, 0, 0, 0, 0, time.UTC)
+	parser := NewParser(conf, start)
+
+	// Test data
+	icalData := []byte(`
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Company//Your Product//EN
+BEGIN:VEVENT
+UID:123456789
+DTSTART;TZID=Europe/Berlin:20231226T150000
+DTEND;TZID=Europe/Berlin:20231226T160000
+RRULE:FREQ=DAILY
+SUMMARY:Event with Categories
+DESCRIPTION:Event with categories A, B, show-no-alarm
+CATEGORIES:A
+CATEGORIES:B
+CATEGORIES:show-no-alarm
 END:VEVENT
 END:VCALENDAR
 `)
