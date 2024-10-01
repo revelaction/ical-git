@@ -99,6 +99,8 @@ type Notification struct {
 	Categories []string
 	// ShowDates indicates whether to display the event dates in the notification
 	ShowDates bool
+	// ShowAlarm indicates whether to display the alarm details in the notification
+	ShowAlarm bool
 }
 
 // EventTimeConf returns the EventTime in the configured location
