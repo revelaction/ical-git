@@ -44,7 +44,9 @@ When creating iCalendar files, you can use the `CATEGORIES` property to categori
 
 **Example:**
 ```ics
-CATEGORIES:Work,Meeting,no-dates
+CATEGORIES:Work
+CATEGORIES:Meeting
+CATEGORIES:no-dates
 ```
 
 # Managing iCal Files
