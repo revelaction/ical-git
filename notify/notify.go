@@ -43,6 +43,9 @@ Attendees:
 🔸{{.}}
 {{- end}}
 {{- end}}
+{{- if and .ShowAlarm .DurIso8601}}
+🔔 Alarm: <b>{{.DurIso8601}}</b>
+{{- end}}
 
 {{.Source}} 🔔 {{.DurIso8601}}
 `
