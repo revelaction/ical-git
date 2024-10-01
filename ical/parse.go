@@ -200,6 +200,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	var categories []string
 
 	n.ShowDate = true
+	n.ShowAlarm = true
 
 	for _, p := range event.Properties {
 		if p.IANAToken == string(ics.ComponentPropertyComment) {
