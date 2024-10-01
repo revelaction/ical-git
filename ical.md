@@ -40,6 +40,13 @@ COMMENT:Task 3: Follow up
 
 ### Disable dates (CATEGORIES property)
 
+When creating iCalendar files, you can use the `CATEGORIES` property to categorize your events. `ical-git` will display all categories associated with an event. Additionally, you can use a special category named "no-dates" to disable the display of dates in the notifications.
+
+**Example:**
+```ics
+CATEGORIES:Work,Meeting,no-dates
+```
+
 # Managing iCal Files
 
 It is highly advisable to place your iCal files under revision control to
