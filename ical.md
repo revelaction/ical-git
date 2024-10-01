@@ -4,18 +4,20 @@
 
 - **Emails**: Many email clients and services allow you to create calendar events directly from email invitations. These events can be exported as iCalendar files.
 - **Appointments**: Calendar applications like Google Calendar, Outlook, or Apple Calendar can create and export events in the iCalendar format.
-- **Language Models (LLMs)**: Private LLMs can be used to generate iCalendar content based on prompts or templates. Ensure the generated content adheres to the iCalendar format, including proper syntax and required fields.
+- **Language Models (LLMs)**: Private LLMs can be used to generate iCalendar content based on simple instructions. 
+- **copy and modify** existing iCalendar files from the `testdata` directory to suit your needs:
 
-To use these sources:
+Export the calendar event or generate the content from the LLM in the iCalendar
+format (`.ics` file) and save the generated or exported `.ics` file in the
+directory specified in your `icalgit.toml` configuration file.
 
-1. **Export from Source**: Export the calendar event or generate the content from the LLM in the iCalendar format (`.ics` file).
-2. **Place in Directory**: Save the generated or exported `.ics` file in the directory specified in your `icalgit.toml` configuration file.
+## ical-git special features 
 
-Alternatively, you can copy and modify existing iCalendar files from the `testdata` directory to suit your needs:
+### Add Images (ATTACH property)
 
-1. **Copy Files**: Copy the desired iCalendar files from the `testdata` directory to your working directory.
-2. **Modify Content**: Open the copied files and modify the event details, dates, and other relevant information to fit your requirements.
-3. **Save Changes**: Save the modified files in the directory specified in your configuration.
+### Comments (COMMENT property)
+
+### Disable dates (CATEGORIES property)
 
 # Managing iCal Files
 
