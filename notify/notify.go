@@ -9,10 +9,10 @@ const Tpl = `
 <b>{{.Summary}}</b>
 <b> </b>
 {{- end}}
-{{- if and .ShowDates .EventTime}}
+{{- if and .ShowDate .EventTime}}
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 {{- end}}
-{{- if and .ShowDates .EventTimeConf}}
+{{- if and .ShowDate .EventTimeConf}}
 📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
 {{- end}}
 
@@ -46,7 +46,6 @@ Attendees:
 {{- if .ShowAlarm}}
 {{.Source}} 🔔 {{.DurIso8601}}
 {{- end}}
-
 `
 
 type Notifier interface {
@@ -99,8 +98,8 @@ type Notification struct {
 	Comment string
 	// Categories lists the categories associated with the event
 	Categories []string
-	// ShowDates indicates whether to display the event dates in the notification
-	ShowDates bool
+	// ShowDate indicates whether to display the event dates in the notification
+	ShowDate bool
 	// ShowAlarm indicates whether to display the alarm details in the notification
 	ShowAlarm bool
 }

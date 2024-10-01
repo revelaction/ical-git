@@ -199,7 +199,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	// Collect all Categories properties
 	var categories []string
 
-	n.ShowDates = true
+	n.ShowDate = true
 
 	for _, p := range event.Properties {
 		if p.IANAToken == string(ics.ComponentPropertyComment) {
@@ -207,7 +207,11 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 		}
 		if p.IANAToken == string(ics.ComponentPropertyCategories) {
 			if p.Value == NoDateCategory {
-				n.ShowDates = false
+				n.ShowDate = false
+				continue
+			}
+			if p.Value == NoAlarmCategory {
+				n.ShowAlarm = false
 				continue
 			}
 			categories = append(categories, p.Value)
