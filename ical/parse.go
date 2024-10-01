@@ -17,6 +17,7 @@ import (
 )
 
 const NoDatesCategory = "no-dates"
+const NoAlarmCategory = "no-alarm"
 
 type Parser struct {
 	notifications []notify.Notification
