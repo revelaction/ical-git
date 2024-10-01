@@ -15,6 +15,15 @@ directory specified in your `icalgit.toml` configuration file.
 
 ### Add Images (ATTACH property)
 
+When creating iCalendar files, you can add images for notifications by using the `ATTACH` property in the `.ics` file. This property should reference an image from the configuration file.
+
+**Example:**
+```ics
+ATTACH:https://example.com/path/to/image.png
+```
+
+For more details on configuring images, refer to the [Configuration File](config.md) documentation.
+
 ### Comments (COMMENT property)
 
 ### Disable dates (CATEGORIES property)
