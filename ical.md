@@ -29,14 +29,27 @@ For more details on configuring images, refer to the [Configuration File](config
 
 ### Comments (COMMENT property)
 
+In iCalendar files, you can use multiple `COMMENT` properties to provide
+additional information about an event. Only one of these `COMMENT` lines will
+be displayed in the notification. This can be useful for events without exact
+dates, composed of many tasks to be made loosely.
+
+**Example:**
+```ics
+COMMENT:Task 1: Prepare materials
+COMMENT:Task 2: Schedule meeting
+COMMENT:Task 3: Follow up
+```
+
 ### Disable dates (CATEGORIES property)
 
 # Managing iCal Files
 
-For detailed instructions on managing iCal files, refer to the [Managing iCal Files](ical.md#managing-ical-files) section.
+It is highly advisable to place your iCal files under revision control to
+ensure that changes are tracked and can be reverted if necessary.
 
-It is highly advisable to place your iCal files under revision control to ensure that changes are tracked and can be reverted if necessary. 
-Additionally, setting up a cron job to periodically pull the latest content of these files can help keep your calendar up-to-date.
+Additionally, setting up a cron job to periodically pull the latest content of
+these files can help keep your calendar up-to-date.
 
 ## Setting Up Revision Control
 
