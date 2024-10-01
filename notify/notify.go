@@ -43,11 +43,10 @@ Attendees:
 🔸{{.}}
 {{- end}}
 {{- end}}
-{{- if and .ShowAlarm .DurIso8601}}
-🔔 Alarm: <b>{{.DurIso8601}}</b>
+{{- if .ShowAlarm}}
+{{.Source}} 🔔 {{.DurIso8601}}
 {{- end}}
 
-{{.Source}} 🔔 {{.DurIso8601}}
 `
 
 type Notifier interface {
