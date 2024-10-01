@@ -35,14 +35,14 @@ The basic usage involves having a private repository containing iCalendar
 [`.ics` files](testdata/event-recurrent.ics). You need to provide the SSH key and repository address in the
 configuration TOML file. Alternatively, you can provide a path in the current
 filesystem. For more details, refer to the [configuration
-file](configuration.md). Once configured, you can run the daemon to start
+file](configuration.md) documentation. Once configured, you can run the daemon to start
 processing the calendar events.
 
 ![daemon log output ](log.png)
 
 # Features
 
-- **Focusing on Private Hosted Solution**: Designed to provide a simple and effective private self-hosted calendar solution.
+- **Private Hosted Solution**: Designed to provide a simple and effective private self-hosted calendar solution.
 - **Low resources computers**: Supports installation on Raspberry Pi Zero and other cheap microcomputers.
 - **Notifications**: Offers support for Telegram bots and local Linux desktop notifications.
 - **Direct Git Fetching**: Can fetch iCal files directly from a git repository without saving them locally.
