@@ -29,10 +29,7 @@ For more details on configuring images, refer to the [Configuration File](config
 
 ### Comments (COMMENT property)
 
-In iCalendar files, you can use multiple `COMMENT` properties to provide
-additional information about an event. Only one of these `COMMENT` lines will
-be displayed in the notification. This can be useful for events without exact
-dates, composed of many tasks to be made loosely.
+In iCalendar files, you can use multiple `COMMENT` properties to provide additional information about an event. `ical-git` will display only one of these `COMMENT` lines in the notification, making it useful for events without exact dates or composed of many loosely related tasks.
 
 **Example:**
 ```ics
