@@ -16,8 +16,8 @@ import (
 	"time"
 )
 
-const NoDateCategory = "show-no-date"
-const NoAlarmCategory = "show-no-alarm"
+const ShowNoDateCategory = "show-no-date"
+const ShowAlarmCategory = "show-alarm"
 
 type Parser struct {
 	notifications []notify.Notification
@@ -200,19 +200,18 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	var categories []string
 
 	n.ShowDate = true
-	n.ShowAlarm = true
 
 	for _, p := range event.Properties {
 		if p.IANAToken == string(ics.ComponentPropertyComment) {
 			comments = append(comments, p.Value)
 		}
 		if p.IANAToken == string(ics.ComponentPropertyCategories) {
-			if p.Value == NoDateCategory {
+			if p.Value == ShowNoDateCategory {
 				n.ShowDate = false
 				continue
 			}
-			if p.Value == NoAlarmCategory {
-				n.ShowAlarm = false
+			if p.Value == ShowAlarmCategory {
+				n.ShowAlarm = true
 				continue
 			}
 			categories = append(categories, p.Value)
