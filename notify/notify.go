@@ -6,7 +6,7 @@ import (
 
 const Tpl = `
 {{- if and (not .Loose) .IsImminent}}
-📢🔥🚨 IN {{.TimeDifference}} 🚨🔥📢
+📢🔥🚨 In {{.TimeDifference}}! 🚨🔥📢
 {{- end}}
 {{- if .Summary}}
 <b>{{.Summary}}</b>
