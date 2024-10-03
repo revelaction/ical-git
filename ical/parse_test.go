@@ -565,7 +565,7 @@ SUMMARY:Event with Categories
 DESCRIPTION:Event with categories A, B, show-no-alarm
 CATEGORIES:A
 CATEGORIES:B
-CATEGORIES:show-no-alarm
+CATEGORIES:show-alarm
 CATEGORIES:loose
 END:VEVENT
 END:VCALENDAR

@@ -199,15 +199,13 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	// Collect all Categories properties
 	var categories []string
 
-	n.ShowDate = true
-
 	for _, p := range event.Properties {
 		if p.IANAToken == string(ics.ComponentPropertyComment) {
 			comments = append(comments, p.Value)
 		}
 		if p.IANAToken == string(ics.ComponentPropertyCategories) {
 			if p.Value == LooseCategory {
-				n.ShowDate = false
+				n.Loose = true
 				continue
 			}
 			if p.Value == ShowAlarmCategory {
