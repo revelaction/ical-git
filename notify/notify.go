@@ -9,10 +9,10 @@ const Tpl = `
 <b>{{.Summary}}</b>
 <b> </b>
 {{- end}}
-{{- if and .Loose .EventTime}}
+{{- if and (not .Loose) .EventTime}}
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 {{- end}}
-{{- if and .Loose .EventTimeConf}}
+{{- if and (not .Loose) .EventTimeConf}}
 📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
 {{- end}}
 
