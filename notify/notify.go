@@ -31,7 +31,7 @@ const Tpl = `
 {{- if .Categories}}
 Categories:
 {{- range .Categories}}
-🔸{{.}}
+🔖{{.}}
 {{- end}}
 {{- end}}
 {{- if .Status}}
