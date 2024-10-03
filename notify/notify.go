@@ -47,7 +47,7 @@ Attendees:
 {{.Source}} 🔔 {{.DurIso8601}}
 {{- end}}
 
-{{- if .IsUrgent}}
+{{- if .IsImminent}}
 
 📢🔥🚨 IN {{.TimeDifference}} 🚨🔥📢
 
@@ -123,7 +123,7 @@ func (n Notification) EventTimeTz() string {
 }
 
 // IsUrgent checks if the notification is urgent based on the difference between EventTime and Time
-func (n Notification) IsUrgent() bool {
+func (n Notification) IsImminent() bool {
 	return n.EventTime.Sub(n.Time) > UrgencyThreshold
 }
 
