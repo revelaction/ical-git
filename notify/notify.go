@@ -123,3 +123,8 @@ func (n Notification) EventTimeTz() string {
 func (n Notification) IsUrgent() bool {
 	return n.EventTime.Sub(n.Time) > UrgencyThreshold
 }
+
+// TimeDifference returns the difference between EventTime and Time
+func (n Notification) TimeDifference() time.Duration {
+	return n.EventTime.Sub(n.Time)
+}
