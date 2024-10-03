@@ -46,8 +46,11 @@ Attendees:
 {{- if .ShowAlarm}}
 {{.Source}} 🔔 {{.DurIso8601}}
 {{- end}}
+
 {{- if .IsUrgent}}
+
 📢 🔥 Urgent! Time Difference: {{.TimeDifference}} 🔥 📢
+
 {{- end}}
 `
 
