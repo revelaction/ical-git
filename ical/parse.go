@@ -16,9 +16,11 @@ import (
 	"time"
 )
 
-// LooseCategory is the category used to indicate that the event is without a fixed date or deadline
+// LooseCategory is the category used to indicate that the event is without a
+// fixed date or deadline
 const LooseCategory = "loose"
-// ShowAlarmCategory is the category used to indicate that the alarm details should be displayed in the notification
+// ShowAlarmCategory is the category used to indicate that the alarm details
+// should be displayed in the notification
 const ShowAlarmCategory = "show-alarm"
 
 type Parser struct {

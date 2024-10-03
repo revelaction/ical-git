@@ -5,6 +5,9 @@ import (
 )
 
 const Tpl = `
+{{- if and (not .Loose) .IsImminent}}
+📢🔥🚨 IN {{.TimeDifference}} 🚨🔥📢
+{{- end}}
 {{- if .Summary}}
 <b>{{.Summary}}</b>
 <b> </b>
@@ -46,15 +49,9 @@ Attendees:
 {{- if .ShowAlarm}}
 {{.Source}} 🔔 {{.DurIso8601}}
 {{- end}}
-
-{{- if and (not .Loose) .IsImminent}}
-
-📢🔥🚨 IN {{.TimeDifference}} 🚨🔥📢
-
-{{- end}}
 `
 
-const ImminenceThreshold = 1 * time.Hour
+const ImminenceThreshold = 2 * time.Hour
 
 type Notifier interface {
 	Notify(n Notification) error
@@ -122,9 +119,9 @@ func (n Notification) EventTimeTz() string {
 	return n.EventTime.Location().String()
 }
 
-// IsUrgent checks if the notification is urgent based on the difference between EventTime and Time
+// IsImminent checks if the notification is urgent based on the difference between EventTime and Time
 func (n Notification) IsImminent() bool {
-	return n.EventTime.Sub(n.Time) > ImminenceThreshold
+	return n.EventTime.Sub(n.Time) < ImminenceThreshold
 }
 
 // TimeDifference returns the difference between EventTime and Time
