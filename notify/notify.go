@@ -46,6 +46,9 @@ Attendees:
 {{- if .ShowAlarm}}
 {{.Source}} 🔔 {{.DurIso8601}}
 {{- end}}
+{{- if .IsUrgent}}
+Urgent!
+{{- end}}
 `
 
 const UrgencyThreshold = 1 * time.Hour
