@@ -40,7 +40,7 @@ Categories:
 {{- if .Attendees}}
 Attendees:
 {{- range .Attendees}}
-🔸{{.}}
+👤{{.}}
 {{- end}}
 {{- end}}
 {{- if .ShowAlarm}}
