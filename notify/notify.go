@@ -48,6 +48,8 @@ Attendees:
 {{- end}}
 `
 
+const UrgencyThreshold = 1 * time.Hour
+
 type Notifier interface {
 	Notify(n Notification) error
 }
@@ -112,4 +114,9 @@ func (n Notification) EventTimeConf(loc *time.Location) time.Time {
 // EventTimeTz extracts the location of EventTime as string
 func (n Notification) EventTimeTz() string {
 	return n.EventTime.Location().String()
+}
+
+// IsUrgent checks if the notification is urgent based on the difference between EventTime and Time
+func (n Notification) IsUrgent() bool {
+	return n.EventTime.Sub(n.Time) > UrgencyThreshold
 }
