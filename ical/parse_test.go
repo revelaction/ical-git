@@ -503,7 +503,7 @@ SUMMARY:Event with Categories
 DESCRIPTION:Event with categories A, B, show-no-date
 CATEGORIES:A
 CATEGORIES:B
-CATEGORIES:show-no-date
+CATEGORIES:loose
 END:VEVENT
 END:VCALENDAR
 `)
