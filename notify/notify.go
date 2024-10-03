@@ -49,7 +49,7 @@ Attendees:
 
 {{- if .IsUrgent}}
 
-📢 🔥 🚨 Urgent! Time Difference: {{.TimeDifference}} 🚨 🔥 📢
+📢🔥🚨 IN {{.TimeDifference}} 🚨🔥📢
 
 {{- end}}
 `
