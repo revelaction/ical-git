@@ -54,7 +54,7 @@ Attendees:
 {{- end}}
 `
 
-const UrgencyThreshold = 1 * time.Hour
+const ImminenceThreshold = 1 * time.Hour
 
 type Notifier interface {
 	Notify(n Notification) error
@@ -124,7 +124,7 @@ func (n Notification) EventTimeTz() string {
 
 // IsUrgent checks if the notification is urgent based on the difference between EventTime and Time
 func (n Notification) IsImminent() bool {
-	return n.EventTime.Sub(n.Time) > UrgencyThreshold
+	return n.EventTime.Sub(n.Time) > ImminenceThreshold
 }
 
 // TimeDifference returns the difference between EventTime and Time
