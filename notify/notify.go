@@ -47,7 +47,7 @@ Attendees:
 {{.Source}} 🔔 {{.DurIso8601}}
 {{- end}}
 
-{{- if .IsImminent}}
+{{- if and (not .Loose) .IsImminent}}
 
 📢🔥🚨 IN {{.TimeDifference}} 🚨🔥📢
 
