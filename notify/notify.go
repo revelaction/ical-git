@@ -9,10 +9,10 @@ const Tpl = `
 <b>{{.Summary}}</b>
 <b> </b>
 {{- end}}
-{{- if and .ShowDate .EventTime}}
+{{- if and .Loose .EventTime}}
 📅 <b>{{.EventTime.Format "Monday, 2006-01-02"}}</b> <b>{{.EventTime.Format "🕒 15:04"}}</b> 🌍 {{.EventTimeZone}}
 {{- end}}
-{{- if and .ShowDate .EventTimeConf}}
+{{- if and .Loose .EventTimeConf}}
 📅 <i>{{.EventTimeConf.Format "Monday, 2006-01-02"}}</i> <i>{{.EventTimeConf.Format "🕒 15:04"}}</i> 🌍 <i>{{.EventTimeZoneConf}}</i>
 {{- end}}
 
@@ -106,8 +106,8 @@ type Notification struct {
 	Comment string
 	// Categories lists the categories associated with the event
 	Categories []string
-	// ShowDate indicates whether to display the event dates in the notification
-	ShowDate bool
+	// Loose indicates whether the event is without a fixed date or deadline
+	Loose bool
 	// ShowAlarm indicates whether to display the alarm details in the notification
 	ShowAlarm bool
 }
