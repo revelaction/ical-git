@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-const LooseCategory = "show-no-date"
+const LooseCategory = "loose"
 const ShowAlarmCategory = "show-alarm"
 
 type Parser struct {
