@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-const ShowNoDateCategory = "show-no-date"
+const LooseCategory = "show-no-date"
 const ShowAlarmCategory = "show-alarm"
 
 type Parser struct {
@@ -206,7 +206,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 			comments = append(comments, p.Value)
 		}
 		if p.IANAToken == string(ics.ComponentPropertyCategories) {
-			if p.Value == ShowNoDateCategory {
+			if p.Value == LooseCategory {
 				n.ShowDate = false
 				continue
 			}
