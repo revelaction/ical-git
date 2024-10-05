@@ -202,13 +202,12 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 				n.ImageName = image.Name
 			}
 		} else {
-			data, err := config.decodeBase64URI(imageUrlProp.Value)
+			// TODO move validation from config
+			data, err := config.DecodeBase64URI(imageUrlProp.Value)
 			if err == nil {
 				n.ImageData = data
 				n.ImageName = imageUrlProp.Value
-				n.ImageType = config.ImageTypeBase64
 			} else {
-				// TODO move validation from config
 				err := config.ValidateUrl(imageUrlProp.Value)
 				if err == nil {
 					if seemsImageFile(imageUrlProp.Value) {

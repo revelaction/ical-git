@@ -154,7 +154,7 @@ func Load(data []byte) (Config, error) {
 	// We support base64 and external URL
 	for i, im := range conf.Images {
 		// check if Value is base64
-		data, err := decodeBase64URI(im.Value)
+		data, err := DecodeBase64URI(im.Value)
 		if err != nil {
 			// try external URL
 			errUrl := ValidateUrl(im.Value)
@@ -219,7 +219,7 @@ func (c *Config) Fetcher() string {
 	return "filesystem"
 }
 
-func decodeBase64URI(s string) ([]byte, error) {
+func DecodeBase64URI(s string) ([]byte, error) {
 	var decoder = base64.StdEncoding
 	decodedData, err := decoder.DecodeString(s)
 	if err != nil {
