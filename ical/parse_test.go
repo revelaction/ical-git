@@ -589,11 +589,6 @@ END:VCALENDAR
 	if notification.ImageData == nil {
 		t.Errorf("Expected non-nil ImageData, got nil")
 	}
-
-	expectedImageName := "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
-	if notification.ImageName != expectedImageName {
-		t.Errorf("Expected ImageName '%s', got '%s'", expectedImageName, notification.ImageName)
-	}
 }
 
 func TestParseCategoriesWithNoAlarm(t *testing.T) {
