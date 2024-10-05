@@ -159,27 +159,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 
 	// we use the ATTACH property only as image file
 	// if the image matches the conf, we get the url or base64 data defined in conf.
-	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
-	if nil != imageUrlProp {
-		if image, ok := p.conf.Image(imageUrlProp.Value); ok {
-			if image.Type == config.ImageTypeUrl {
-				n.ImageUrl = image.Value
-				n.ImageName = image.Name
-			} else if image.Type == config.ImageTypeBase64 {
-				n.ImageData = image.Data
-				n.ImageName = image.Name
-			}
-		} else {
-			// TODO move validation from config
-			err := config.ValidateUrl(imageUrlProp.Value)
-			if err == nil {
-				if seemsImageFile(imageUrlProp.Value) {
-					n.ImageUrl = imageUrlProp.Value
-					n.ImageName = imageUrlProp.Value
-				}
-			}
-		}
-	}
+	n = buildNotificationImageFields(n, event, p.conf)
 
 	locationProp := event.GetProperty(ics.ComponentPropertyLocation)
 	if nil != locationProp {
@@ -237,4 +217,28 @@ func seemsImageFile(path string) bool {
 	ext := strings.ToLower(filepath.Ext(path))
 
 	return slices.Contains(imageExtensions, ext)
+}
+func buildNotificationImageFields(n notify.Notification, event *ics.VEvent, conf config.Config) notify.Notification {
+	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
+	if nil != imageUrlProp {
+		if image, ok := conf.Image(imageUrlProp.Value); ok {
+			if image.Type == config.ImageTypeUrl {
+				n.ImageUrl = image.Value
+				n.ImageName = image.Name
+			} else if image.Type == config.ImageTypeBase64 {
+				n.ImageData = image.Data
+				n.ImageName = image.Name
+			}
+		} else {
+			// TODO move validation from config
+			err := config.ValidateUrl(imageUrlProp.Value)
+			if err == nil {
+				if seemsImageFile(imageUrlProp.Value) {
+					n.ImageUrl = imageUrlProp.Value
+					n.ImageName = imageUrlProp.Value
+				}
+			}
+		}
+	}
+	return n
 }
