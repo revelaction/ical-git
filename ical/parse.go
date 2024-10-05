@@ -218,6 +218,8 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 	}
 
 	randomImage := validImages[rand.Intn(len(validImages))]
+
+	// only one of ImageUrl or ImageData is populated
 	n.ImageUrl = randomImage.Value
 	n.ImageData = randomImage.Data
 	n.ImageName = randomImage.Name
