@@ -210,6 +210,7 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 					}
 				}
 			}
+			return n
 		}
 	}
 
