@@ -591,7 +591,7 @@ END:VCALENDAR
 	}
 }
 
-func TestParseTwoBase64Images(t *testing.T) {
+func TestParseTwoValidAttachLines(t *testing.T) {
 	configData := []byte(`
 timezone = "Europe/Berlin"
 tick = "24h"
@@ -600,6 +600,10 @@ notifiers = ["desktop"]
 
 alarms = [
 	{type = "desktop", when = "-P1D"},  
+]
+
+images = [
+	{name = "testImage", value = "http://example.com/image.jpg"}
 ]
 `)
 
@@ -621,10 +625,10 @@ UID:123456789
 DTSTART;TZID=Europe/Berlin:20231226T150000
 DTEND;TZID=Europe/Berlin:20231226T160000
 RRULE:FREQ=DAILY
-SUMMARY:Event with Two Base64 Images
-DESCRIPTION:Event with two base64 encoded images
+SUMMARY:Event with Two Valid Attach Lines
+DESCRIPTION:Event with one base64 encoded image and one URL image
 ATTACH;ENCODING=BASE64;FMTTYPE=image/jpeg:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
-ATTACH;ENCODING=BASE64;FMTTYPE=image/png:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
+ATTACH:http://example.com/image.jpg
 END:VEVENT
 END:VCALENDAR
 `)
@@ -649,6 +653,9 @@ END:VCALENDAR
 	notification := notifications[0]
 	if notification.ImageData == nil {
 		t.Errorf("Expected non-nil ImageData, got nil")
+	}
+	if notification.ImageUrl == "" {
+		t.Errorf("Expected non-empty ImageUrl, got empty")
 	}
 }
 
