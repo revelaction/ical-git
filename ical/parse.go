@@ -191,45 +191,25 @@ func seemsImageFile(path string) bool {
 	return slices.Contains(imageExtensions, ext)
 }
 func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent) notify.Notification {
-	var validImages []struct {
-		ImageUrl  string
-		ImageData []byte
-		ImageName string
-	}
+	var validImages []ImageInfo
 
 	for _, prop := range event.Properties {
 		if prop.IANAToken == string(ics.ComponentPropertyAttach) {
 			if image, ok := p.conf.Image(prop.Value); ok {
 				if image.Type == config.ImageTypeUrl {
-					validImages = append(validImages, struct {
-						ImageUrl  string
-						ImageData []byte
-						ImageName string
-					}{ImageUrl: image.Value, ImageName: image.Name})
+					validImages = append(validImages, ImageInfo{ImageUrl: image.Value, ImageName: image.Name})
 				} else if image.Type == config.ImageTypeBase64 {
-					validImages = append(validImages, struct {
-						ImageUrl  string
-						ImageData []byte
-						ImageName string
-					}{ImageData: image.Data, ImageName: image.Name})
+					validImages = append(validImages, ImageInfo{ImageData: image.Data, ImageName: image.Name})
 				}
 			} else {
 				data, err := config.DecodeBase64URI(prop.Value)
 				if err == nil {
-					validImages = append(validImages, struct {
-						ImageUrl  string
-						ImageData []byte
-						ImageName string
-					}{ImageData: data})
+					validImages = append(validImages, ImageInfo{ImageData: data})
 				} else {
 					err := config.ValidateUrl(prop.Value)
 					if err == nil {
 						if seemsImageFile(prop.Value) {
-							validImages = append(validImages, struct {
-								ImageUrl  string
-								ImageData []byte
-								ImageName string
-							}{ImageUrl: prop.Value})
+							validImages = append(validImages, ImageInfo{ImageUrl: prop.Value})
 						}
 					}
 				}
@@ -278,4 +258,9 @@ func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event
 	n.Categories = categories
 
 	return n
+}
+type ImageInfo struct {
+	ImageUrl  string
+	ImageData []byte
+	ImageName string
 }
