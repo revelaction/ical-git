@@ -628,7 +628,7 @@ RRULE:FREQ=DAILY
 SUMMARY:Event with Two Valid Attach Lines
 DESCRIPTION:Event with one base64 encoded image and one URL image
 ATTACH;ENCODING=BASE64;FMTTYPE=image/jpeg:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
-ATTACH:http://example.com/image.jpg
+ATTACH:testImage
 END:VEVENT
 END:VCALENDAR
 `)
