@@ -46,7 +46,7 @@ func (t *Telegram) Notify(n notify.Notification) error {
 		photo.ParseMode = "html"
 		msg = photo
 	} else if n.ImageData != nil {
-		photo := tg.NewPhoto(t.config.Telegram.ChatId, tg.FileBytes{Name: "image.png", Bytes: n.ImageData})
+		photo := tg.NewPhoto(t.config.Telegram.ChatId, tg.FileBytes{Name: n.ImageName, Bytes: n.ImageData})
 		photo.Caption = message
 		photo.ParseMode = "html"
 		msg = photo
