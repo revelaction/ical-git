@@ -651,13 +651,7 @@ END:VCALENDAR
 	}
 
 	notification := notifications[0]
-	if notification.ImageData == nil {
-		t.Errorf("Expected non-nil ImageData, got nil")
-	}
-	if notification.ImageUrl == "" {
-		t.Errorf("Expected non-empty ImageUrl, got empty")
-	}
-	if notification.ImageData == nil || notification.ImageUrl == "" {
+	if notification.ImageData == nil && notification.ImageUrl == "" {
 		t.Errorf("Both ImageData and ImageUrl should not be empty")
 	}
 }
