@@ -657,6 +657,9 @@ END:VCALENDAR
 	if notification.ImageUrl == "" {
 		t.Errorf("Expected non-empty ImageUrl, got empty")
 	}
+	if notification.ImageData == nil || notification.ImageUrl == "" {
+		t.Errorf("Both ImageData and ImageUrl should not be empty")
+	}
 }
 
 func TestParseCategoriesWithNoAlarm(t *testing.T) {
