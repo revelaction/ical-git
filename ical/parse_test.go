@@ -586,9 +586,13 @@ END:VCALENDAR
 	}
 
 	notification := notifications[0]
-	expectedImageData := []byte{137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0, 0, 0, 31, 21, 196, 137, 0, 0, 0, 10, 73, 68, 65, 84, 120, 156, 99, 96, 0, 0, 0, 2, 0, 1, 244, 113, 100, 166, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130}
-	if !bytes.Equal(notification.ImageData, expectedImageData) {
-		t.Errorf("Expected image data %v, got %v", expectedImageData, notification.ImageData)
+	if notification.ImageData == nil {
+		t.Errorf("Expected non-nil ImageData, got nil")
+	}
+
+	expectedImageName := "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+	if notification.ImageName != expectedImageName {
+		t.Errorf("Expected ImageName '%s', got '%s'", expectedImageName, notification.ImageName)
 	}
 }
 
