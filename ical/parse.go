@@ -221,7 +221,7 @@ func seemsImageFile(path string) bool {
 func (p *Parser) buildNotificationImageFields(n notify.Notification, event *ics.VEvent) notify.Notification {
 	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
 	if nil != imageUrlProp {
-		if image, ok := conf.Image(imageUrlProp.Value); ok {
+		if image, ok := p.conf.Image(imageUrlProp.Value); ok {
 			if image.Type == config.ImageTypeUrl {
 				n.ImageUrl = image.Value
 				n.ImageName = image.Name
