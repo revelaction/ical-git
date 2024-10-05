@@ -191,33 +191,59 @@ func seemsImageFile(path string) bool {
 	return slices.Contains(imageExtensions, ext)
 }
 func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent) notify.Notification {
-	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
-	if nil != imageUrlProp {
-		if image, ok := p.conf.Image(imageUrlProp.Value); ok {
-			if image.Type == config.ImageTypeUrl {
-				n.ImageUrl = image.Value
-				n.ImageName = image.Name
-			} else if image.Type == config.ImageTypeBase64 {
-				n.ImageData = image.Data
-				n.ImageName = image.Name
-			}
-		} else {
-			// TODO move validation from config
-			data, err := config.DecodeBase64URI(imageUrlProp.Value)
-			if err == nil {
-				n.ImageData = data
-				n.ImageName = ""
+	var validImages []struct {
+		ImageUrl  string
+		ImageData []byte
+		ImageName string
+	}
+
+	for _, prop := range event.Properties {
+		if prop.IANAToken == string(ics.ComponentPropertyAttach) {
+			if image, ok := p.conf.Image(prop.Value); ok {
+				if image.Type == config.ImageTypeUrl {
+					validImages = append(validImages, struct {
+						ImageUrl  string
+						ImageData []byte
+						ImageName string
+					}{ImageUrl: image.Value, ImageName: image.Name})
+				} else if image.Type == config.ImageTypeBase64 {
+					validImages = append(validImages, struct {
+						ImageUrl  string
+						ImageData []byte
+						ImageName string
+					}{ImageData: image.Data, ImageName: image.Name})
+				}
 			} else {
-				err := config.ValidateUrl(imageUrlProp.Value)
+				data, err := config.DecodeBase64URI(prop.Value)
 				if err == nil {
-					if seemsImageFile(imageUrlProp.Value) {
-						n.ImageUrl = imageUrlProp.Value
-						n.ImageName = "" 
+					validImages = append(validImages, struct {
+						ImageUrl  string
+						ImageData []byte
+						ImageName string
+					}{ImageData: data})
+				} else {
+					err := config.ValidateUrl(prop.Value)
+					if err == nil {
+						if seemsImageFile(prop.Value) {
+							validImages = append(validImages, struct {
+								ImageUrl  string
+								ImageData []byte
+								ImageName string
+							}{ImageUrl: prop.Value})
+						}
 					}
 				}
 			}
 		}
 	}
+
+	if len(validImages) > 0 {
+		randomImage := validImages[rand.Intn(len(validImages))]
+		n.ImageUrl = randomImage.ImageUrl
+		n.ImageData = randomImage.ImageData
+		n.ImageName = randomImage.ImageName
+	}
+
 	return n
 }
 func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event *ics.VEvent) notify.Notification {
