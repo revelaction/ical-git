@@ -191,25 +191,21 @@ func seemsImageFile(path string) bool {
 	return slices.Contains(imageExtensions, ext)
 }
 func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent) notify.Notification {
-	var validImages []ImageInfo
+	var validImages []config.Image
 
 	for _, prop := range event.Properties {
 		if prop.IANAToken == string(ics.ComponentPropertyAttach) {
 			if image, ok := p.conf.Image(prop.Value); ok {
-				if image.Type == config.ImageTypeUrl {
-					validImages = append(validImages, ImageInfo{ImageUrl: image.Value, ImageName: image.Name})
-				} else if image.Type == config.ImageTypeBase64 {
-					validImages = append(validImages, ImageInfo{ImageData: image.Data, ImageName: image.Name})
-				}
+				validImages = append(validImages, image)
 			} else {
 				data, err := config.DecodeBase64URI(prop.Value)
 				if err == nil {
-					validImages = append(validImages, ImageInfo{ImageData: data})
+					validImages = append(validImages, config.Image{Data: data, Type: config.ImageTypeBase64})
 				} else {
 					err := config.ValidateUrl(prop.Value)
 					if err == nil {
 						if seemsImageFile(prop.Value) {
-							validImages = append(validImages, ImageInfo{ImageUrl: prop.Value})
+							validImages = append(validImages, config.Image{Value: prop.Value, Type: config.ImageTypeUrl})
 						}
 					}
 				}
@@ -219,9 +215,9 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 
 	if len(validImages) > 0 {
 		randomImage := validImages[rand.Intn(len(validImages))]
-		n.ImageUrl = randomImage.ImageUrl
-		n.ImageData = randomImage.ImageData
-		n.ImageName = randomImage.ImageName
+		n.ImageUrl = randomImage.Value
+		n.ImageData = randomImage.Data
+		n.ImageName = randomImage.Name
 	}
 
 	return n
@@ -258,9 +254,4 @@ func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event
 	n.Categories = categories
 
 	return n
-}
-type ImageInfo struct {
-	ImageUrl  string
-	ImageData []byte
-	ImageName string
 }
