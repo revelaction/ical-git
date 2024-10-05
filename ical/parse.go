@@ -194,19 +194,20 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 	var validImages []config.Image
 
 	for _, prop := range event.Properties {
-		if prop.IANAToken == string(ics.ComponentPropertyAttach) {
-			if image, ok := p.conf.Image(prop.Value); ok {
-				validImages = append(validImages, image)
+		if prop.IANAToken != string(ics.ComponentPropertyAttach) {
+			continue
+		}
+		if image, ok := p.conf.Image(prop.Value); ok {
+			validImages = append(validImages, image)
+		} else {
+			data, err := config.DecodeBase64URI(prop.Value)
+			if err == nil {
+				validImages = append(validImages, config.Image{Data: data, Type: config.ImageTypeBase64})
 			} else {
-				data, err := config.DecodeBase64URI(prop.Value)
+				err := config.ValidateUrl(prop.Value)
 				if err == nil {
-					validImages = append(validImages, config.Image{Data: data, Type: config.ImageTypeBase64})
-				} else {
-					err := config.ValidateUrl(prop.Value)
-					if err == nil {
-						if seemsImageFile(prop.Value) {
-							validImages = append(validImages, config.Image{Value: prop.Value, Type: config.ImageTypeUrl})
-						}
+					if seemsImageFile(prop.Value) {
+						validImages = append(validImages, config.Image{Value: prop.Value, Type: config.ImageTypeUrl})
 					}
 				}
 			}
