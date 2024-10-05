@@ -159,7 +159,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 
 	// we use the ATTACH property only as image file
 	// if the image matches the conf, we get the url or base64 data defined in conf.
-	n = buildNotificationImageFields(n, event, p.conf)
+	n = p.buildNotificationImageFields(n, event)
 
 	locationProp := event.GetProperty(ics.ComponentPropertyLocation)
 	if nil != locationProp {
@@ -218,7 +218,7 @@ func seemsImageFile(path string) bool {
 
 	return slices.Contains(imageExtensions, ext)
 }
-func buildNotificationImageFields(n notify.Notification, event *ics.VEvent, conf config.Config) notify.Notification {
+func (p *Parser) buildNotificationImageFields(n notify.Notification, event *ics.VEvent) notify.Notification {
 	imageUrlProp := event.GetProperty(ics.ComponentPropertyAttach)
 	if nil != imageUrlProp {
 		if image, ok := conf.Image(imageUrlProp.Value); ok {
