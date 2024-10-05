@@ -178,35 +178,7 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 		}
 	}
 
-	// Collect all Comment properties
-	var comments []string
-	// Collect all Categories properties
-	var categories []string
-
-	for _, p := range event.Properties {
-		if p.IANAToken == string(ics.ComponentPropertyComment) {
-			comments = append(comments, p.Value)
-		}
-		if p.IANAToken == string(ics.ComponentPropertyCategories) {
-			if p.Value == LooseCategory {
-				n.Loose = true
-				continue
-			}
-			if p.Value == ShowAlarmCategory {
-				n.ShowAlarm = true
-				continue
-			}
-			categories = append(categories, p.Value)
-		}
-	}
-
-	// Randomly select one Comment
-	if len(comments) > 0 {
-		n.Comment = comments[rand.Intn(len(comments))]
-	}
-
-	// Assign collected categories to the Notification property
-	n.Categories = categories
+	n = p.buildNotificationCommentCategories(n, event)
 
 	return n
 }
@@ -240,5 +212,38 @@ func (p *Parser) buildNotificationImageFields(n notify.Notification, event *ics.
 			}
 		}
 	}
+	return n
+}
+func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event *ics.VEvent) notify.Notification {
+	// Collect all Comment properties
+	var comments []string
+	// Collect all Categories properties
+	var categories []string
+
+	for _, p := range event.Properties {
+		if p.IANAToken == string(ics.ComponentPropertyComment) {
+			comments = append(comments, p.Value)
+		}
+		if p.IANAToken == string(ics.ComponentPropertyCategories) {
+			if p.Value == LooseCategory {
+				n.Loose = true
+				continue
+			}
+			if p.Value == ShowAlarmCategory {
+				n.ShowAlarm = true
+				continue
+			}
+			categories = append(categories, p.Value)
+		}
+	}
+
+	// Randomly select one Comment
+	if len(comments) > 0 {
+		n.Comment = comments[rand.Intn(len(comments))]
+	}
+
+	// Assign collected categories to the Notification property
+	n.Categories = categories
+
 	return n
 }
