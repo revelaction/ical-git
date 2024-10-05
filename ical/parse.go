@@ -213,12 +213,14 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 		}
 	}
 
-	if len(validImages) > 0 {
-		randomImage := validImages[rand.Intn(len(validImages))]
-		n.ImageUrl = randomImage.Value
-		n.ImageData = randomImage.Data
-		n.ImageName = randomImage.Name
+	if len(validImages) == 0 {
+		return n
 	}
+
+	randomImage := validImages[rand.Intn(len(validImages))]
+	n.ImageUrl = randomImage.Value
+	n.ImageData = randomImage.Data
+	n.ImageName = randomImage.Name
 
 	return n
 }
