@@ -656,6 +656,8 @@ END:VCALENDAR
 	}
 }
 
+import "fmt"
+
 func TestPickModuloProp(t *testing.T) {
 	testCases := []struct {
 		eventInterval int
