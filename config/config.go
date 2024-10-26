@@ -167,7 +167,10 @@ func Load(data []byte) (Config, error) {
 			conf.Images[i].Type = ImageTypeUrl
 
 		} else {
+            // if Value is base64, empty the Value with the base64 string, we already have data.
+            // See parse.go
 			conf.Images[i].Data = data
+			conf.Images[i].Value = ""
 			conf.Images[i].Type = ImageTypeBase64
 		}
 
