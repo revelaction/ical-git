@@ -228,8 +228,10 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 	return n
 }
 func pickModuloProp(eventInterval, modulo int, eventTime time.Time) int {
-    // Implementation to be added later
-    return 0
+    fixedTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+    duration := eventTime.Sub(fixedTime)
+    numberOfIntervals := int(duration.Hours() / 24 / float64(eventInterval))
+    return numberOfIntervals % modulo
 }
 
 func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event *ics.VEvent, et *EventTime) notify.Notification {
