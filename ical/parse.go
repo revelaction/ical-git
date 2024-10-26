@@ -230,10 +230,11 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 
 	return n
 }
-// pickModuloProp calculates the modulo of the number of occurrences of an event
-// since a fixed start time, based on the event's interval. This is used to
-// sequentially select properties like COMMENT or ATTACH, ensuring that we
-// cycle through them in a predictable manner rather than randomly.
+// pickModuloProp calculates the modulo of the number of occurrences of an
+// event since a fixed start time, based on the event's interval (only if
+// RRULE). This is used to sequentially select properties like COMMENT or
+// ATTACH, ensuring that we cycle through them in a predictable manner rather
+// than randomly.
 func pickModuloProp(eventInterval, modulo int, eventTime time.Time) int {
     fixedTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
     duration := eventTime.Sub(fixedTime)
@@ -265,7 +266,7 @@ func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event
 	}
 
 	// Select one Comment using pickModuloProp
-	if len(comments) > 0 {
+	if len(comments) > 1 {
 		commentIndex := pickModuloProp(et.interval, len(comments), n.EventTime)
 		n.Comment = comments[commentIndex]
 	}
