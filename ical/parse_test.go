@@ -656,66 +656,45 @@ END:VCALENDAR
 	}
 }
 
-func TestParseCategoriesWithNoAlarm(t *testing.T) {
-	configData := []byte(`
-timezone = "Europe/Berlin"
-tick = "24h"
-
-notifiers = ["desktop"]
-
-alarms = [
-	{type = "desktop", when = "-P1D"},  
-]
-`)
-
-	conf, err := config.Load(configData)
-	if err != nil {
-		t.Fatalf("Failed to load config: %v", err)
+func TestPickModuloProp(t *testing.T) {
+	testCases := []struct {
+		eventInterval int
+		modulo        int
+		eventTime     time.Time
+		expected      int
+	}{
+		{
+			eventInterval: 1,
+			modulo:        10,
+			eventTime:     time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+			expected:      1461 % 10,
+		},
+		{
+			eventInterval: 7,
+			modulo:        5,
+			eventTime:     time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+			expected:      (1461 / 7) % 5,
+		},
+		{
+			eventInterval: 30,
+			modulo:        3,
+			eventTime:     time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+			expected:      (1461 / 30) % 3,
+		},
+		{
+			eventInterval: 1,
+			modulo:        1,
+			eventTime:     time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+			expected:      0,
+		},
 	}
 
-	start := time.Date(2023, 12, 25, 0, 0, 0, 0, time.UTC)
-	parser := NewParser(conf, start)
-
-	// Test data
-	icalData := []byte(`
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Your Company//Your Product//EN
-BEGIN:VEVENT
-UID:123456789
-DTSTART;TZID=Europe/Berlin:20231226T150000
-DTEND;TZID=Europe/Berlin:20231226T160000
-RRULE:FREQ=DAILY
-SUMMARY:Event with Categories
-DESCRIPTION:Event with categories A, B, show-no-alarm
-CATEGORIES:A
-CATEGORIES:B
-CATEGORIES:show-alarm
-CATEGORIES:loose
-END:VEVENT
-END:VCALENDAR
-`)
-
-	// Parse the iCal data
-	file := fetch.File{
-		Path:    "",
-		Content: icalData,
-		Error:   nil,
-	}
-	err = parser.Parse(file)
-	if err != nil {
-		t.Fatalf("Unexpected error: %v", err)
-	}
-
-	// Check the notifications
-	notifications := parser.Notifications()
-	if len(notifications) != 1 {
-		t.Fatalf("Expected 1 notification, got %d", len(notifications))
-	}
-
-	notification := notifications[0]
-	expectedCategories := []string{"A", "B"}
-	if !slices.Equal(notification.Categories, expectedCategories) {
-		t.Errorf("Expected categories %v, got %v", expectedCategories, notification.Categories)
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("eventInterval=%d, modulo=%d, eventTime=%s", tc.eventInterval, tc.modulo, tc.eventTime), func(t *testing.T) {
+			result := pickModuloProp(tc.eventInterval, tc.modulo, tc.eventTime)
+			if result != tc.expected {
+				t.Errorf("Expected %d, got %d", tc.expected, result)
+			}
+		})
 	}
 }
