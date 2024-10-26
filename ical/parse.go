@@ -178,7 +178,7 @@ func (p *Parser) buildNotification(event *ics.VEvent, et *EventTime) notify.Noti
 		}
 	}
 
-	n = p.buildNotificationCommentCategories(n, event)
+	n = p.buildNotificationCommentCategories(n, event, et)
 
 	return n
 }
@@ -227,7 +227,7 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 
 	return n
 }
-func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event *ics.VEvent) notify.Notification {
+func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event *ics.VEvent, et *EventTime) notify.Notification {
 	// Collect all Comment properties
 	var comments []string
 	// Collect all Categories properties
