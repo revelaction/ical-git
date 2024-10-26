@@ -107,13 +107,20 @@ func (p *Parser) Parse(f fetch.File) error {
 		for _, a := range alarms {
 
 			// To notification
-			n := p.buildNotification(event, et)
+			n := p.buildNotificationBasic(event)
 			n.Time = a.TriggerTime(eventTime)
 			n.EventTime = eventTime
 			n.EventPath = f.Path
 			n.Type = a.Action
 			n.DurIso8601 = a.DurIso8601
 			n.Source = a.Source
+
+            // we use the COMMENT property as a one of many DESCRIPTION 
+	        n = p.buildNotificationCommentCategories(n, event, et)
+
+            // we use the ATTACH property only as image file
+            // if the image matches the conf, we get the url or base64 data defined in conf.
+            n = p.buildNotificationImage(n, event)
 
 			p.notifications = append(p.notifications, n)
 		}
@@ -141,7 +148,7 @@ func buildEventDuration(event *ics.VEvent) time.Duration {
 	return end.Sub(start)
 }
 
-func (p *Parser) buildNotification(event *ics.VEvent, et *EventTime) notify.Notification {
+func (p *Parser) buildNotificationBasic(event *ics.VEvent) notify.Notification {
 
 	n := notify.Notification{}
 
@@ -157,9 +164,6 @@ func (p *Parser) buildNotification(event *ics.VEvent, et *EventTime) notify.Noti
 		n.Description = descriptionProp.Value
 	}
 
-	// we use the ATTACH property only as image file
-	// if the image matches the conf, we get the url or base64 data defined in conf.
-	n = p.buildNotificationImage(n, event)
 
 	locationProp := event.GetProperty(ics.ComponentPropertyLocation)
 	if nil != locationProp {
@@ -178,7 +182,6 @@ func (p *Parser) buildNotification(event *ics.VEvent, et *EventTime) notify.Noti
 		}
 	}
 
-	n = p.buildNotificationCommentCategories(n, event, et)
 
 	return n
 }
@@ -263,7 +266,7 @@ func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event
 
 	// Select one Comment using pickModuloProp
 	if len(comments) > 0 {
-		commentIndex := pickModuloProp(et.interval, len(comments), et.dtStart)
+		commentIndex := pickModuloProp(et.interval, len(comments), n.EventTime)
 		n.Comment = comments[commentIndex]
 	}
 
