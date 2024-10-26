@@ -133,7 +133,7 @@ func (et *EventTime) hasTzId() bool {
 // RDATE does semmes to be properly supported by teambition. Custom logic to try to support
 func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 
-	s, err := rrule.StrToRRuleSet(et.joinLines())
+	s, err := et.parseRRuleSet()
 	if err != nil {
 		return time.Time{}, err
 	}
@@ -189,4 +189,7 @@ func (et *EventTime) joinLines() string {
 	s = append(s, et.rRule...)
 	s = append(s, et.rDate...)
 	return strings.Join(s, "\n")
+}
+func (et *EventTime) parseRRuleSet() (*rrule.Set, error) {
+	return rrule.StrToRRuleSet(et.joinLines())
 }
