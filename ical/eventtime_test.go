@@ -570,3 +570,20 @@ END:VEVENT`
 		t.Errorf("nextTime() = %v; want %v", nextTime, expectedTime)
 	}
 }
+
+func TestDailyRRuleWithInterval(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=America/New_York:20240401T000000
+RRULE:FREQ=DAILY;INTERVAL=3
+SUMMARY:Daily Event with Interval 3
+END:VEVENT`
+
+	et := newEventTime(event)
+	et.parse()
+
+	if et.interval != 3 {
+		t.Errorf("interval = %d; want 3", et.interval)
+	}
+}
