@@ -12,7 +12,9 @@ import (
 type EventTime struct {
 	Event   string
 	dtStart string
-	rRule   []string
+    // Appendix A.1 The "RRULE" property SHOULD NOT occur more than once in a
+    // component.
+	rRule   []string 
 	rDate   []string
 	interval int // number of days between occurrences of the event (if they have a rrule)
 }
