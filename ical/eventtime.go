@@ -14,7 +14,7 @@ type EventTime struct {
 	dtStart string
     // Appendix A.1 The "RRULE" property SHOULD NOT occur more than once in a
     // component.
-	rRule   []string 
+	rRule   string 
 	rDate   []string
 	interval int // number of days between occurrences of the event (if they have a rrule)
 }
@@ -40,7 +40,11 @@ func (et *EventTime) parse() {
 		}
 
 		if strings.HasPrefix(line, "RRULE") {
-			et.rRule = append(et.rRule, line)
+			if et.rRule != "" {
+				slog.Warn("Multiple RRULE properties found. Only the first one will be processed.")
+			} else {
+				et.rRule = line
+			}
 			continue
 		}
 
