@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-// TODO to event
 type EventTime struct {
 	Event   string
 	dtStart string
@@ -22,7 +21,6 @@ type EventTime struct {
 func newEventTime(event string) *EventTime {
 	return &EventTime{
 		Event: event,
-		rRule: []string{},
 		rDate: []string{},
 	}
 }
@@ -40,9 +38,7 @@ func (et *EventTime) parse() {
 		}
 
 		if strings.HasPrefix(line, "RRULE") {
-			if et.rRule != "" {
-				slog.Warn("Multiple RRULE properties found. Only the first one will be processed.")
-			} else {
+			if et.rRule == "" {
 				et.rRule = line
 			}
 			continue
@@ -60,7 +56,7 @@ func (et *EventTime) parse() {
 }
 
 func (et *EventTime) hasRRule() bool {
-	return len(et.rRule) > 0
+	return et.rRule != ""
 }
 
 func (et *EventTime) hasRDate() bool {
@@ -193,7 +189,7 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 func (et *EventTime) joinLines() string {
 
 	s := []string{et.dtStart}
-	s = append(s, et.rRule...)
+	s = append(s, et.rRule)
 	s = append(s, et.rDate...)
 	return strings.Join(s, "\n")
 }
@@ -204,15 +200,14 @@ func (et *EventTime) parseRRuleSet() (*rrule.Set, error) {
 	}
 
 	// Calculate the interval based on the first valid RRULE
-	if et.rRule != "" {
-		r, err := rrule.StrToRRule(et.rRule)
-		if err != nil {
-			return nil, err
-		}
-		if r.Options.Interval > 0 {
-			et.interval = r.Options.Interval
-		}
-	}
+	if !et.hasRRule() {
+	    return set, nil
+    }
+
+    if set.GetRRule().Options.Freq == rrule.DAILY  {
+        // add the porperty
+    }
+
 
 	return set, nil
 }
