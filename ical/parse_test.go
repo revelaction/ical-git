@@ -4,6 +4,7 @@ import (
 	"slices"
 	"testing"
 	"time"
+	"fmt"
 
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/fetch"
@@ -656,7 +657,6 @@ END:VCALENDAR
 	}
 }
 
-import "fmt"
 
 func TestPickModuloProp(t *testing.T) {
 	testCases := []struct {
@@ -699,4 +699,36 @@ func TestPickModuloProp(t *testing.T) {
 			}
 		})
 	}
+}
+
+
+func TestPickModuloPropConsecutive(t *testing.T) {
+    eventInterval := 3 // Example interval in days
+    modulo := 10       // Example modulo
+
+    // Starting eventTime
+    eventTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+
+    // Initial result for the first iteration
+    lastResult := pickModuloProp(eventInterval, modulo, eventTime)
+
+    // Increment eventTime by eventInterval days for the next iteration
+    eventTime = eventTime.AddDate(0, 0, eventInterval)
+
+    for i := 1; i < 100; i++ {
+        result := pickModuloProp(eventInterval, modulo, eventTime)
+
+        // Calculate the expected result as the consecutive modulo of the last result
+        expected := (lastResult + 1) % modulo
+
+        if result != expected {
+            t.Errorf("Iteration %d: Expected %d, got %d", i, expected, result)
+        }
+
+        // Update lastResult for the next iteration
+        lastResult = result
+
+        // Increment eventTime by eventInterval
+        eventTime = eventTime.AddDate(0, 0, eventInterval)
+    }
 }
