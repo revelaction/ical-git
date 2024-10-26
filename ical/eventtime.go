@@ -210,8 +210,11 @@ func (et *EventTime) parseRRuleSet() (*rrule.Set, error) {
 	    return set, nil
     }
 
-    if set.GetRRule().Options.Freq == rrule.DAILY  {
-        // add the porperty
+    switch set.GetRRule().Options.Freq {
+    case rrule.DAILY:
+        et.interval = set.GetRRule().Options.Interval
+    case rrule.WEEKLY:
+        et.interval = set.GetRRule().Options.Interval * 7
     }
 
 
