@@ -14,6 +14,7 @@ type EventTime struct {
 	dtStart string
 	rRule   []string
 	rDate   []string
+	interval int // number of days between occurrences of the event (if they have a rrule)
 }
 
 func newEventTime(event string) *EventTime {
@@ -191,5 +192,24 @@ func (et *EventTime) joinLines() string {
 	return strings.Join(s, "\n")
 }
 func (et *EventTime) parseRRuleSet() (*rrule.Set, error) {
-	return rrule.StrToRRuleSet(et.joinLines())
+	set, err := rrule.StrToRRuleSet(et.joinLines())
+	if err != nil {
+		return nil, err
+	}
+
+	// Calculate the interval based on the RRULE
+	if len(et.rRule) > 0 {
+		for _, rruleStr := range et.rRule {
+			r, err := rrule.StrToRRule(rruleStr)
+			if err != nil {
+				return nil, err
+			}
+			if r.Options.Interval > 0 {
+				et.interval = r.Options.Interval
+				break
+			}
+		}
+	}
+
+	return set, nil
 }
