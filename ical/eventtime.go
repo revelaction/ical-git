@@ -203,17 +203,14 @@ func (et *EventTime) parseRRuleSet() (*rrule.Set, error) {
 		return nil, err
 	}
 
-	// Calculate the interval based on the RRULE
-	if len(et.rRule) > 0 {
-		for _, rruleStr := range et.rRule {
-			r, err := rrule.StrToRRule(rruleStr)
-			if err != nil {
-				return nil, err
-			}
-			if r.Options.Interval > 0 {
-				et.interval = r.Options.Interval
-				break
-			}
+	// Calculate the interval based on the first valid RRULE
+	if et.rRule != "" {
+		r, err := rrule.StrToRRule(et.rRule)
+		if err != nil {
+			return nil, err
+		}
+		if r.Options.Interval > 0 {
+			et.interval = r.Options.Interval
 		}
 	}
 
