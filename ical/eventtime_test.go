@@ -595,3 +595,28 @@ END:VEVENT`
 		t.Errorf("interval = %d; want %d", et.interval, expectedInterval)
 	}
 }
+
+func TestWeeklyRRuleWithInterval(t *testing.T) {
+	event := `BEGIN:VEVENT
+UID:123456789
+DTSTAMP:20240109T090000Z
+DTSTART;TZID=America/New_York:20240401T000000
+RRULE:FREQ=WEEKLY;INTERVAL=3
+SUMMARY:Weekly Event with Interval 3
+END:VEVENT`
+
+	now := time.Date(2022, 4, 1, 0, 0, 0, 0, time.UTC)
+
+	et := newEventTime(event)
+	et.parse()
+	_, err := et.nextTime(now)
+
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
+
+	expectedInterval := 21 // 3 weeks * 7 days
+	if et.interval != expectedInterval {
+		t.Errorf("interval = %d; want %d", et.interval, expectedInterval)
+	}
+}
