@@ -107,7 +107,7 @@ func (p *Parser) Parse(f fetch.File) error {
 		for _, a := range alarms {
 
 			// To notification
-			n := p.buildNotification(event)
+			n := p.buildNotification(event, et)
 			n.Time = a.TriggerTime(eventTime)
 			n.EventTime = eventTime
 			n.EventPath = f.Path
@@ -141,7 +141,7 @@ func buildEventDuration(event *ics.VEvent) time.Duration {
 	return end.Sub(start)
 }
 
-func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
+func (p *Parser) buildNotification(event *ics.VEvent, et *EventTime) notify.Notification {
 
 	n := notify.Notification{}
 
@@ -179,6 +179,10 @@ func (p *Parser) buildNotification(event *ics.VEvent) notify.Notification {
 	}
 
 	n = p.buildNotificationCommentCategories(n, event)
+
+	// Add EventTime properties to the notification
+	n.EventTime = et.dtStart
+	n.Interval = et.interval
 
 	return n
 }
