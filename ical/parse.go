@@ -227,7 +227,7 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 
 	return n
 }
-func pickModuloProp(a, b int) int {
+func pickModuloProp(eventInterval, modulo int) int {
     // Implementation to be added later
     return 0
 }
