@@ -180,10 +180,6 @@ func (p *Parser) buildNotification(event *ics.VEvent, et *EventTime) notify.Noti
 
 	n = p.buildNotificationCommentCategories(n, event)
 
-	// Add EventTime properties to the notification
-	n.EventTime = et.dtStart
-	n.Interval = et.interval
-
 	return n
 }
 
