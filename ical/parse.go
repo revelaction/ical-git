@@ -266,10 +266,16 @@ func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event
 	}
 
 	// Select one Comment using pickModuloProp
-	if len(comments) > 1 {
-		commentIndex := pickModuloProp(et.interval, len(comments), n.EventTime)
-		n.Comment = comments[commentIndex]
-	}
+    if len(comments) > 1 {
+        if et.interval == 0 {
+            commentIndex := rand.Intn(len(comments))
+            n.Comment = comments[commentIndex]
+        } else {
+            commentIndex := pickModuloProp(et.interval, len(comments), n.EventTime)
+            n.Comment = comments[commentIndex]
+        }
+    }
+
 
 	// Assign collected categories to the Notification property
 	n.Categories = categories
