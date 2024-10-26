@@ -15,7 +15,8 @@ type EventTime struct {
     // component.
 	rRule   string 
 	rDate   []string
-	interval int // number of days between occurrences of the event (if they have a rrule)
+    // number of days between occurrences of the event (if they have a rrule)
+	interval int 
 }
 
 func newEventTime(event string) *EventTime {
@@ -37,6 +38,7 @@ func (et *EventTime) parse() {
 			continue
 		}
 
+        // consider only first
 		if strings.HasPrefix(line, "RRULE") {
 			if et.rRule == "" {
 				et.rRule = line
@@ -189,11 +191,15 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 func (et *EventTime) joinLines() string {
 
 	s := []string{et.dtStart}
-	s = append(s, et.rRule)
+    if et.hasRRule() {
+	    s = append(s, et.rRule)
+    }
+
 	s = append(s, et.rDate...)
 	return strings.Join(s, "\n")
 }
 func (et *EventTime) parseRRuleSet() (*rrule.Set, error) {
+
 	set, err := rrule.StrToRRuleSet(et.joinLines())
 	if err != nil {
 		return nil, err
