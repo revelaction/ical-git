@@ -583,7 +583,14 @@ END:VEVENT`
 	et := newEventTime(event)
 	et.parse()
 
-	if et.interval != 3 {
-		t.Errorf("interval = %d; want 3", et.interval)
+	expectedInterval := 3
+	if et.interval != expectedInterval {
+		t.Errorf("interval = %d; want %d", et.interval, expectedInterval)
+	}
+
+	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
+	_, err := et.nextTime(now)
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
 	}
 }
