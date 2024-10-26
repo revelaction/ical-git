@@ -18,10 +18,11 @@ type EventTime struct {
     // number of days between occurrences of the event (if they have a rrule)
 	interval int
 
-    // GetInterval returns the interval of the event
-    func (et *EventTime) GetInterval() int {
-        return et.interval
-    }
+}
+
+// GetInterval returns the interval of the event
+func (et *EventTime) GetInterval() int {
+    return et.interval
 }
 
 func newEventTime(event string) *EventTime {
