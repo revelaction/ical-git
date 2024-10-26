@@ -580,17 +580,18 @@ RRULE:FREQ=DAILY;INTERVAL=3
 SUMMARY:Daily Event with Interval 3
 END:VEVENT`
 
+	now := time.Date(2022, 4, 1, 0, 0, 0, 0, time.UTC)
+
 	et := newEventTime(event)
 	et.parse()
+	_, err := et.nextTime(now)
+
+	if err != nil {
+		t.Fatalf("nextTime failed: %v", err)
+	}
 
 	expectedInterval := 3
 	if et.interval != expectedInterval {
 		t.Errorf("interval = %d; want %d", et.interval, expectedInterval)
-	}
-
-	now := time.Date(2024, 1, 10, 0, 0, 0, 0, time.UTC)
-	_, err := et.nextTime(now)
-	if err != nil {
-		t.Fatalf("nextTime failed: %v", err)
 	}
 }
