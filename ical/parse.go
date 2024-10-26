@@ -227,6 +227,11 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 
 	return n
 }
+func pickModuloProp(a, b int) int {
+    // Implementation to be added later
+    return 0
+}
+
 func (p *Parser) buildNotificationCommentCategories(n notify.Notification, event *ics.VEvent, et *EventTime) notify.Notification {
 	// Collect all Comment properties
 	var comments []string
