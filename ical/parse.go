@@ -232,13 +232,9 @@ func (p *Parser) buildNotificationImage(n notify.Notification, event *ics.VEvent
 // sequentially select properties like COMMENT or ATTACH, ensuring that we
 // cycle through them in a predictable manner rather than randomly.
 func pickModuloProp(eventInterval, modulo int, eventTime time.Time) int {
-    // Fixed start time used to calculate the number of intervals
     fixedTime := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
-    // Duration between the event time and the fixed start time
     duration := eventTime.Sub(fixedTime)
-    // Number of intervals (days) since the fixed start time
     numberOfIntervals := int(duration.Hours() / 24 / float64(eventInterval))
-    // Return the modulo of the number of intervals
     return numberOfIntervals % modulo
 }
 
