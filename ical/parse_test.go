@@ -732,3 +732,75 @@ func TestPickModuloPropConsecutive(t *testing.T) {
         eventTime = eventTime.AddDate(0, 0, eventInterval)
     }
 }
+
+func TestSequentialCommentSelection(t *testing.T) {
+    configData := []byte(`
+timezone = "Europe/Berlin"
+tick = "24h"
+
+notifiers = ["desktop"]
+
+alarms = [
+    {type = "desktop", when = "-P1D"},  
+]
+`)
+
+    conf, err := config.Load(configData)
+    if err != nil {
+        t.Fatalf("Failed to load config: %v", err)
+    }
+
+    // Test data
+    icalData := []byte(`
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Company//Your Product//EN
+BEGIN:VEVENT
+UID:123456789
+DTSTART;TZID=Europe/Berlin:20231226T150000
+DTEND;TZID=Europe/Berlin:20231226T160000
+RRULE:FREQ=DAILY;INTERVAL=1
+SUMMARY:Event with Comments
+DESCRIPTION:Event with 3 comments
+COMMENT:Comment 1
+COMMENT:Comment 2
+COMMENT:Comment 3
+END:VEVENT
+END:VCALENDAR
+`)
+
+    // Parse the iCal data
+    file := fetch.File{
+        Path:    "",
+        Content: icalData,
+        Error:   nil,
+    }
+
+    // Starting now time
+    now := time.Date(2023, 12, 25, 0, 0, 0, 0, time.UTC)
+
+    // Expected comments in sequence
+    expectedComments := []string{"Comment 1", "Comment 2", "Comment 3"}
+
+    for i := 0; i < 10; i++ {
+        parser := NewParser(conf, now)
+        err = parser.Parse(file)
+        if err != nil {
+            t.Fatalf("Unexpected error: %v", err)
+        }
+
+        // Check the notifications
+        notifications := parser.Notifications()
+        if len(notifications) != 1 {
+            t.Fatalf("Expected 1 notification, got %d", len(notifications))
+        }
+
+        notification := notifications[0]
+        if notification.Comment != expectedComments[i%3] {
+            t.Errorf("Iteration %d: Expected comment '%s', got '%s'", i, expectedComments[i%3], notification.Comment)
+        }
+
+        // Increment now by 1 day
+        now = now.AddDate(0, 0, 1)
+    }
+}
