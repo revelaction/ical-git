@@ -795,6 +795,7 @@ END:VCALENDAR
         }
 
         notification := notifications[0]
+        t.Logf("Iteration %d: now=%s, comment=%s", i, now.Format(time.RFC3339), notification.Comment)
         if notification.Comment != expectedComments[i%3] {
             t.Errorf("Iteration %d: Expected comment '%s', got '%s'", i, expectedComments[i%3], notification.Comment)
         }
