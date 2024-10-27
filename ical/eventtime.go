@@ -149,21 +149,6 @@ func (et *EventTime) nextTime(now time.Time) (time.Time, error) {
 		return time.Time{}, err
 	}
 
-    //if s != nil && s.GetRRule().Options.Freq == rrule.DAILY  {
-    //    slog.Info("8888888888888888888888", "Loc", s.GetRRule().Options.Interval)
-        // preparse or New
-        // parse method,  
-        // eventtime receives property interval
-        // rruleInterval method in days 
-        // switch with week and day, if not 0
-        // parse.go check rruleInterval is not 0 and comments > 1
-        //  choose a arbitrary day in the past, calculatehow many run till now. modulo num comments.
-        // day till now, divided by rruleInterval, the modulo
-        // in parse.go func receives rruleInterval,numcomments  provides int
-        // pickModuloProp(rruleInterval, numCommetn or numImages)
-        // pickRandomProp()
-    //}
-
 	// If it also has RDATE this also works properly
 	if et.hasRRule() {
 		// time can be Zero
