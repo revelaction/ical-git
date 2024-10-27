@@ -741,7 +741,7 @@ tick = "24h"
 notifiers = ["desktop"]
 
 alarms = [
-    {type = "desktop", when = "-P1D"},  
+    {type = "desktop", when = "-PT1M"},  
 ]
 `)
 
@@ -758,7 +758,6 @@ PRODID:-//Your Company//Your Product//EN
 BEGIN:VEVENT
 UID:123456789
 DTSTART;TZID=Europe/Berlin:20231226T150000
-DTEND;TZID=Europe/Berlin:20231226T160000
 RRULE:FREQ=DAILY;INTERVAL=1
 SUMMARY:Event with Comments
 DESCRIPTION:Event with 3 comments
@@ -777,12 +776,12 @@ END:VCALENDAR
     }
 
     // Starting now time
-    now := time.Date(2023, 12, 25, 0, 0, 0, 0, time.UTC)
+    now := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
 
     // Expected comments in sequence
     expectedComments := []string{"Comment 1", "Comment 2", "Comment 3"}
 
-    for i := 0; i < 10; i++ {
+    for i := 0; i < 100; i++ {
         parser := NewParser(conf, now)
         err = parser.Parse(file)
         if err != nil {
