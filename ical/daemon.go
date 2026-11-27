@@ -51,7 +51,7 @@ func (d *Daemon) Run() error {
 	go func() {
 		defer close(d.ShutdownDone)
 
-		ticker := time.NewTicker(d.conf.Load().DaemonTick)
+		ticker := time.NewTicker(d.conf.Load().DaemonTick.Duration)
 		defer ticker.Stop()
 
 		err := d.run(d.Ctx)
@@ -67,7 +67,7 @@ func (d *Daemon) Run() error {
 
 			case reloadCtx := <-d.ReloadCh:
 				reloadErr := d.reload(reloadCtx)
-				ticker.Reset(d.conf.Load().DaemonTick)
+				ticker.Reset(d.conf.Load().DaemonTick.Duration)
 				d.ReloadDone <- reloadErr
 
 			case <-ticker.C:

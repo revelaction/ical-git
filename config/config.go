@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BurntSushi/toml"
+	"github.com/pelletier/go-toml/v2"
 	"github.com/revelaction/ical-git/alarm"
 )
 
@@ -21,9 +21,27 @@ const (
 
 var validNotifierTypes = []string{NotifierTypeTelegram, NotifierTypeDesktop}
 
+// Duration is a wrapper around time.Duration that supports TOML unmarshalling
+// from a string value (e.g., "3h", "15m", "1h30m").
+type Duration struct {
+	time.Duration
+}
+
+// UnmarshalText implements the encoding.TextUnmarshaler interface.
+// This allows TOML libraries like pelletier/go-toml/v2 to unmarshal
+// TOML string values directly into a Duration field.
+func (d *Duration) UnmarshalText(text []byte) error {
+	var err error
+	d.Duration, err = time.ParseDuration(string(text))
+	if err != nil {
+		return fmt.Errorf("failed to parse duration '%s': %w", string(text), err)
+	}
+	return nil
+}
+
 type Config struct {
 	Location   Location      `toml:"timezone"`
-	DaemonTick time.Duration `toml:"tick"`
+	DaemonTick Duration `toml:"tick"`
 	Icon       string        `toml:"icon"`
 
 	Alarms []alarm.Alarm
@@ -108,7 +126,7 @@ func (c *Config) Image(name string) (Image, bool) {
 // present in conf.Alarms
 func Load(data []byte) (Config, error) {
 	var conf Config
-	if _, err := toml.Decode(string(data), &conf); err != nil {
+	if err := toml.Unmarshal(data, &conf); err != nil {
 		return Config{}, err
 	}
 
@@ -117,7 +135,7 @@ func Load(data []byte) (Config, error) {
 		conf.Location.Location = time.UTC
 	}
 
-	if err := validatePositiveDuration(conf.DaemonTick); err != nil {
+	if err := validatePositiveDuration(conf.DaemonTick.Duration); err != nil {
 		return Config{}, fmt.Errorf("invalid duration for tick %w", err)
 	}
 

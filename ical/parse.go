@@ -78,7 +78,7 @@ func (p *Parser) Parse(f fetch.File) error {
 
 		for _, a := range eventAlarms {
 			slog.Info("        : 🔔", "action", a.Action, "durIso", a.DurIso8601, "dur", a.Dur)
-			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
+			if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick.Duration) {
 				continue
 			}
 
@@ -96,7 +96,7 @@ func (p *Parser) Parse(f fetch.File) error {
 					continue
 				}
 
-				if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick) {
+				if !a.InTickPeriod(eventTime, p.start, p.conf.DaemonTick.Duration) {
 					continue
 				}
 

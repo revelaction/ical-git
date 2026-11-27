@@ -3,13 +3,13 @@ module github.com/revelaction/ical-git
 go 1.25.0
 
 require (
-	github.com/BurntSushi/toml v1.3.2
 	github.com/arran4/golang-ical v0.3.1
 	github.com/caasmo/go-daemon-runner v0.3.1
 	github.com/gen2brain/beeep v0.0.0-20240516210008-9c006672e7f4
 	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
+	github.com/pelletier/go-toml/v2 v2.4.3
 	github.com/sosodev/duration v1.3.1
 	github.com/teambition/rrule-go v1.8.2
 )
