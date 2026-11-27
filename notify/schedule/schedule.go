@@ -3,27 +3,27 @@ package schedule
 import (
 	"errors"
 	"fmt"
+	"log/slog"
+	"path/filepath"
+	"sync/atomic"
+	"time"
+
 	"github.com/revelaction/ical-git/config"
 	"github.com/revelaction/ical-git/notify"
 	"github.com/revelaction/ical-git/notify/desktop"
 	"github.com/revelaction/ical-git/notify/telegram"
-	"log/slog"
-	"path/filepath"
-	"time"
 )
 
 type Scheduler struct {
 	telegram notify.Notifier
 	desktop  notify.Notifier
 
-	conf   config.Config
+	conf   *atomic.Pointer[config.Config]
 	timers []*time.Timer
 }
 
-func New(c config.Config) *Scheduler {
-	return &Scheduler{
-		conf: c,
-	}
+func New(conf *atomic.Pointer[config.Config]) *Scheduler {
+	return &Scheduler{conf: conf}
 }
 
 // Schedule creates timers for the delivery of notifications.
@@ -31,8 +31,11 @@ func New(c config.Config) *Scheduler {
 // will be executed even if they are triggered in the tick boundary as they run
 // in its own goroutines.
 func (s *Scheduler) Schedule(notifications []notify.Notification, tickStart time.Time) error {
+	s.StopTimers()
 
-	s.initializeNotifiers()
+	conf := s.conf.Load()
+
+	s.initializeNotifiers(conf)
 
 	slog.Info("🚦 Schedule:", "num_notifications", len(notifications))
 
@@ -67,8 +70,9 @@ func (s *Scheduler) getNotifyFunc(n notify.Notification) (func(), error) {
 			return nil, errors.New("no notifier. Unable to create Notification")
 		}
 
+		telegramNotifier := s.telegram
 		f = func() {
-			err := s.telegram.Notify(n)
+			err := telegramNotifier.Notify(n)
 			if err != nil {
 				slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source, "📸", n.ImageName)
 				fmt.Printf("Could not deliver telegram notfication: %s", err)
@@ -78,8 +82,13 @@ func (s *Scheduler) getNotifyFunc(n notify.Notification) (func(), error) {
 		}
 
 	case "desktop":
+		if nil == s.desktop {
+			return nil, errors.New("no notifier. Unable to create Notification")
+		}
+
+		desktopNotifier := s.desktop
 		f = func() {
-			err := s.desktop.Notify(n)
+			err := desktopNotifier.Notify(n)
 			if err != nil {
 				slog.Error("🚚 Notification:", "Send?", "🛑", "📁", filepath.Base(n.EventPath), "error", err, "📌", n.Time.Format("2006-01-02 15:04:05 MST"), "type", n.Type, "source", n.Source, "📸", n.ImageName)
 				return
@@ -101,20 +110,22 @@ func (s *Scheduler) StopTimers() {
 	s.timers = []*time.Timer{}
 }
 
-func (s *Scheduler) initializeNotifiers() {
-	for _, t := range s.conf.NotifierTypes {
+func (s *Scheduler) initializeNotifiers(conf *config.Config) {
+	s.telegram = nil
+	s.desktop = nil
+
+	for _, t := range conf.NotifierTypes {
 		switch t {
 		case "telegram":
-			tg, err := telegram.New(s.conf)
+			tg, err := telegram.New(*conf)
 			if err != nil {
 				slog.Error("🚦 Schedule: 🚨 Unable to create telegram bot client:", "error", err)
-				s.telegram = nil
 				break
 			}
 
 			s.telegram = tg
 		case "desktop":
-			s.desktop = desktop.New(s.conf)
+			s.desktop = desktop.New(*conf)
 		}
 	}
 }

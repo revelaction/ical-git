@@ -1,5 +1,7 @@
 package fetch
 
+import "context"
+
 type File struct {
 	Path    string
 	Content []byte
@@ -7,5 +9,5 @@ type File struct {
 }
 
 type Fetcher interface {
-	GetCh() <-chan File
+	GetCh(ctx context.Context) <-chan File
 }

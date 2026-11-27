@@ -1,10 +1,11 @@
 module github.com/revelaction/ical-git
 
-go 1.23.0
+go 1.25.0
 
 require (
 	github.com/BurntSushi/toml v1.3.2
 	github.com/arran4/golang-ical v0.3.1
+	github.com/caasmo/go-daemon-runner v0.3.1
 	github.com/gen2brain/beeep v0.0.0-20240516210008-9c006672e7f4
 	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.12.0
@@ -35,6 +36,7 @@ require (
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.22.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect

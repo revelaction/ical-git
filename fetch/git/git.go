@@ -1,7 +1,10 @@
 package git
 
 import (
+	"context"
 	"fmt"
+	"log/slog"
+
 	"github.com/revelaction/ical-git/fetch"
 
 	"github.com/go-git/go-billy/v5/memfs"
@@ -29,7 +32,7 @@ func New(url string, privateKeyPath string) fetch.Fetcher {
 }
 
 // GetCh implements the fetch.Fetcher interface method
-func (g *Git) GetCh() <-chan fetch.File {
+func (g *Git) GetCh(ctx context.Context) <-chan fetch.File {
 	go func() {
 		defer close(g.ch)
 
@@ -44,7 +47,7 @@ func (g *Git) GetCh() <-chan fetch.File {
 		fs := memfs.New()
 
 		// Clone the repository
-		repo, err := git.Clone(memory.NewStorage(), fs, &git.CloneOptions{
+		repo, err := git.CloneContext(ctx, memory.NewStorage(), fs, &git.CloneOptions{
 			URL:           g.url,
 			Auth:          auth,
 			ReferenceName: plumbing.Master,
@@ -77,10 +80,14 @@ func (g *Git) GetCh() <-chan fetch.File {
 		}
 
 		err = tree.Files().ForEach(func(f *object.File) error {
+			ctxErr := ctx.Err()
+			if ctxErr != nil {
+				return ctxErr
+			}
 
-			contents, err := f.Contents()
-			if err != nil {
-				g.ch <- fetch.File{Error: fmt.Errorf("failed to get contents: %w", err)}
+			contents, contentsErr := f.Contents()
+			if contentsErr != nil {
+				slog.Error("failed to get contents", "path", f.Name, "error", contentsErr)
 				return nil
 			}
 
@@ -89,7 +96,7 @@ func (g *Git) GetCh() <-chan fetch.File {
 		})
 
 		if err != nil {
-			fmt.Printf("error walking through repository: %v\n", err)
+			slog.Error("error walking through repository", "error", err)
 		}
 	}()
 

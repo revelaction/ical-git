@@ -1,10 +1,13 @@
 package filesystem
 
 import (
-	"github.com/revelaction/ical-git/fetch"
+	"context"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/revelaction/ical-git/fetch"
 )
 
 // FileSystem implements the fetch.Fetcher interface
@@ -22,10 +25,15 @@ func New(rootDir string) fetch.Fetcher {
 }
 
 // GetCh implements the fetch.Fetcher interface method
-func (fs *FileSystem) GetCh() <-chan fetch.File {
+func (fs *FileSystem) GetCh(ctx context.Context) <-chan fetch.File {
 	go func() {
 		defer close(fs.ch)
-		filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, err error) error {
+
+		walkErr := filepath.Walk(fs.rootDir, func(path string, info os.FileInfo, err error) error {
+			ctxErr := ctx.Err()
+			if ctxErr != nil {
+				return ctxErr
+			}
 
 			if err != nil {
 				fs.ch <- fetch.File{Path: path, Error: err}
@@ -37,8 +45,9 @@ func (fs *FileSystem) GetCh() <-chan fetch.File {
 			}
 
 			if strings.HasSuffix(strings.ToLower(info.Name()), ".ical") || strings.HasSuffix(strings.ToLower(info.Name()), ".ics") {
-				content, err := os.ReadFile(path)
-				if err != nil {
+				content, readErr := os.ReadFile(path)
+				if readErr != nil {
+					slog.Error("failed to read file", "path", path, "error", readErr)
 					return nil
 				}
 
@@ -48,6 +57,9 @@ func (fs *FileSystem) GetCh() <-chan fetch.File {
 			return nil
 		})
 
+		if walkErr != nil {
+			slog.Error("error walking filesystem", "error", walkErr)
+		}
 	}()
 
 	return fs.ch
