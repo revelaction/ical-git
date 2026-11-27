@@ -1,30 +1,91 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Test
+name: Test 
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [master]
+  workflow_dispatch:
 
 jobs:
-
-  build:
+  coverage:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.23'
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: 1.25
 
-    - name: Test
-      run: go test -v ./...
+      - name: Test with coverage
+        run: go test -v -cover -bench=. -benchtime=100x ./... -coverprofile=coverage.out -coverpkg=./...
 
-    - name: Lint
-      uses: dominikh/staticcheck-action@v1.3.1
-      with:
-        install-go: false
+      - name: Show coverage by package
+        run: |
+          echo "=== Package-level Coverage ==="
+          {
+            echo "## Package coverage"
+            echo ""
+            echo "| Package | Coverage |"
+            echo "| --- | --- |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          MODULE=$(go list -m)
+          go list ./... | grep -v "^${MODULE}$" | while read pkg; do
+            coverage=$(go test -cover "$pkg" 2>/dev/null | grep "coverage:" | awk '{print $5}')
+            dir=$(echo "$pkg" | sed "s|^${MODULE}||" | sed 's|^/||')
+            
+            if [ -n "$coverage" ] && [ "$coverage" != "statements" ]; then
+              printf "%-30s %s\n" "$dir" "$coverage"
+            else
+              coverage="0.0%"
+              printf "%-30s %s\n" "$dir" "0.0%"
+            fi
+            echo "| ${dir} | ${coverage} |" >> "$GITHUB_STEP_SUMMARY"
+          done
+      - name: Generate coverage endpoint
+        run: |
+          # Extract coverage percentage
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+          echo "COVERAGE=${COVERAGE}" >> $GITHUB_ENV
+          
+          # Determine badge color based on coverage
+          if (( $(echo "$COVERAGE >= 75" | bc -l) )); then
+            COLOR="brightgreen"
+          elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
+            COLOR="yellow"
+          elif (( $(echo "$COVERAGE >= 40" | bc -l) )); then
+            COLOR="orange"
+          else
+            COLOR="red"
+          fi
+          
+          # Create badge directory
+          mkdir -p .github/badges
+          
+          # Create a JSON endpoint for shields.io
+          cat > .github/badges/coverage.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "coverage",
+            "message": "${COVERAGE}%",
+            "color": "${COLOR}"
+          }
+          EOF
+
+      - name: Commit coverage endpoint
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          if [ -z "$(git status --porcelain -- .github/badges/coverage.json)" ]; then
+            echo "No changes to coverage endpoint"
+          else
+            git add .github/badges/coverage.json
+            COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}')
+            git commit -m "Update coverage endpoint: $COVERAGE"
+            git pull --rebase
+            git push
+          fi
