@@ -1,0 +1,78 @@
+name: Dependencies
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deps-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        # During a release event, GitHub Actions check out the release tag,
+        # which leads to a "detached HEAD" state. To commit and push changes back
+        # to the repository (e.g., updating the deps badge), we must explicitly
+        # check out the persistent target branch.
+        uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: master
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Count direct dependencies and create badge
+        run: |
+          # Count direct dependencies (excluding main module and indirect deps)
+          DIRECT_DEPS=$(go list -m -json all | jq -r 'select(.Main != true and .Indirect != true) | .Path' | wc -l | tr -d ' ')
+          
+          # Determine badge color based on dependency count
+          if [ "$DIRECT_DEPS" -le 5 ]; then
+            COLOR="brightgreen"
+          elif [ "$DIRECT_DEPS" -le 15 ]; then
+            COLOR="green"
+          elif [ "$DIRECT_DEPS" -le 25 ]; then
+            COLOR="yellow"
+          elif [ "$DIRECT_DEPS" -le 40 ]; then
+            COLOR="orange"
+          else
+            COLOR="red"
+          fi
+          
+          # Create badge directory
+          mkdir -p .github/badges
+          
+          # Create a JSON endpoint for shields.io
+          cat > .github/badges/deps.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "direct deps",
+            "message": "${DIRECT_DEPS}",
+            "color": "${COLOR}"
+          }
+          EOF
+          
+          echo "DIRECT_DEPS=$DIRECT_DEPS" >> $GITHUB_ENV
+          echo "Direct dependencies: $DIRECT_DEPS (badge color: $COLOR)"
+
+      - name: Commit dependency endpoint
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          if [ -z "$(git status --porcelain -- .github/badges/deps.json)" ]; then
+            echo "No changes to dependency endpoint"
+          else
+            git add .github/badges/deps.json
+            git commit -m "Update dependency endpoint: ${{ env.DIRECT_DEPS }}"
+            git pull --rebase
+            git push
+          fi
